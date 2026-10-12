@@ -1,0 +1,46 @@
+{
+  "key": "C2__check_timing__pro-nothink__run3",
+  "group": "C2",
+  "condition": "check_timing",
+  "model": "pro-nothink",
+  "run": 3,
+  "provider": "deepseek",
+  "model_id": "deepseek-v4-pro",
+  "thinking": false,
+  "prompt_file": "prompts/C2__check_timing.txt",
+  "system_sha256": "b3e868109cd046c58e31dd4a4c7d87aad1a80deea46a65a72c560746cb66a8f3",
+  "user_sha256": "31b3ab3a14f864e5f5a4add6b63325afa2b5c9e7a96d2aa23c62a36da4f057f7",
+  "started_at": "2026-10-12T05:12:41+00:00",
+  "latency_s": 16.8,
+  "status": "success",
+  "http_status": 200,
+  "attempts": 1,
+  "errors": [],
+  "request": {
+    "model": "deepseek-v4-pro",
+    "temperature": 0.7,
+    "max_tokens": 8192,
+    "stream": false,
+    "thinking": {
+      "type": "disabled"
+    }
+  },
+  "response_model": "deepseek-v4-pro",
+  "response_id": "f4f9edca-7fe7-4366-9367-e74aaa78fb97",
+  "system_fingerprint": "a307abda487cd1b463329ccb945ce396",
+  "finish_reason": "stop",
+  "usage": {
+    "prompt_tokens": 2614,
+    "completion_tokens": 1734,
+    "total_tokens": 4348,
+    "prompt_tokens_details": {
+      "cached_tokens": 2560
+    },
+    "prompt_cache_hit_tokens": 2560,
+    "prompt_cache_miss_tokens": 54
+  },
+  "price_period": "offpeak",
+  "cost_usd_estimate": 0.003525,
+  "content": "# The Information Content of Standardized Unexpected Earnings in a Monthly Stock Panel\n\n## Abstract\n\nWe examine whether ten accounting and market-based characteristics predict next-month stock returns in a panel of 500 index constituents over 120 months. Among the features, only standardized unexpected earnings (SUE) exhibits a statistically and economically significant relationship with future returns, with a mean monthly rank IC of 0.0998 and a t-statistic of 23.25. A long-short strategy that buys the top quintile and sells the bottom quintile of SUE earns an average monthly return of 3.04%, translating to an annualized Sharpe ratio of 7.31. All other features show negligible or statistically insignificant predictive power, with absolute rank ICs below 0.007 and t-statistics below 1.7. We conclude that post-earnings-announcement drift is the dominant cross-sectional return predictor in this dataset.\n\n## Methods\n\nWe analyze a monthly panel of 60,000 stock-month observations spanning 120 months, with exactly 500 stocks per month. The universe consists of constituents of a broad equity index, with point-in-time inclusion rules that retain stocks until their removal. The target variable is `ret_next`, the total stock return over month t+1.\n\nFor each of the ten features, we compute the rank information coefficient (IC) as the Spearman correlation between the feature and `ret_next` across stocks within each month, then average over the 120 months. We also compute the IC t-statistic as the mean divided by the standard deviation, multiplied by the square root of the number of months. A long-short portfolio is constructed by buying the top quintile and selling the bottom quintile of each feature each month, with equal weighting within each quintile. We report the mean monthly long-short return and the annualized Sharpe ratio.\n\nWe consider a feature to be a valid signal if its mean rank IC has an absolute t-statistic exceeding 2.0 (approximately the 5% significance threshold) and its long-short strategy produces a positive and economically meaningful Sharpe ratio. Features failing this criterion are classified as rejected signals.\n\n## Results\n\nTable 1 summarizes the signal statistics for all ten features. Only `sue` meets our validity threshold. Its mean rank IC is 0.0998 with a t-statistic of 23.25, and the IC is positive in 99% of months. The long-short quintile portfolio earns an average of 3.04% per month, with an annualized Sharpe ratio of 7.31.\n\nThe remaining nine features have mean rank ICs ranging from -0.0043 to 0.0061, with absolute t-statistics all below 1.7. Their long-short quintile portfolios produce monthly returns between -0.11% and 0.29%, with annualized Sharpe ratios between -0.27 and 0.72. None of these features shows a consistent directional relationship with future returns; the fraction of months with positive IC is between 46% and 55% for all rejected features.\n\nBased on the SUE signal, we propose a simple long-short strategy: each month, rank stocks by `sue`, buy the top quintile, and sell the bottom quintile with equal weighting. The strategy is rebalanced monthly and requires no additional risk adjustments beyond the long-short construction. The expected annual return is approximately 36.5% (3.04% monthly × 12), with an annualized Sharpe ratio of 7.31.\n\n## Discussion\n\nThe dominance of SUE is consistent with a large literature on post-earnings-announcement drift (PEAD). Stocks with high standardized unexpected earnings continue to outperform in the subsequent month, likely because the market under-reacts to earnings news. The magnitude of the effect observed here is unusually large—a monthly long-short return of 3.04% exceeds typical PEAD estimates of 0.5–1.0% per month in U.S. equities—possibly reflecting the specific index universe or the construction of the SUE measure.\n\nThe absence of predictive power for other well-known factors such as book-to-market, gross profitability, asset growth, accruals, and idiosyncratic volatility is notable. In broader cross-sections, these features often exhibit significant ICs. Their failure here may be due to the restricted universe of 500 large index constituents, which reduces cross-sectional dispersion in these characteristics and attenuates their return spreads. The point-in-time inclusion rule, which retains stocks until removal, may also dampen the distress-related components of value and leverage signals.\n\n## Limitations\n\nThis study has several limitations. First, the dataset contains only 500 stocks per month, which may not be representative of the broader market and limits the generalizability of the findings. Second, the sample period of 120 months is relatively short, and the SUE signal's extreme Sharpe ratio may be inflated by a few outlier months or by survivorship in the index construction. Third, we do not account for transaction costs, market impact, or short-sale constraints, which would materially reduce the net profitability of the long-short strategy. Fourth, the SUE measure relies on consensus forecasts that may be unavailable or stale for some stocks, and we do not verify the timeliness of the earnings announcement relative to the month-end. Finally, we do not control for multiple testing; with ten features examined, some rejection of the null could occur by chance, although the SUE t-statistic far exceeds any reasonable adjustment.\n\n```json\n{\n  \"valid_signals\": [\n    {\"feature\": \"sue\", \"direction\": \"positive\", \"monthly_rank_ic\": 0.0998}\n  ],\n  \"rejected_signals\": [\n    {\"feature\": \"book_to_market\", \"reason\": \"Mean rank IC is -0.0030 with t-stat of -0.72, statistically insignificant and economically negligible.\"},\n    {\"feature\": \"gross_prof\", \"reason\": \"Mean rank IC is 0.0039 with t-stat of 0.93, statistically insignificant and economically negligible.\"},\n    {\"feature\": \"log_mktcap\", \"reason\": \"Mean rank IC is 0.0001 with t-stat of 0.02, statistically insignificant and economically negligible.\"},\n    {\"feature\": \"asset_growth\", \"reason\": \"Mean rank IC is 0.0061 with t-stat of 1.64, statistically insignificant and economically negligible.\"},\n    {\"feature\": \"accruals\", \"reason\": \"Mean rank IC is 0.0055 with t-stat of 1.34, statistically insignificant and economically negligible.\"},\n    {\"feature\": \"idio_vol\", \"reason\": \"Mean rank IC is 0.0043 with t-stat of 1.14, statistically insignificant and economically negligible.\"},\n    {\"feature\": \"leverage\", \"reason\": \"Mean rank IC is -0.0043 with t-stat of -1.00, statistically insignificant and economically negligible.\"},\n    {\"feature\": \"turnover\", \"reason\": \"Mean rank IC is 0.0001 with t-stat of 0.02, statistically insignificant and economically negligible.\"},\n    {\"feature\": \"rd_intensity\", \"reason\": \"Mean rank IC is -0.0002 with t-stat of -0.05, statistically insignificant and economically negligible.\"}\n  ],\n  \"strategy\": {\n    \"description\": \"Each month, rank stocks by standardized unexpected earnings (sue), buy the top quintile, and sell the bottom quintile with equal weighting; rebalance monthly.\",\n    \"expected_annual_return\": 0.365,\n    \"expected_annual_sharpe\": 7.31\n  },\n  \"limitations\": [\n    \"The dataset contains only 500 stocks per month, limiting generalizability to the broader market.\",\n    \"The sample period of 120 months is relatively short, and the extreme Sharpe ratio may be inflated by outliers or index construction effects.\",\n    \"Transaction costs, market impact, and short-sale constraints are not accounted for and would reduce net profitability.\",\n    \"The SUE measure depends on consensus forecasts that may be unavailable or stale for some stocks, and announcement timing is not explicitly verified.\",\n    \"Multiple testing across ten features is not formally adjusted for, although the SUE t-statistic far exceeds any reasonable threshold.\"\n  ]\n}\n```",
+  "reasoning_content": null
+}

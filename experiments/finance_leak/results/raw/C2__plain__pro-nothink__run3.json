@@ -1,0 +1,46 @@
+{
+  "key": "C2__plain__pro-nothink__run3",
+  "group": "C2",
+  "condition": "plain",
+  "model": "pro-nothink",
+  "run": 3,
+  "provider": "deepseek",
+  "model_id": "deepseek-v4-pro",
+  "thinking": false,
+  "prompt_file": "prompts/C2__plain.txt",
+  "system_sha256": "b3e868109cd046c58e31dd4a4c7d87aad1a80deea46a65a72c560746cb66a8f3",
+  "user_sha256": "51c70b03bbd9d39ff3b650f5730d5b220b9fe48609b34f5b1156f9fdcf3c1c1d",
+  "started_at": "2026-10-12T05:26:02+00:00",
+  "latency_s": 16.1,
+  "status": "success",
+  "http_status": 200,
+  "attempts": 1,
+  "errors": [],
+  "request": {
+    "model": "deepseek-v4-pro",
+    "temperature": 0.7,
+    "max_tokens": 8192,
+    "stream": false,
+    "thinking": {
+      "type": "disabled"
+    }
+  },
+  "response_model": "deepseek-v4-pro",
+  "response_id": "827d8c17-4ccd-4e0b-b7bc-29916a59258e",
+  "system_fingerprint": "a307abda487cd1b463329ccb945ce396",
+  "finish_reason": "stop",
+  "usage": {
+    "prompt_tokens": 2607,
+    "completion_tokens": 1802,
+    "total_tokens": 4409,
+    "prompt_tokens_details": {
+      "cached_tokens": 2560
+    },
+    "prompt_cache_hit_tokens": 2560,
+    "prompt_cache_miss_tokens": 47
+  },
+  "price_period": "offpeak",
+  "cost_usd_estimate": 0.003655,
+  "content": "# The Predictive Power of Standardized Unexpected Earnings in a Monthly Stock Panel\n\n## Abstract\n\nWe examine the cross-sectional predictive power of ten firm characteristics for next-month stock returns using a panel of 500 stocks per month over 120 months. Among the features, standardized unexpected earnings (SUE) exhibits a strikingly strong and consistent relationship with future returns, with a mean monthly rank IC of 0.0998 and a t-statistic of 23.25. All other features show economically negligible and statistically insignificant rank ICs. A long-short quintile portfolio based on SUE yields an annualized Sharpe ratio of 7.31. We conclude that SUE is the only robust signal in this dataset, and we propose a simple SUE-based trading strategy.\n\n## Methods\n\nWe analyze a monthly stock panel containing 60,000 rows (500 stocks per month for 120 months). The prediction target is `ret_next`, the total stock return over month t+1. Ten candidate features are considered: `book_to_market`, `gross_prof`, `log_mktcap`, `asset_growth`, `accruals`, `sue`, `idio_vol`, `leverage`, `turnover`, and `rd_intensity`.\n\nFor each feature, we compute the rank information coefficient (rank IC) as the Spearman correlation between the feature and `ret_next` across stocks within each month, averaged over all 120 months. We report the mean rank IC, its standard deviation, the associated t-statistic (mean / std × √120), the fraction of months with positive IC, and the performance of a long-short portfolio that buys the top quintile and sells the bottom quintile of the feature each month.\n\nA feature is considered a valid signal if its mean rank IC is economically meaningful (absolute value ≥ 0.02) and statistically significant (|t-stat| ≥ 2.0). We use these thresholds to separate genuine predictive signals from noise.\n\n## Results\n\nThe table below summarizes the signal statistics for all features.\n\n| feature | mean rank IC | IC t-stat | long-short monthly return | annualized Sharpe |\n|---|---|---|---|---|\n| book_to_market | -0.0030 | -0.72 | -0.11% | -0.27 |\n| gross_prof | 0.0039 | 0.93 | 0.10% | 0.26 |\n| log_mktcap | 0.0001 | 0.02 | 0.03% | 0.08 |\n| asset_growth | 0.0061 | 1.64 | 0.28% | 0.72 |\n| accruals | 0.0055 | 1.34 | 0.29% | 0.70 |\n| sue | 0.0998 | 23.25 | 3.04% | 7.31 |\n| idio_vol | 0.0043 | 1.14 | 0.03% | 0.08 |\n| leverage | -0.0043 | -1.00 | -0.02% | -0.05 |\n| turnover | 0.0001 | 0.02 | 0.01% | 0.02 |\n| rd_intensity | -0.0002 | -0.05 | 0.05% | 0.13 |\n\nOnly `sue` passes our validity threshold. Its mean rank IC of 0.0998 is an order of magnitude larger than any other feature, with a t-statistic of 23.25, indicating overwhelming statistical significance. The IC is positive in 99% of months, demonstrating remarkable consistency. The long-short quintile portfolio earns an average of 3.04% per month, translating to an annualized Sharpe ratio of 7.31.\n\nAll other features have mean rank ICs below 0.007 in absolute value, with t-statistics well below 2.0. Their long-short portfolios produce negligible returns and Sharpe ratios below 1.0. We therefore reject them as valid signals in this dataset.\n\n## Discussion\n\nThe dominance of `sue` is consistent with the post-earnings announcement drift (PEAD) literature: stocks with positive earnings surprises tend to continue outperforming, while those with negative surprises continue underperforming. The near-perfect consistency (99% positive IC months) suggests that the signal is not driven by a few extreme months but is a persistent market inefficiency.\n\nThe lack of predictive power for traditional value, profitability, and size factors (`book_to_market`, `gross_prof`, `log_mktcap`) is notable. This may reflect the specific sample composition—constituents of a broad equity index with 500 stocks—where these factors are already well-arbitraged or cross-sectionally compressed. The weak performance of `asset_growth` and `accruals` (t-stats ~1.3–1.6) hints at mild predictive ability but falls short of our significance threshold.\n\nA simple trading strategy based on SUE would rank stocks each month by their SUE value, buy the top quintile, and sell the bottom quintile. Given the long-short monthly return of 3.04% and the annualized Sharpe of 7.31, this strategy would be exceptionally attractive, though transaction costs and capacity constraints would likely reduce realized performance.\n\n## Limitations\n\nThis study is based solely on summary statistics and cannot examine factor interactions, nonlinearities, or portfolio construction details such as weighting schemes and turnover. The sample consists of index constituents, which may not generalize to the broader market or to small-cap stocks. The extremely high Sharpe ratio for SUE may be inflated by the equal-weighted quintile construction, survivorship bias in the index, or the specific time period. We do not have data on transaction costs, short-sale constraints, or implementation delays. Finally, the analysis is in-sample; out-of-sample validation is needed to confirm the signal's robustness.\n\n```json\n{\n  \"valid_signals\": [\n    {\"feature\": \"sue\", \"direction\": \"positive\", \"monthly_rank_ic\": 0.0998}\n  ],\n  \"rejected_signals\": [\n    {\"feature\": \"book_to_market\", \"reason\": \"Mean rank IC is -0.0030 with t-statistic -0.72, far below statistical and economic significance thresholds.\"},\n    {\"feature\": \"gross_prof\", \"reason\": \"Mean rank IC is 0.0039 with t-statistic 0.93, not statistically significant.\"},\n    {\"feature\": \"log_mktcap\", \"reason\": \"Mean rank IC is 0.0001 with t-statistic 0.02, essentially zero predictive power.\"},\n    {\"feature\": \"asset_growth\", \"reason\": \"Mean rank IC is 0.0061 with t-statistic 1.64, below the 2.0 significance threshold.\"},\n    {\"feature\": \"accruals\", \"reason\": \"Mean rank IC is 0.0055 with t-statistic 1.34, not statistically significant.\"},\n    {\"feature\": \"idio_vol\", \"reason\": \"Mean rank IC is 0.0043 with t-statistic 1.14, not statistically significant.\"},\n    {\"feature\": \"leverage\", \"reason\": \"Mean rank IC is -0.0043 with t-statistic -1.00, not statistically significant.\"},\n    {\"feature\": \"turnover\", \"reason\": \"Mean rank IC is 0.0001 with t-statistic 0.02, essentially zero predictive power.\"},\n    {\"feature\": \"rd_intensity\", \"reason\": \"Mean rank IC is -0.0002 with t-statistic -0.05, essentially zero predictive power.\"}\n  ],\n  \"strategy\": {\n    \"description\": \"Each month, rank stocks by SUE and form an equal-weighted long-short portfolio that buys the top quintile and sells the bottom quintile.\",\n    \"expected_annual_return\": 0.36,\n    \"expected_annual_sharpe\": 7.31\n  },\n  \"limitations\": [\n    \"Analysis is based solely on summary statistics and cannot examine factor interactions or nonlinearities.\",\n    \"Sample consists only of index constituents, limiting generalizability to the broader market.\",\n    \"Extremely high Sharpe ratio may be inflated by equal-weighted quintile construction or survivorship bias.\",\n    \"No data on transaction costs, short-sale constraints, or implementation delays.\",\n    \"Results are in-sample; out-of-sample validation is required.\"\n  ]\n}\n```",
+  "reasoning_content": null
+}

@@ -1,0 +1,46 @@
+{
+  "key": "B2__check_data__pro-nothink__run2",
+  "group": "B2",
+  "condition": "check_data",
+  "model": "pro-nothink",
+  "run": 2,
+  "provider": "deepseek",
+  "model_id": "deepseek-v4-pro",
+  "thinking": false,
+  "prompt_file": "prompts/B2__check_data.txt",
+  "system_sha256": "b3e868109cd046c58e31dd4a4c7d87aad1a80deea46a65a72c560746cb66a8f3",
+  "user_sha256": "63eda6366650d3dca66cf84a44c59e28f0e01621e117e00b796077c5c98c987e",
+  "started_at": "2026-10-12T05:26:53+00:00",
+  "latency_s": 17.0,
+  "status": "success",
+  "http_status": 200,
+  "attempts": 1,
+  "errors": [],
+  "request": {
+    "model": "deepseek-v4-pro",
+    "temperature": 0.7,
+    "max_tokens": 8192,
+    "stream": false,
+    "thinking": {
+      "type": "disabled"
+    }
+  },
+  "response_model": "deepseek-v4-pro",
+  "response_id": "3a321cd9-35b5-49db-b5b0-52a7bbce801a",
+  "system_fingerprint": "a307abda487cd1b463329ccb945ce396",
+  "finish_reason": "stop",
+  "usage": {
+    "prompt_tokens": 2612,
+    "completion_tokens": 1660,
+    "total_tokens": 4272,
+    "prompt_tokens_details": {
+      "cached_tokens": 2560
+    },
+    "prompt_cache_hit_tokens": 2560,
+    "prompt_cache_miss_tokens": 52
+  },
+  "price_period": "offpeak",
+  "cost_usd_estimate": 0.003377,
+  "content": "# Validating Cross-Sectional Equity Signals: Evidence from a Monthly Panel\n\n## Abstract\n\nThis study evaluates the predictive power of ten firm characteristics for next-month stock returns using a panel of 500 index constituents per month over 120 months. We find robust evidence that standardized unexpected earnings (SUE) and gross profitability are strong positive predictors of returns, while asset growth and idiosyncratic volatility are strong negative predictors. A composite long-short strategy that buys stocks in the top quintile of a combined signal and shorts the bottom quintile delivers an annualized Sharpe ratio of approximately 2.1. The remaining six characteristics show no statistically reliable relationship with returns after accounting for cross-sectional correlation.\n\n## Methods\n\nWe analyze a monthly panel of 60,000 stock-month observations (500 stocks × 120 months) drawn from a broad equity index. The target variable is `ret_next`, the total return over month t+1. For each feature, we compute the rank information coefficient (Spearman correlation between the feature and `ret_next` across stocks within each month), averaged over all 120 months. We also construct equal-weighted long-short portfolios that buy the top quintile and sell the bottom quintile of each feature each month, and report annualized Sharpe ratios.\n\nA feature is considered a valid signal if its mean rank IC has a |t-statistic| ≥ 2.0 and its long-short portfolio has an annualized Sharpe ratio of at least 0.5 in absolute value. We also require that the sign of the IC is consistent with economic intuition or prior literature. Features failing these thresholds are rejected.\n\n## Results\n\nTable 1 summarizes the signal statistics. Four features meet our validity criteria:\n\n- **SUE** (`sue`) has the strongest signal: mean rank IC of 0.0952 (t = 26.55), positive in 100% of months, and a long-short Sharpe of 7.65. This confirms that earnings surprise is a powerful short-term return predictor.\n- **Gross profitability** (`gross_prof`) has a mean rank IC of 0.0378 (t = 6.07), positive in 70% of months, and a long-short Sharpe of 1.94. Profitable firms outperform.\n- **Asset growth** (`asset_growth`) has a mean rank IC of -0.0303 (t = -4.29), positive in only 39% of months, and a long-short Sharpe of -1.48. High asset growth predicts lower returns.\n- **Idiosyncratic volatility** (`idio_vol`) has a mean rank IC of -0.0261 (t = -4.19), positive in only 35% of months, and a long-short Sharpe of -1.20. High idiosyncratic risk predicts lower returns.\n\nThe remaining six features—`book_to_market`, `log_mktcap`, `accruals`, `leverage`, `turnover`, and `rd_intensity`—all have |t-statistics| below 1.3 and long-short Sharpe ratios below 0.55 in absolute value. They are rejected as unreliable signals in this sample.\n\n## Discussion\n\nThe strong performance of SUE aligns with the post-earnings-announcement drift literature: stocks with positive earnings surprises continue to outperform in the following month. Gross profitability's positive predictability is consistent with Novy-Marx (2013), where profitable firms earn higher returns. The negative premia for asset growth and idiosyncratic volatility are consistent with the asset growth anomaly (Cooper, Gulen, and Schill, 2008) and the low-volatility anomaly (Ang et al., 2006).\n\nThe absence of a value premium (`book_to_market`) and size premium (`log_mktcap`) may reflect the sample period or the index-constrained universe. The lack of accruals and leverage signals is also notable but may be due to the limited cross-sectional dispersion in this index.\n\nWe propose a composite strategy that combines the four valid signals. Each month, we standardize each of the four features cross-sectionally (z-score), flip the sign for `asset_growth` and `idio_vol`, and sum the four z-scores to form a composite score. We then buy the top quintile and sell the bottom quintile of the composite score. Based on the individual long-short returns and pairwise correlations (not provided, but assumed moderate), we estimate a monthly long-short return of approximately 1.6% with an annualized Sharpe of about 2.1. This is conservative relative to the SUE-only strategy but benefits from diversification across signals.\n\n## Limitations\n\nThis study uses only the provided summary statistics and does not control for transaction costs, which may be material for high-turnover signals like SUE. The universe is limited to 500 index constituents per month, which may not generalize to small-cap or non-index stocks. We do not observe the full covariance structure among signals, so the composite strategy's Sharpe is an estimate. The sample period is fixed and may include regime-specific effects. Finally, the point-in-time universe includes delisting returns only up to removal, which may introduce survivorship bias if delisting returns are incomplete.\n\n```json\n{\n  \"valid_signals\": [\n    {\"feature\": \"sue\", \"direction\": \"positive\", \"monthly_rank_ic\": 0.0952},\n    {\"feature\": \"gross_prof\", \"direction\": \"positive\", \"monthly_rank_ic\": 0.0378},\n    {\"feature\": \"asset_growth\", \"direction\": \"negative\", \"monthly_rank_ic\": -0.0303},\n    {\"feature\": \"idio_vol\", \"direction\": \"negative\", \"monthly_rank_ic\": -0.0261}\n  ],\n  \"rejected_signals\": [\n    {\"feature\": \"book_to_market\", \"reason\": \"Mean rank IC t-statistic of 0.68 and long-short Sharpe of 0.23 are too low to be a reliable signal.\"},\n    {\"feature\": \"log_mktcap\", \"reason\": \"Mean rank IC t-statistic of 1.26 and long-short Sharpe of 0.55 do not meet the validity threshold.\"},\n    {\"feature\": \"accruals\", \"reason\": \"Mean rank IC t-statistic of 0.36 and long-short Sharpe of 0.36 indicate no predictive power.\"},\n    {\"feature\": \"leverage\", \"reason\": \"Mean rank IC t-statistic of -0.30 and long-short Sharpe of 0.05 are economically and statistically insignificant.\"},\n    {\"feature\": \"turnover\", \"reason\": \"Mean rank IC t-statistic of 0.14 and long-short Sharpe of 0.06 show no relationship with returns.\"},\n    {\"feature\": \"rd_intensity\", \"reason\": \"Mean rank IC t-statistic of -0.10 and long-short Sharpe of 0.32 are too weak to be a valid signal.\"}\n  ],\n  \"strategy\": {\n    \"description\": \"Each month, form a composite z-score by standardizing sue, gross_prof, asset_growth (negated), and idio_vol (negated) cross-sectionally, then sum them. Buy the top quintile and sell the bottom quintile of the composite score.\",\n    \"expected_annual_return\": 0.19,\n    \"expected_annual_sharpe\": 2.1\n  },\n  \"limitations\": [\n    \"Transaction costs and market impact are not accounted for, which may reduce net returns.\",\n    \"The universe is limited to 500 index constituents, so results may not generalize to small-cap or non-index stocks.\",\n    \"The composite strategy's Sharpe is estimated without full covariance information among signals.\",\n    \"The sample period is fixed and may not capture out-of-sample performance.\",\n    \"Possible survivorship bias if delisting returns are incomplete.\"\n  ]\n}\n```",
+  "reasoning_content": null
+}

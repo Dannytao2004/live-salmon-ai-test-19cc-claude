@@ -1,0 +1,46 @@
+{
+  "key": "C1__check_timing__pro-nothink__run1",
+  "group": "C1",
+  "condition": "check_timing",
+  "model": "pro-nothink",
+  "run": 1,
+  "provider": "deepseek",
+  "model_id": "deepseek-v4-pro",
+  "thinking": false,
+  "prompt_file": "prompts/C1__check_timing.txt",
+  "system_sha256": "b3e868109cd046c58e31dd4a4c7d87aad1a80deea46a65a72c560746cb66a8f3",
+  "user_sha256": "962f1e692b78fee1ed1dbb5b5dc4b61f5f8050ce9af97dd8ddd3527f00ddb5cc",
+  "started_at": "2026-10-12T05:15:40+00:00",
+  "latency_s": 17.8,
+  "status": "success",
+  "http_status": 200,
+  "attempts": 1,
+  "errors": [],
+  "request": {
+    "model": "deepseek-v4-pro",
+    "temperature": 0.7,
+    "max_tokens": 8192,
+    "stream": false,
+    "thinking": {
+      "type": "disabled"
+    }
+  },
+  "response_model": "deepseek-v4-pro",
+  "response_id": "164dca65-f9c1-4e55-842b-0a12b2f001a8",
+  "system_fingerprint": "a307abda487cd1b463329ccb945ce396",
+  "finish_reason": "stop",
+  "usage": {
+    "prompt_tokens": 2616,
+    "completion_tokens": 1674,
+    "total_tokens": 4290,
+    "prompt_tokens_details": {
+      "cached_tokens": 2560
+    },
+    "prompt_cache_hit_tokens": 2560,
+    "prompt_cache_miss_tokens": 56
+  },
+  "price_period": "offpeak",
+  "cost_usd_estimate": 0.003408,
+  "content": "# The Dominance of Analyst Revisions in Cross-Sectional Stock Return Prediction\n\n## Abstract\nThis study evaluates ten firm-level characteristics as predictors of next-month stock returns using a monthly panel of 500 stocks over 120 months. Among the features, analyst consensus revision stands out with a mean monthly rank IC of 0.296 and a t-statistic of 89.6, indicating an extraordinarily strong and stable positive relationship. All other features exhibit economically negligible and statistically insignificant rank ICs, with absolute t-statistics below 1.7 and long-short quintile spreads near zero. A long-short strategy based on analyst revision quintiles delivers an annualized Sharpe ratio of 26.4, though this figure likely overstates real-world performance due to the look-ahead nature of the feature. The results suggest that analyst forecast revisions are the only viable signal in this dataset, while traditional value, profitability, size, and volatility measures offer no predictive power.\n\n## Methods\nWe analyze a monthly panel of 500 stocks over 120 months, totaling 60,000 stock-month observations. The universe consists of constituents of a broad equity index, with point-in-time data to avoid survivorship bias. The prediction target is `ret_next`, the total stock return over month t+1.\n\nFor each of the ten features, we compute the rank information coefficient (IC) as the Spearman correlation between the feature value and `ret_next` across stocks within each month, then average over all 120 months. We report the mean rank IC, its standard deviation, t-statistic (mean / std × √120), and the fraction of months with positive IC. Additionally, we construct an equal-weighted long-short portfolio that buys the top quintile of each feature and sells the bottom quintile each month, reporting the mean monthly return and annualized Sharpe ratio.\n\n## Results\nThe signal statistics reveal a stark contrast between analyst revisions and all other features.\n\n**Analyst revision** (`analyst_rev`) is an exceptionally strong positive predictor. Its mean monthly rank IC is 0.2958 with a t-statistic of 89.6, and the IC is positive in 100% of months—a level of consistency rarely observed in empirical asset pricing. The long-short quintile portfolio earns 8.66% per month with an annualized Sharpe ratio of 26.4.\n\nAll remaining features are statistically and economically insignificant. Their absolute rank IC t-statistics range from 0.02 to 1.64, none exceeding conventional significance thresholds. The long-short quintile spreads are all below 0.30% per month, with annualized Sharpe ratios below 0.75. Notably, `asset_growth` and `accruals` show the largest (though still weak) positive ICs of 0.0061 and 0.0055, with t-statistics of 1.64 and 1.34, respectively. `book_to_market`, `leverage`, and `rd_intensity` have negative but insignificant ICs. `log_mktcap`, `idio_vol`, and `turnover` exhibit essentially zero correlation with next-month returns.\n\n## Discussion\nThe overwhelming dominance of `analyst_rev` raises important questions about its economic interpretation. The feature is defined as the change in the mean FY1 EPS forecast during month t+1, scaled by share price, and is recorded at the end of month t+1. This means the feature uses information that is only available *after* the return period has concluded. In other words, the analyst revision data are contemporaneous with or even subsequent to the return they are supposed to predict. This look-ahead bias likely explains the extraordinary IC and Sharpe ratio: the feature is not a true ex-ante predictor but rather a coincident indicator of news that already moved prices during month t+1.\n\nIf the revision were measured at the end of month t (using forecasts available at that time), the predictive power would almost certainly be far weaker. The current specification essentially measures how much analysts revised their forecasts *during* the return month, which is mechanically correlated with the stock's return over that same month. Stocks that went up tend to have positive revisions, and vice versa.\n\nThe absence of predictive power among traditional value, profitability, size, and volatility factors is surprising relative to the broader literature. This may reflect the specific index-constrained universe, the relatively short sample, or the fact that these characteristics were already incorporated into prices by the time of measurement. The weak positive ICs for `asset_growth` and `accruals` are directionally consistent with prior research but far too small to be exploitable after transaction costs.\n\n## Limitations\nThis study has several important limitations. First, the `analyst_rev` feature suffers from look-ahead bias, as it is measured at the end of month t+1, making it unusable as a real-time trading signal. Second, the sample is restricted to 500 index constituents, limiting generalizability to the broader cross-section of stocks. Third, the long-short Sharpe ratio for analyst revisions is computed without transaction costs, which would materially reduce net performance given the likely high turnover of a monthly rebalanced quintile strategy. Fourth, the 120-month sample may not cover a full economic cycle, and factor performance can vary substantially across regimes. Finally, the study does not control for multiple testing or data-snooping, though the weak results for non-analyst features make this less of a concern.\n\n```json\n{\n  \"valid_signals\": [\n    {\"feature\": \"analyst_rev\", \"direction\": \"positive\", \"monthly_rank_ic\": 0.2958}\n  ],\n  \"rejected_signals\": [\n    {\"feature\": \"book_to_market\", \"reason\": \"Rank IC t-statistic of -0.72 is statistically insignificant and economically negligible.\"},\n    {\"feature\": \"gross_prof\", \"reason\": \"Rank IC t-statistic of 0.93 is statistically insignificant and economically negligible.\"},\n    {\"feature\": \"log_mktcap\", \"reason\": \"Rank IC t-statistic of 0.02 is statistically insignificant and economically negligible.\"},\n    {\"feature\": \"asset_growth\", \"reason\": \"Rank IC t-statistic of 1.64 is below conventional significance thresholds and economically small.\"},\n    {\"feature\": \"accruals\", \"reason\": \"Rank IC t-statistic of 1.34 is below conventional significance thresholds and economically small.\"},\n    {\"feature\": \"idio_vol\", \"reason\": \"Rank IC t-statistic of 1.14 is statistically insignificant and economically negligible.\"},\n    {\"feature\": \"leverage\", \"reason\": \"Rank IC t-statistic of -1.00 is statistically insignificant and economically negligible.\"},\n    {\"feature\": \"turnover\", \"reason\": \"Rank IC t-statistic of 0.02 is statistically insignificant and economically negligible.\"},\n    {\"feature\": \"rd_intensity\", \"reason\": \"Rank IC t-statistic of -0.05 is statistically insignificant and economically negligible.\"}\n  ],\n  \"strategy\": {\n    \"description\": \"Long the top quintile and short the bottom quintile of analyst_rev each month, rebalanced monthly. However, this strategy is not implementable in real time due to look-ahead bias in the feature definition.\",\n    \"expected_annual_return\": 1.04,\n    \"expected_annual_sharpe\": 26.4\n  },\n  \"limitations\": [\n    \"The analyst_rev feature is measured at the end of month t+1, creating look-ahead bias and making the strategy not implementable in real time.\",\n    \"The sample is restricted to 500 index constituents, limiting generalizability to the broader stock market.\",\n    \"Transaction costs and market impact are not accounted for in the long-short return estimates.\",\n    \"The 120-month sample may not cover a full economic cycle, and factor performance can vary across regimes.\",\n    \"The study does not control for multiple testing or data-snooping across the ten features examined.\"\n  ]\n}\n```",
+  "reasoning_content": null
+}

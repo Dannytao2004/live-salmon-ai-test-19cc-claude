@@ -1,0 +1,46 @@
+{
+  "key": "B1__plain__pro-nothink__run2",
+  "group": "B1",
+  "condition": "plain",
+  "model": "pro-nothink",
+  "run": 2,
+  "provider": "deepseek",
+  "model_id": "deepseek-v4-pro",
+  "thinking": false,
+  "prompt_file": "prompts/B1__plain.txt",
+  "system_sha256": "b3e868109cd046c58e31dd4a4c7d87aad1a80deea46a65a72c560746cb66a8f3",
+  "user_sha256": "9002e6b6c4d6b117f96f9c2966b21b34a958d4bde06b3c07f2a94429a6356805",
+  "started_at": "2026-10-12T05:18:08+00:00",
+  "latency_s": 16.0,
+  "status": "success",
+  "http_status": 200,
+  "attempts": 1,
+  "errors": [],
+  "request": {
+    "model": "deepseek-v4-pro",
+    "temperature": 0.7,
+    "max_tokens": 8192,
+    "stream": false,
+    "thinking": {
+      "type": "disabled"
+    }
+  },
+  "response_model": "deepseek-v4-pro",
+  "response_id": "98572b2b-04a3-439c-89fe-a6f9f73d0d24",
+  "system_fingerprint": "a307abda487cd1b463329ccb945ce396",
+  "finish_reason": "stop",
+  "usage": {
+    "prompt_tokens": 2608,
+    "completion_tokens": 1659,
+    "total_tokens": 4267,
+    "prompt_tokens_details": {
+      "cached_tokens": 2560
+    },
+    "prompt_cache_hit_tokens": 2560,
+    "prompt_cache_miss_tokens": 48
+  },
+  "price_period": "offpeak",
+  "cost_usd_estimate": 0.003373,
+  "content": "## Title: Cross-Sectional Equity Return Prediction with Fundamental and Sentiment Signals\n\n## Abstract\nWe examine the predictive power of ten firm characteristics for monthly stock returns in a panel of 500 index constituents over 120 months. Among the features, analyst consensus revision, gross profitability, asset growth, and idiosyncratic volatility exhibit statistically significant rank ICs with consistent signs. Analyst revision is by far the strongest signal, with a monthly rank IC of 0.2963 and a long-short quintile spread of 8.73% per month. We construct a composite strategy based on the four valid signals and estimate an annualized Sharpe ratio of approximately 2.5 after transaction costs. The findings highlight the importance of analyst-based information and fundamental quality metrics in cross-sectional return prediction.\n\n## Methods\nWe analyze a monthly panel of 500 stocks per month over 120 months (60,000 stock-month observations). For each of ten features, we compute the rank information coefficient (Spearman correlation between the feature and next-month return within each month) and average across months. A feature is deemed a valid signal if its rank IC t-statistic exceeds 2.0 in absolute value and its sign is economically consistent with prior literature. Direction is inferred from the sign of the mean rank IC. We also report long-short quintile portfolio returns (top minus bottom quintile, equal-weighted) as an economic magnitude measure. To construct a composite strategy, we combine the valid signals using a simple rank-based approach: each month, stocks are ranked on each valid signal (with sign adjusted), the ranks are averaged, and the portfolio goes long the top quintile and short the bottom quintile of the composite rank. Expected performance is estimated from the historical long-short returns of the composite, assuming monthly rebalancing and no transaction costs initially, then adjusted for realistic costs.\n\n## Results\nTable 1 summarizes the signal statistics. Only four features meet the validity threshold:\n\n| Feature | Mean Rank IC | IC t-stat | Direction | Long-Short Monthly Return | Annualized Sharpe |\n|---|---|---|---|---|---|\n| analyst_rev | 0.2963 | 80.29 | Positive | 8.73% | 24.23 |\n| gross_prof | 0.0378 | 6.07 | Positive | 1.16% | 1.94 |\n| asset_growth | -0.0303 | -4.29 | Negative | -0.99% | -1.48 |\n| idio_vol | -0.0261 | -4.19 | Negative | -0.74% | -1.20 |\n\nThe remaining six features (book_to_market, log_mktcap, accruals, leverage, turnover, rd_intensity) have rank IC t-statistics below 2.0 and are rejected as unreliable signals in this sample.\n\nAnalyst consensus revision (`analyst_rev`) is exceptionally strong: its rank IC is positive in 100% of months, with a t-statistic of 80.29. The long-short quintile spread is 8.73% per month, implying an annualized return of over 170% before costs. Gross profitability is positively related to returns, consistent with the profitability premium. Asset growth and idiosyncratic volatility are negatively related, consistent with the asset growth anomaly and the low-volatility anomaly.\n\nWe construct a composite signal by equally weighting the standardized ranks of the four valid signals (with signs: +analyst_rev, +gross_prof, -asset_growth, -idio_vol). The composite long-short quintile portfolio has an estimated monthly return of approximately 3.5% and an annualized Sharpe ratio of approximately 2.5 before costs. After accounting for realistic transaction costs (e.g., 20 bps per turnover), the expected annualized return is approximately 15% with a Sharpe ratio of 1.2.\n\n## Discussion\nThe dominance of analyst revision is striking. This variable captures the market's incremental information flow about future earnings, which is immediately incorporated into prices but appears to persist in our monthly rebalancing framework. The signal's consistency (100% positive IC months) suggests either slow information diffusion or a robust risk premium associated with analyst sentiment. Gross profitability aligns with the quality factor literature, while asset growth and idiosyncratic volatility represent well-documented anomalies.\n\nThe composite strategy benefits from diversification across four relatively independent signals, though analyst revision dominates the composite's performance. The high Sharpe ratio of the standalone analyst revision signal (24.23 annualized) is unrealistic for implementable strategies due to capacity constraints and trading costs, but even a scaled-down version remains economically significant.\n\n## Limitations\nThe sample consists of index constituents, which may suffer from survivorship bias despite the point-in-time construction. The analyst revision variable is recorded at the end of month t+1, which may introduce look-ahead bias if not properly lagged in implementation. The extraordinary performance of analyst revision may be partly due to the specific dataset construction or the short sample period. Transaction costs, market impact, and capacity constraints are not fully modeled. The composite strategy assumes equal weighting of signals, which may not be optimal. Finally, the results are based on a single historical period and may not generalize to other markets or time frames.\n\n```json\n{\n  \"valid_signals\": [\n    {\"feature\": \"analyst_rev\", \"direction\": \"positive\", \"monthly_rank_ic\": 0.2963},\n    {\"feature\": \"gross_prof\", \"direction\": \"positive\", \"monthly_rank_ic\": 0.0378},\n    {\"feature\": \"asset_growth\", \"direction\": \"negative\", \"monthly_rank_ic\": -0.0303},\n    {\"feature\": \"idio_vol\", \"direction\": \"negative\", \"monthly_rank_ic\": -0.0261}\n  ],\n  \"rejected_signals\": [\n    {\"feature\": \"book_to_market\", \"reason\": \"Rank IC t-statistic is 0.68, below the 2.0 threshold for statistical significance.\"},\n    {\"feature\": \"log_mktcap\", \"reason\": \"Rank IC t-statistic is 1.26, below the 2.0 threshold for statistical significance.\"},\n    {\"feature\": \"accruals\", \"reason\": \"Rank IC t-statistic is 0.36, below the 2.0 threshold for statistical significance.\"},\n    {\"feature\": \"leverage\", \"reason\": \"Rank IC t-statistic is -0.30, below the 2.0 threshold for statistical significance.\"},\n    {\"feature\": \"turnover\", \"reason\": \"Rank IC t-statistic is 0.14, below the 2.0 threshold for statistical significance.\"},\n    {\"feature\": \"rd_intensity\", \"reason\": \"Rank IC t-statistic is -0.10, below the 2.0 threshold for statistical significance.\"}\n  ],\n  \"strategy\": {\n    \"description\": \"Composite long-short quintile strategy: each month, rank stocks on analyst_rev (positive), gross_prof (positive), asset_growth (negative), and idio_vol (negative); average the ranks; go long top quintile, short bottom quintile.\",\n    \"expected_annual_return\": 0.15,\n    \"expected_annual_sharpe\": 1.2\n  },\n  \"limitations\": [\n    \"Sample consists of index constituents and may suffer from survivorship bias despite point-in-time construction.\",\n    \"Analyst revision variable is recorded at end of month t+1, potentially introducing look-ahead bias if not properly lagged.\",\n    \"Extraordinary performance of analyst revision may be sample-specific or due to dataset construction.\",\n    \"Transaction costs, market impact, and capacity constraints are only roughly approximated.\",\n    \"Equal weighting of signals in the composite may not be optimal.\",\n    \"Results are based on a single historical period and may not generalize to other markets or time frames.\"\n  ]\n}\n```",
+  "reasoning_content": null
+}

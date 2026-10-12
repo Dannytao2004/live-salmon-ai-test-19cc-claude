@@ -1,0 +1,46 @@
+{
+  "key": "C2__plain__pro-nothink__run2",
+  "group": "C2",
+  "condition": "plain",
+  "model": "pro-nothink",
+  "run": 2,
+  "provider": "deepseek",
+  "model_id": "deepseek-v4-pro",
+  "thinking": false,
+  "prompt_file": "prompts/C2__plain.txt",
+  "system_sha256": "b3e868109cd046c58e31dd4a4c7d87aad1a80deea46a65a72c560746cb66a8f3",
+  "user_sha256": "51c70b03bbd9d39ff3b650f5730d5b220b9fe48609b34f5b1156f9fdcf3c1c1d",
+  "started_at": "2026-10-12T05:03:33+00:00",
+  "latency_s": 15.3,
+  "status": "success",
+  "http_status": 200,
+  "attempts": 1,
+  "errors": [],
+  "request": {
+    "model": "deepseek-v4-pro",
+    "temperature": 0.7,
+    "max_tokens": 8192,
+    "stream": false,
+    "thinking": {
+      "type": "disabled"
+    }
+  },
+  "response_model": "deepseek-v4-pro",
+  "response_id": "0ebaf05c-e775-425a-83e9-34cfb99c9f9b",
+  "system_fingerprint": "a307abda487cd1b463329ccb945ce396",
+  "finish_reason": "stop",
+  "usage": {
+    "prompt_tokens": 2607,
+    "completion_tokens": 1494,
+    "total_tokens": 4101,
+    "prompt_tokens_details": {
+      "cached_tokens": 2560
+    },
+    "prompt_cache_hit_tokens": 2560,
+    "prompt_cache_miss_tokens": 47
+  },
+  "price_period": "offpeak",
+  "cost_usd_estimate": 0.003045,
+  "content": "# Standardized Unexpected Earnings as a Dominant Signal in a Monthly Stock Panel\n\n## Abstract\nWe examine the cross-sectional predictive power of ten firm characteristics for next-month stock returns using a panel of 500 stocks over 120 months. Standardized unexpected earnings (SUE) emerges as the only economically and statistically significant signal, with a mean monthly rank IC of 0.0998 (t-stat 23.25) and a top-minus-bottom quintile long-short return of 3.04% per month (annualized Sharpe 7.31). All other features exhibit negligible or statistically insignificant rank ICs, with absolute values below 0.007. A trading strategy based on SUE quintiles is expected to deliver substantial risk-adjusted performance, though the magnitude of the Sharpe ratio suggests the need for caution regarding overfitting and implementation costs.\n\n## Methods\nWe analyze a monthly panel of 500 stocks over 120 months (60,000 stock-month observations). For each month, we compute the cross-sectional Spearman rank correlation between each of ten features and next-month returns (`ret_next`). The average rank IC, its standard deviation, t-statistic, and the fraction of months with positive IC are reported. We also construct equal-weighted long-short portfolios that buy the top quintile and sell the bottom quintile of each feature each month, reporting the mean monthly return and annualized Sharpe ratio (monthly mean / monthly std × √12). No data cleaning or transformations are applied beyond those already present in the panel.\n\n## Results\nThe signal statistics reveal a stark contrast between SUE and all other features. SUE has a mean rank IC of 0.0998 with a t-statistic of 23.25, indicating an exceptionally strong and stable positive relationship with next-month returns; 99% of months exhibit a positive IC. The corresponding long-short portfolio earns 3.04% per month with an annualized Sharpe ratio of 7.31. In contrast, the remaining nine features have mean rank ICs ranging from -0.0043 (leverage) to 0.0061 (asset_growth), with t-statistics between -1.00 and 1.64. None of these features approaches conventional significance thresholds (|t| > 2). Their long-short quintile portfolio returns range from -0.11% to 0.29% per month, with annualized Sharpe ratios between -0.27 and 0.72. Book-to-market, a widely studied value factor, shows a slightly negative but insignificant IC (-0.0030, t-stat -0.72). Gross profitability, size, idiosyncratic volatility, and R&D intensity all have near-zero ICs. Asset growth and accruals show marginally positive but statistically weak relationships.\n\n## Discussion\nThe dominance of SUE is consistent with the post-earnings announcement drift literature, where stocks with positive earnings surprises continue to outperform in subsequent months. The magnitude of the rank IC (approximately 0.10) is unusually high relative to typical cross-sectional predictors, which often have monthly rank ICs in the range of 0.01–0.03. This may reflect the specific construction of the dataset, the universe of index constituents, or a particularly strong drift effect in this sample. The long-short Sharpe of 7.31 is far above levels typically achievable in practice, raising the possibility of look-ahead bias, data mining, or an unrealistically clean signal. The weak performance of book-to-market and other fundamental characteristics may be due to the relatively short sample period, the specific index universe, or the use of point-in-time annual data that may not capture the intended anomalies. The lack of significance for idiosyncratic volatility, turnover, and R&D intensity suggests these features do not provide incremental predictive power in this panel.\n\n## Limitations\nThis study has several important limitations. First, the dataset is a synthetic or curated panel with exactly 500 stocks per month and a very strong SUE signal, which may not generalize to real-world data. Second, the SUE long-short Sharpe of 7.31 is implausibly high and likely reflects overfitting or data artifacts; we do not have access to raw data to verify the construction. Third, the analysis is based solely on summary statistics and cannot account for transaction costs, market impact, or capacity constraints. Fourth, the sample period of 120 months is relatively short for evaluating factor robustness. Fifth, we cannot examine potential interaction effects or nonlinear relationships among features. Finally, the lack of information on stock-level coverage, missing data, or corporate actions limits the reliability of the conclusions.\n\n```json\n{\n  \"valid_signals\": [\n    {\"feature\": \"sue\", \"direction\": \"positive\", \"monthly_rank_ic\": 0.0998}\n  ],\n  \"rejected_signals\": [\n    {\"feature\": \"book_to_market\", \"reason\": \"Mean rank IC is -0.0030 with t-stat -0.72, not statistically significant.\"},\n    {\"feature\": \"gross_prof\", \"reason\": \"Mean rank IC is 0.0039 with t-stat 0.93, not statistically significant.\"},\n    {\"feature\": \"log_mktcap\", \"reason\": \"Mean rank IC is 0.0001 with t-stat 0.02, not statistically significant.\"},\n    {\"feature\": \"asset_growth\", \"reason\": \"Mean rank IC is 0.0061 with t-stat 1.64, below conventional significance threshold.\"},\n    {\"feature\": \"accruals\", \"reason\": \"Mean rank IC is 0.0055 with t-stat 1.34, not statistically significant.\"},\n    {\"feature\": \"idio_vol\", \"reason\": \"Mean rank IC is 0.0043 with t-stat 1.14, not statistically significant.\"},\n    {\"feature\": \"leverage\", \"reason\": \"Mean rank IC is -0.0043 with t-stat -1.00, not statistically significant.\"},\n    {\"feature\": \"turnover\", \"reason\": \"Mean rank IC is 0.0001 with t-stat 0.02, not statistically significant.\"},\n    {\"feature\": \"rd_intensity\", \"reason\": \"Mean rank IC is -0.0002 with t-stat -0.05, not statistically significant.\"}\n  ],\n  \"strategy\": {\n    \"description\": \"Each month, rank stocks by SUE and form an equal-weighted long-short portfolio that buys the top quintile and sells the bottom quintile, rebalanced monthly.\",\n    \"expected_annual_return\": 0.44,\n    \"expected_annual_sharpe\": 7.31\n  },\n  \"limitations\": [\n    \"The SUE long-short Sharpe of 7.31 is implausibly high and likely reflects overfitting or data artifacts.\",\n    \"The dataset is synthetic or curated with exactly 500 stocks per month and may not generalize to real-world data.\",\n    \"Transaction costs, market impact, and capacity constraints are not accounted for.\",\n    \"The 120-month sample period is relatively short for evaluating factor robustness.\",\n    \"Analysis is based solely on summary statistics without access to raw data for verification.\"\n  ]\n}\n```",
+  "reasoning_content": null
+}

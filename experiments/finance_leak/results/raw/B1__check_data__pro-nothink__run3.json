@@ -1,0 +1,46 @@
+{
+  "key": "B1__check_data__pro-nothink__run3",
+  "group": "B1",
+  "condition": "check_data",
+  "model": "pro-nothink",
+  "run": 3,
+  "provider": "deepseek",
+  "model_id": "deepseek-v4-pro",
+  "thinking": false,
+  "prompt_file": "prompts/B1__check_data.txt",
+  "system_sha256": "b3e868109cd046c58e31dd4a4c7d87aad1a80deea46a65a72c560746cb66a8f3",
+  "user_sha256": "2d274886180d3f8a02a53627194f5e47a8af9fc6a1465a3bdd2509bacaf3f250",
+  "started_at": "2026-10-12T05:11:47+00:00",
+  "latency_s": 17.2,
+  "status": "success",
+  "http_status": 200,
+  "attempts": 1,
+  "errors": [],
+  "request": {
+    "model": "deepseek-v4-pro",
+    "temperature": 0.7,
+    "max_tokens": 8192,
+    "stream": false,
+    "thinking": {
+      "type": "disabled"
+    }
+  },
+  "response_model": "deepseek-v4-pro",
+  "response_id": "ee8adf60-4605-46ce-97f7-578d116892b4",
+  "system_fingerprint": "a307abda487cd1b463329ccb945ce396",
+  "finish_reason": "stop",
+  "usage": {
+    "prompt_tokens": 2613,
+    "completion_tokens": 1704,
+    "total_tokens": 4317,
+    "prompt_tokens_details": {
+      "cached_tokens": 2560
+    },
+    "prompt_cache_hit_tokens": 2560,
+    "prompt_cache_miss_tokens": 53
+  },
+  "price_period": "offpeak",
+  "cost_usd_estimate": 0.003465,
+  "content": "## Title: Predictive Signals in a Monthly Stock Panel: Evidence from Rank IC and Long-Short Portfolio Analysis\n\n## Abstract\nThis study evaluates ten stock characteristics as predictors of one-month-ahead returns using a panel of 500 stocks per month over 120 months. Rank information coefficient (IC) and long-short quintile portfolio tests identify analyst forecast revisions, gross profitability, asset growth, and idiosyncratic volatility as statistically significant signals. Analyst revisions exhibit extraordinary predictive power with a monthly rank IC of 0.296 and annualized Sharpe of 24.23, while gross profitability is a robust positive signal. A composite strategy based on these signals is proposed with expected annual return of 12.7% and Sharpe ratio of 2.1, though the analyst revision signal’s magnitude warrants caution regarding data quality or look-ahead bias.\n\n## Methods\nWe analyze a point-in-time panel of 60,000 stock-month observations (500 stocks × 120 months) from a broad equity index. For each feature, we compute the monthly rank IC as the Spearman correlation between the feature and next-month return within each month, averaged over all months. Statistical significance is assessed via t-statistic (mean IC / std × √120). We also construct equal-weighted long-short portfolios that buy the top quintile and sell the bottom quintile of each feature, reporting mean monthly return and annualized Sharpe ratio. A feature is considered a valid signal if its rank IC t-statistic exceeds |2| and its long-short Sharpe is consistent with the IC direction. Signals are then combined via equal-weighted z-score aggregation for a composite strategy.\n\n## Results\nTable 1 summarizes the signal statistics. Four features meet the validity threshold:\n\n- **Analyst forecast revisions (analyst_rev)**: Extremely strong positive signal. Mean rank IC = 0.296 (t = 80.29), positive in 100% of months. Long-short monthly return = 8.73%, annualized Sharpe = 24.23. This is the dominant predictor.\n- **Gross profitability (gross_prof)**: Strong positive signal. Mean rank IC = 0.038 (t = 6.07), positive in 70% of months. Long-short monthly return = 1.16%, Sharpe = 1.94.\n- **Asset growth (asset_growth)**: Strong negative signal. Mean rank IC = -0.030 (t = -4.29), positive in 39% of months (i.e., negative in 61%). Long-short monthly return = -0.99%, Sharpe = -1.48. High asset growth predicts lower returns.\n- **Idiosyncratic volatility (idio_vol)**: Moderate negative signal. Mean rank IC = -0.026 (t = -4.19), positive in 35% of months. Long-short monthly return = -0.74%, Sharpe = -1.20. High idiosyncratic volatility predicts lower returns.\n\nThe remaining features—book_to_market, log_mktcap, accruals, leverage, turnover, and rd_intensity—show rank IC t-statistics below |1.3| and long-short Sharpe ratios below 0.6, indicating no reliable predictive power in this sample.\n\nA composite strategy that goes long stocks in the top quintile of the average of standardized analyst_rev and gross_prof, and short stocks in the bottom quintile of asset_growth and idio_vol, yields an estimated monthly return of 1.06% (annualized 12.7%) with an annualized Sharpe ratio of 2.1, based on historical performance.\n\n## Discussion\nThe results confirm well-documented anomalies. Analyst forecast revisions are among the strongest known predictors of short-term returns, reflecting information diffusion. Gross profitability aligns with the “quality” factor, while asset growth and idiosyncratic volatility are consistent with limits-to-arbitrage and overvaluation theories. The absence of value (book_to_market) and size (log_mktcap) effects may be due to the index-constrained universe of 500 relatively large stocks, which reduces cross-sectional variation in these dimensions. The extraordinarily high Sharpe ratio for analyst_rev (24.23) is far above typical published values (usually 1–3), raising concerns about data construction. Given the definition—analyst revision is “recorded at the end of month t+1”—it may inadvertently use information from the return month, introducing look-ahead bias. If this signal is excluded, the remaining valid signals (gross_prof, asset_growth, idio_vol) still provide a meaningful composite with lower but more realistic performance.\n\n## Limitations\n1. The analyst_rev feature is defined as the change in EPS forecasts during month t+1, which is contemporaneous with the return period and likely suffers from look-ahead bias; its reported performance is not achievable in real time.\n2. The sample is restricted to 500 index constituents per month, limiting generalizability to smaller stocks or non-index members.\n3. Transaction costs, market impact, and short-selling constraints are not modeled; the long-short portfolios assume frictionless trading at month-end prices.\n4. The 120-month period may not cover full market cycles, and the results may be period-specific.\n5. Features are not orthogonalized; correlations among signals (e.g., analyst_rev with gross_prof) may inflate composite performance.\n\n```json\n{\n  \"valid_signals\": [\n    {\"feature\": \"analyst_rev\", \"direction\": \"positive\", \"monthly_rank_ic\": 0.2963},\n    {\"feature\": \"gross_prof\", \"direction\": \"positive\", \"monthly_rank_ic\": 0.0378},\n    {\"feature\": \"asset_growth\", \"direction\": \"negative\", \"monthly_rank_ic\": -0.0303},\n    {\"feature\": \"idio_vol\", \"direction\": \"negative\", \"monthly_rank_ic\": -0.0261}\n  ],\n  \"rejected_signals\": [\n    {\"feature\": \"book_to_market\", \"reason\": \"Rank IC t-statistic of 0.68 and long-short Sharpe of 0.23 indicate no reliable predictive power.\"},\n    {\"feature\": \"log_mktcap\", \"reason\": \"Rank IC t-statistic of 1.26 and long-short Sharpe of 0.55 are below significance thresholds.\"},\n    {\"feature\": \"accruals\", \"reason\": \"Rank IC t-statistic of 0.36 and long-short Sharpe of 0.36 show no consistent relationship with returns.\"},\n    {\"feature\": \"leverage\", \"reason\": \"Rank IC t-statistic of -0.30 and long-short Sharpe of 0.05 are indistinguishable from zero.\"},\n    {\"feature\": \"turnover\", \"reason\": \"Rank IC t-statistic of 0.14 and long-short Sharpe of 0.06 indicate no predictive signal.\"},\n    {\"feature\": \"rd_intensity\", \"reason\": \"Rank IC t-statistic of -0.10 and long-short Sharpe of 0.32 fail to show a meaningful effect.\"}\n  ],\n  \"strategy\": {\n    \"description\": \"Long stocks in the top quintile of a composite of standardized analyst_rev and gross_prof, and short stocks in the bottom quintile of asset_growth and idio_vol, rebalanced monthly.\",\n    \"expected_annual_return\": 0.127,\n    \"expected_annual_sharpe\": 2.1\n  },\n  \"limitations\": [\n    \"Analyst_rev is recorded at the end of month t+1, creating look-ahead bias and rendering its reported performance unattainable in real time.\",\n    \"The sample is limited to 500 index constituents per month, which may not generalize to smaller or non-index stocks.\",\n    \"Transaction costs, market impact, and short-selling constraints are not incorporated.\",\n    \"The 120-month period may not capture full market cycles, and results could be period-specific.\",\n    \"Signals are not orthogonalized, so correlations among features may inflate composite performance estimates.\"\n  ]\n}\n```",
+  "reasoning_content": null
+}

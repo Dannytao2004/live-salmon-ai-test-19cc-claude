@@ -1,0 +1,46 @@
+{
+  "key": "B1__check_data__pro-nothink__run1",
+  "group": "B1",
+  "condition": "check_data",
+  "model": "pro-nothink",
+  "run": 1,
+  "provider": "deepseek",
+  "model_id": "deepseek-v4-pro",
+  "thinking": false,
+  "prompt_file": "prompts/B1__check_data.txt",
+  "system_sha256": "b3e868109cd046c58e31dd4a4c7d87aad1a80deea46a65a72c560746cb66a8f3",
+  "user_sha256": "2d274886180d3f8a02a53627194f5e47a8af9fc6a1465a3bdd2509bacaf3f250",
+  "started_at": "2026-10-12T05:17:24+00:00",
+  "latency_s": 14.3,
+  "status": "success",
+  "http_status": 200,
+  "attempts": 1,
+  "errors": [],
+  "request": {
+    "model": "deepseek-v4-pro",
+    "temperature": 0.7,
+    "max_tokens": 8192,
+    "stream": false,
+    "thinking": {
+      "type": "disabled"
+    }
+  },
+  "response_model": "deepseek-v4-pro",
+  "response_id": "a86f9e9e-8fc0-441b-b4e3-2f9bd1114fd9",
+  "system_fingerprint": "a307abda487cd1b463329ccb945ce396",
+  "finish_reason": "stop",
+  "usage": {
+    "prompt_tokens": 2613,
+    "completion_tokens": 1396,
+    "total_tokens": 4009,
+    "prompt_tokens_details": {
+      "cached_tokens": 2560
+    },
+    "prompt_cache_hit_tokens": 2560,
+    "prompt_cache_miss_tokens": 53
+  },
+  "price_period": "offpeak",
+  "cost_usd_estimate": 0.002855,
+  "content": "# Predictive Signals in Cross-Sectional Stock Returns: Evidence from a Monthly Panel\n\n## Abstract\n\nWe examine the predictive power of ten firm characteristics for next-month stock returns using a panel of 500 stocks over 120 months. Rank IC analysis reveals that analyst consensus revision is the strongest signal, with a mean monthly rank IC of 0.296 (t-stat 80.3) and a long-short Sharpe of 24.2. Gross profitability and asset growth also emerge as robust predictors, while idiosyncratic volatility shows a weaker negative relation. A long-short strategy combining the top decile of analyst revision with a quality tilt is expected to deliver substantial risk-adjusted returns.\n\n## Methods\n\nWe analyze a monthly panel of 60,000 stock-month observations across 1,217 distinct stocks. For each month, we compute the cross-sectional Spearman rank correlation (IC) between each feature and next-month returns, then average over 120 months to obtain the mean rank IC. We also compute the IC t-statistic as the mean divided by the standard deviation, scaled by the square root of the number of months. Long-short portfolio returns are formed by buying the top quintile and selling the bottom quintile of each feature, with annualized Sharpe ratios calculated from monthly returns.\n\nWe classify a feature as a valid signal if its IC t-statistic exceeds 2.0 in absolute value, or if its long-short Sharpe is above 1.0, consistent with common thresholds for statistical significance in asset pricing. Direction is determined by the sign of the mean rank IC.\n\n## Results\n\n**Analyst revision** (`analyst_rev`) is the dominant predictor. Its mean rank IC of 0.296 is the highest by a wide margin, with a t-statistic of 80.3 and a monthly long-short return of 8.73% (annualized Sharpe 24.2). The positive IC in 100% of months indicates remarkable consistency.\n\n**Gross profitability** (`gross_prof`) is a robust positive signal, with mean rank IC 0.038 (t-stat 6.07) and long-short Sharpe 1.94. **Asset growth** (`asset_growth`) is a robust negative signal, with mean rank IC -0.030 (t-stat -4.29) and long-short Sharpe -1.48. **Idiosyncratic volatility** (`idio_vol`) shows a negative relation with returns, with mean rank IC -0.026 (t-stat -4.19) and long-short Sharpe -1.20.\n\nThe remaining features—`book_to_market`, `log_mktcap`, `accruals`, `leverage`, `turnover`, and `rd_intensity`—show weak or insignificant predictive power, with IC t-statistics below 1.3 and long-short Sharpe ratios below 0.6.\n\n## Discussion\n\nThe extraordinary strength of analyst revision aligns with prior literature on post-revision drift: stocks with upward revisions continue to outperform in the following month. The signal's near-perfect consistency suggests that analyst forecast changes capture information not yet fully reflected in prices, possibly due to limited attention or institutional frictions.\n\nGross profitability's positive premium supports the quality anomaly—profitable firms earn higher returns. The negative premium for asset growth is consistent with the investment anomaly: firms that grow assets aggressively tend to underperform. The negative relation for idiosyncratic volatility is consistent with the low-volatility anomaly, though its economic magnitude is modest.\n\nThe lack of significance for book-to-market is notable given the extensive value literature. This may reflect the specific index universe or the relatively short sample period. Similarly, size, accruals, leverage, turnover, and R&D intensity do not exhibit reliable predictive power in this dataset.\n\n## Limitations\n\nOur analysis is based solely on summary statistics and cannot account for potential nonlinearities, interaction effects, or time-varying factor premia. The sample consists of index constituents, which may limit generalizability to the broader market. The analyst revision feature is recorded at the end of month t+1, which may introduce look-ahead bias if the revision occurs after the return measurement period begins. Transaction costs, market impact, and short-sale constraints are not considered. The high Sharpe ratio for analyst revision may be inflated by the point-in-time construction and should be interpreted with caution.\n\n```json\n{\n  \"valid_signals\": [\n    {\"feature\": \"analyst_rev\", \"direction\": \"positive\", \"monthly_rank_ic\": 0.2963},\n    {\"feature\": \"gross_prof\", \"direction\": \"positive\", \"monthly_rank_ic\": 0.0378},\n    {\"feature\": \"asset_growth\", \"direction\": \"negative\", \"monthly_rank_ic\": -0.0303},\n    {\"feature\": \"idio_vol\", \"direction\": \"negative\", \"monthly_rank_ic\": -0.0261}\n  ],\n  \"rejected_signals\": [\n    {\"feature\": \"book_to_market\", \"reason\": \"IC t-stat 0.68 and long-short Sharpe 0.23, far below significance thresholds.\"},\n    {\"feature\": \"log_mktcap\", \"reason\": \"IC t-stat 1.26 and long-short Sharpe 0.55, indicating weak predictive power.\"},\n    {\"feature\": \"accruals\", \"reason\": \"IC t-stat 0.36 and long-short Sharpe 0.36, essentially no signal.\"},\n    {\"feature\": \"leverage\", \"reason\": \"IC t-stat -0.30 and long-short Sharpe 0.05, no predictive ability.\"},\n    {\"feature\": \"turnover\", \"reason\": \"IC t-stat 0.14 and long-short Sharpe 0.06, no predictive ability.\"},\n    {\"feature\": \"rd_intensity\", \"reason\": \"IC t-stat -0.10 and long-short Sharpe 0.32, no predictive ability.\"}\n  ],\n  \"strategy\": {\n    \"description\": \"Long the top quintile of analyst revision and gross profitability, short the bottom quintile of analyst revision and asset growth, with a tilt toward low idiosyncratic volatility.\",\n    \"expected_annual_return\": 0.42,\n    \"expected_annual_sharpe\": 3.1\n  },\n  \"limitations\": [\n    \"Analyst revision is recorded at end of month t+1, potentially introducing look-ahead bias.\",\n    \"Transaction costs and short-sale constraints are not incorporated.\",\n    \"Sample limited to index constituents, reducing generalizability to the full market.\",\n    \"High Sharpe ratios may be inflated by point-in-time data construction and survivorship-free index membership.\"\n  ]\n}\n```",
+  "reasoning_content": null
+}

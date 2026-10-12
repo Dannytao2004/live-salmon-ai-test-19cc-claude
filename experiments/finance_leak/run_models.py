@@ -25,6 +25,7 @@ import hashlib
 import json
 import os
 import random
+import sys
 import time
 from collections import Counter, defaultdict
 
@@ -360,6 +361,7 @@ def summarize(records: list) -> None:
 
 
 def main() -> None:
+    sys.stdout.reconfigure(line_buffering=True)  # progress shows up live even when output goes to a file
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--live", action="store_true", help="actually call the APIs (costs money)")
     parser.add_argument("--summary", action="store_true", help="summarize saved results and exit")

@@ -1,0 +1,46 @@
+{
+  "key": "C3__plain__pro-nothink__run1",
+  "group": "C3",
+  "condition": "plain",
+  "model": "pro-nothink",
+  "run": 1,
+  "provider": "deepseek",
+  "model_id": "deepseek-v4-pro",
+  "thinking": false,
+  "prompt_file": "prompts/C3__plain.txt",
+  "system_sha256": "b3e868109cd046c58e31dd4a4c7d87aad1a80deea46a65a72c560746cb66a8f3",
+  "user_sha256": "f0992affbe2ef257786821b874f83f09d0870c2e1a17eeccc72a5bc51a8c4a9f",
+  "started_at": "2026-10-12T05:16:35+00:00",
+  "latency_s": 12.4,
+  "status": "success",
+  "http_status": 200,
+  "attempts": 1,
+  "errors": [],
+  "request": {
+    "model": "deepseek-v4-pro",
+    "temperature": 0.7,
+    "max_tokens": 8192,
+    "stream": false,
+    "thinking": {
+      "type": "disabled"
+    }
+  },
+  "response_model": "deepseek-v4-pro",
+  "response_id": "84d859f0-6b23-404a-b76f-58f2ae579b42",
+  "system_fingerprint": "a307abda487cd1b463329ccb945ce396",
+  "finish_reason": "stop",
+  "usage": {
+    "prompt_tokens": 2414,
+    "completion_tokens": 1241,
+    "total_tokens": 3655,
+    "prompt_tokens_details": {
+      "cached_tokens": 2304
+    },
+    "prompt_cache_hit_tokens": 2304,
+    "prompt_cache_miss_tokens": 110
+  },
+  "price_period": "offpeak",
+  "cost_usd_estimate": 0.00258,
+  "content": "# Predictive Signals in a Monthly Stock Panel: Evidence from a Broad Equity Index\n\n## Abstract\n\nWe evaluate nine stock characteristics as predictors of next-month returns in a panel of 500 stocks over 120 months. Only leverage exhibits a statistically significant rank IC, with a mean of 0.0164 and a t-statistic of 2.74, indicating a positive cross-sectional relationship between leverage and future returns. All other features fail to show meaningful predictive power, with absolute t-statistics below 1.2. A long-short quintile strategy based on leverage yields an annualized Sharpe ratio of 0.92. We conclude that leverage is the only robust signal in this dataset, though its economic significance is modest.\n\n## Methods\n\nWe use a monthly stock panel of 500 stocks over 120 months, totaling 34,708 stock-month observations. The prediction target is the next-month total return, `ret_next`. For each month, we compute the rank correlation (Spearman) between each of nine features and `ret_next` across stocks. The reported rank IC is the time-series mean of these monthly rank correlations, with t-statistics computed as mean / standard deviation × √120. Long-short returns are constructed by going long the top quintile and short the bottom quintile of each feature, equal-weighted within quintiles, rebalanced monthly. We consider a feature a valid signal if its rank IC has an absolute t-statistic greater than 2.0 (approximately the 95% confidence threshold for 120 months).\n\n## Results\n\nTable 1 summarizes the signal statistics. Among the nine features, only `leverage` has a statistically significant mean rank IC of 0.0164 (t = 2.74), with 59% of monthly ICs positive. The long-short portfolio based on leverage generates a mean monthly return of 0.52% and an annualized Sharpe ratio of 0.92. All other features have t-statistics below 1.16, indicating no reliable predictive power. Notably, `book_to_market`, a widely studied value factor, shows a slightly negative but insignificant IC (-0.0017, t = -0.28). `asset_growth`, `accruals`, and `idio_vol` show weakly positive ICs but fail to reach statistical significance.\n\n## Discussion\n\nThe positive relationship between leverage and future returns is consistent with the leverage-return puzzle documented in some empirical studies, where high-leverage stocks earn higher average returns, possibly as compensation for financial distress risk. The lack of significance for traditional factors such as book-to-market, gross profitability, and asset growth may reflect the specific sample composition (index constituents) or the relatively short time period. The long-short leverage strategy's Sharpe ratio of 0.92 suggests a potentially profitable trading strategy, though the average long-short return of 0.52% per month is moderate.\n\n## Limitations\n\nThis study uses a single dataset with a limited time span of 120 months, which may not capture full economic cycles. The sample consists of stocks that are index constituents at the end of month 120, introducing survivorship bias. Rank ICs are computed cross-sectionally each month, but the number of stocks varies from 143 to 500, which may affect the stability of early-month estimates. The analysis does not control for transaction costs, which could significantly reduce the net profitability of the long-short strategy. Finally, only univariate signals are considered; multivariate combinations or interaction effects are not explored.\n\n```json\n{\n  \"valid_signals\": [\n    {\"feature\": \"leverage\", \"direction\": \"positive\", \"monthly_rank_ic\": 0.0164}\n  ],\n  \"rejected_signals\": [\n    {\"feature\": \"book_to_market\", \"reason\": \"Rank IC t-statistic is -0.28, far below the 2.0 threshold for statistical significance.\"},\n    {\"feature\": \"gross_prof\", \"reason\": \"Rank IC t-statistic is 0.23, far below the 2.0 threshold for statistical significance.\"},\n    {\"feature\": \"log_mktcap\", \"reason\": \"Rank IC t-statistic is 0.26, far below the 2.0 threshold for statistical significance.\"},\n    {\"feature\": \"asset_growth\", \"reason\": \"Rank IC t-statistic is 1.16, below the 2.0 threshold for statistical significance.\"},\n    {\"feature\": \"accruals\", \"reason\": \"Rank IC t-statistic is 1.03, below the 2.0 threshold for statistical significance.\"},\n    {\"feature\": \"idio_vol\", \"reason\": \"Rank IC t-statistic is 0.86, below the 2.0 threshold for statistical significance.\"},\n    {\"feature\": \"turnover\", \"reason\": \"Rank IC t-statistic is -0.10, far below the 2.0 threshold for statistical significance.\"},\n    {\"feature\": \"rd_intensity\", \"reason\": \"Rank IC t-statistic is 0.20, far below the 2.0 threshold for statistical significance.\"}\n  ],\n  \"strategy\": {\n    \"description\": \"Long the top quintile and short the bottom quintile of stocks sorted by leverage, rebalanced monthly with equal weights.\",\n    \"expected_annual_return\": 0.064,\n    \"expected_annual_sharpe\": 0.92\n  },\n  \"limitations\": [\n    \"The dataset covers only 120 months and may not capture full economic cycles.\",\n    \"The sample is subject to survivorship bias because it includes only stocks that are index constituents at the end of month 120.\",\n    \"The number of stocks per month varies from 143 to 500, which may affect early-month rank IC stability.\",\n    \"Transaction costs are not considered and could reduce net returns of the long-short strategy.\",\n    \"Only univariate signals are examined; multivariate combinations or interactions are not explored.\"\n  ]\n}\n```",
+  "reasoning_content": null
+}

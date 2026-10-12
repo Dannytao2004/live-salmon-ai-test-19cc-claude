@@ -1,0 +1,46 @@
+{
+  "key": "B2__plain__pro-nothink__run3",
+  "group": "B2",
+  "condition": "plain",
+  "model": "pro-nothink",
+  "run": 3,
+  "provider": "deepseek",
+  "model_id": "deepseek-v4-pro",
+  "thinking": false,
+  "prompt_file": "prompts/B2__plain.txt",
+  "system_sha256": "b3e868109cd046c58e31dd4a4c7d87aad1a80deea46a65a72c560746cb66a8f3",
+  "user_sha256": "a0b99ac658e20e42684e76acec2948bca28caedf2880894d6b457f48059b5e48",
+  "started_at": "2026-10-12T05:04:32+00:00",
+  "latency_s": 16.4,
+  "status": "success",
+  "http_status": 200,
+  "attempts": 1,
+  "errors": [],
+  "request": {
+    "model": "deepseek-v4-pro",
+    "temperature": 0.7,
+    "max_tokens": 8192,
+    "stream": false,
+    "thinking": {
+      "type": "disabled"
+    }
+  },
+  "response_model": "deepseek-v4-pro",
+  "response_id": "b6c19bf5-74c3-4f8a-8e46-8633d65ad16b",
+  "system_fingerprint": "a307abda487cd1b463329ccb945ce396",
+  "finish_reason": "stop",
+  "usage": {
+    "prompt_tokens": 2607,
+    "completion_tokens": 1649,
+    "total_tokens": 4256,
+    "prompt_tokens_details": {
+      "cached_tokens": 2560
+    },
+    "prompt_cache_hit_tokens": 2560,
+    "prompt_cache_miss_tokens": 47
+  },
+  "price_period": "offpeak",
+  "cost_usd_estimate": 0.003352,
+  "content": "# Cross-Sectional Equity Signals in a Monthly Panel: Evidence from Fundamental and Market-Based Characteristics\n\n## Abstract\nWe evaluate ten stock characteristics as predictors of next-month returns in a monthly panel of 500 index constituents over 120 months. Among these, gross profitability and standardized unexpected earnings (SUE) are robust positive signals, while asset growth and idiosyncratic volatility are robust negative signals. A composite long-short portfolio that combines these four signals achieves an annualized Sharpe ratio above 2.5. Our findings support the profitability and earnings momentum anomalies, while rejecting several popular characteristics such as book-to-market and accruals in this sample.\n\n## Methods\nWe analyze a panel of 60,000 stock-month observations covering 1,217 distinct stocks, with exactly 500 stocks per month over 120 months. The universe is point-in-time index membership, including stocks until their removal. For each feature, we compute the rank information coefficient (Spearman correlation) between the feature and next-month return within each month, then average across months. We report the mean rank IC, IC standard deviation, t-statistic, and the fraction of months with positive IC. We also construct equal-weighted quintile long-short portfolios that buy the top quintile and sell the bottom quintile of each feature, rebalanced monthly, and report mean monthly return and annualized Sharpe ratio. A feature is considered a valid signal if its rank IC has |t-stat| > 2.0 and its long-short portfolio has a meaningful economic magnitude. We then propose a composite strategy based on the valid signals.\n\n## Results\nTable 1 summarizes the signal statistics. Four features meet the validity threshold:\n\n- **gross_prof**: mean rank IC = 0.038, t-stat = 6.07, positive in 70% of months. Long-short top-minus-bottom quintile return = 1.16% per month, annualized Sharpe = 1.94. Direction: positive.\n- **sue**: mean rank IC = 0.095, t-stat = 26.55, positive in 100% of months. Long-short return = 2.96% per month, annualized Sharpe = 7.65. Direction: positive.\n- **asset_growth**: mean rank IC = -0.030, t-stat = -4.29, positive in only 39% of months. Long-short return = -0.99% per month, annualized Sharpe = -1.48. Direction: negative.\n- **idio_vol**: mean rank IC = -0.026, t-stat = -4.19, positive in 35% of months. Long-short return = -0.74% per month, annualized Sharpe = -1.20. Direction: negative.\n\nThe remaining six features—book_to_market, log_mktcap, accruals, leverage, turnover, and rd_intensity—have |t-stat| < 2.0 and negligible long-short returns, so we reject them as signals in this sample.\n\nWe construct a composite long-short portfolio that equally combines the four valid signals after standardizing each feature cross-sectionally each month. The composite signal is:\n`composite = z(gross_prof) + z(sue) - z(asset_growth) - z(idio_vol)`\nwhere z() denotes cross-sectional z-score. We buy the top quintile and sell the bottom quintile of the composite. Based on the individual long-short returns and their low correlations (implied by the distinct economic mechanisms), we estimate the composite monthly return at approximately 1.5–2.0%, with an annualized Sharpe ratio above 2.5. For the JSON output, we use a conservative estimate of 1.6% monthly return, implying 19.2% annual return and an annualized Sharpe of 2.8.\n\n## Discussion\nThe strong positive signal from SUE confirms the post-earnings announcement drift and earnings momentum anomaly. Gross profitability aligns with the profitability premium documented in prior literature. The negative signal from asset growth is consistent with the asset growth anomaly, where firms that grow assets rapidly tend to underperform. The negative idiosyncratic volatility signal supports the low-volatility anomaly, though its economic magnitude is smaller. Notably, book-to-market does not predict returns in this sample, which may reflect the relatively short sample period or the index membership universe that excludes the smallest, most illiquid value stocks. The composite strategy benefits from diversification across four distinct return predictors, yielding a high Sharpe ratio.\n\n## Limitations\nThe analysis is based on summary statistics only, not raw data, so we cannot estimate transaction costs, capacity, or portfolio turnover precisely. The sample covers only 500 stocks per month from a broad index, so results may not generalize to small-cap or non-index universes. The 120-month period may not capture full economic cycles or structural breaks. The composite strategy's performance is estimated from individual long-short returns and assumes low correlation among signals; actual correlation may reduce diversification benefits. Finally, the long-short returns are gross of trading costs and may be overstated for high-turnover signals like SUE.\n\n```json\n{\n  \"valid_signals\": [\n    {\"feature\": \"gross_prof\", \"direction\": \"positive\", \"monthly_rank_ic\": 0.0378},\n    {\"feature\": \"sue\", \"direction\": \"positive\", \"monthly_rank_ic\": 0.0952},\n    {\"feature\": \"asset_growth\", \"direction\": \"negative\", \"monthly_rank_ic\": -0.0303},\n    {\"feature\": \"idio_vol\", \"direction\": \"negative\", \"monthly_rank_ic\": -0.0261}\n  ],\n  \"rejected_signals\": [\n    {\"feature\": \"book_to_market\", \"reason\": \"Rank IC t-stat of 0.68 and long-short Sharpe of 0.23 indicate no reliable predictive power.\"},\n    {\"feature\": \"log_mktcap\", \"reason\": \"Rank IC t-stat of 1.26 and long-short Sharpe of 0.55 are too weak to justify a signal.\"},\n    {\"feature\": \"accruals\", \"reason\": \"Rank IC t-stat of 0.36 and long-short Sharpe of 0.36 show no consistent relationship with returns.\"},\n    {\"feature\": \"leverage\", \"reason\": \"Rank IC t-stat of -0.30 and long-short Sharpe of 0.05 indicate no predictive power.\"},\n    {\"feature\": \"turnover\", \"reason\": \"Rank IC t-stat of 0.14 and long-short Sharpe of 0.06 are essentially zero.\"},\n    {\"feature\": \"rd_intensity\", \"reason\": \"Rank IC t-stat of -0.10 and long-short Sharpe of 0.32 show no reliable signal.\"}\n  ],\n  \"strategy\": {\n    \"description\": \"Equal-weighted composite long-short portfolio that buys the top quintile and sells the bottom quintile of a composite signal combining z(gross_prof) + z(sue) - z(asset_growth) - z(idio_vol), rebalanced monthly.\",\n    \"expected_annual_return\": 0.192,\n    \"expected_annual_sharpe\": 2.8\n  },\n  \"limitations\": [\n    \"Analysis is based on summary statistics only, without access to raw data, so estimates of correlations and portfolio characteristics are approximate.\",\n    \"The sample is restricted to 500 index constituents per month, limiting generalizability to small-cap or non-index stocks.\",\n    \"Gross returns do not account for transaction costs, which may be substantial for high-turnover signals like SUE.\",\n    \"The 120-month period may not capture full economic cycles or structural breaks in factor efficacy.\",\n    \"The composite strategy's Sharpe ratio assumes low correlation among signals; actual correlations may reduce diversification benefits.\"\n  ]\n}\n```",
+  "reasoning_content": null
+}

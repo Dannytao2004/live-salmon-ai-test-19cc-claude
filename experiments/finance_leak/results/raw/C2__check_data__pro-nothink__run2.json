@@ -1,0 +1,46 @@
+{
+  "key": "C2__check_data__pro-nothink__run2",
+  "group": "C2",
+  "condition": "check_data",
+  "model": "pro-nothink",
+  "run": 2,
+  "provider": "deepseek",
+  "model_id": "deepseek-v4-pro",
+  "thinking": false,
+  "prompt_file": "prompts/C2__check_data.txt",
+  "system_sha256": "b3e868109cd046c58e31dd4a4c7d87aad1a80deea46a65a72c560746cb66a8f3",
+  "user_sha256": "d954f1444f52d814ef9687eca97acf3e80b3ef32e446b7122e1a6fa463b5801c",
+  "started_at": "2026-10-12T04:40:55+00:00",
+  "latency_s": 15.5,
+  "status": "success",
+  "http_status": 200,
+  "attempts": 1,
+  "errors": [],
+  "request": {
+    "model": "deepseek-v4-pro",
+    "temperature": 0.7,
+    "max_tokens": 8192,
+    "stream": false,
+    "thinking": {
+      "type": "disabled"
+    }
+  },
+  "response_model": "deepseek-v4-pro",
+  "response_id": "2abd6095-61ed-4960-b5a6-43b1b738dc0c",
+  "system_fingerprint": "a307abda487cd1b463329ccb945ce396",
+  "finish_reason": "stop",
+  "usage": {
+    "prompt_tokens": 2612,
+    "completion_tokens": 1630,
+    "total_tokens": 4242,
+    "prompt_tokens_details": {
+      "cached_tokens": 2560
+    },
+    "prompt_cache_hit_tokens": 2560,
+    "prompt_cache_miss_tokens": 52
+  },
+  "price_period": "offpeak",
+  "cost_usd_estimate": 0.003318,
+  "content": "# Post-Earnings Announcement Drift as the Dominant Signal in a Monthly Stock Panel\n\n## Abstract\nWe examine the cross-sectional predictive power of ten firm characteristics for next-month stock returns in a panel of 500 index constituents over 120 months. Among the ten features, standardized unexpected earnings (SUE) exhibits an exceptionally strong and consistent positive rank correlation with future returns (mean monthly rank IC of 0.0998, t-statistic of 23.25). All other features show economically negligible and statistically insignificant rank ICs, with absolute t-statistics below 1.7. A long-short quintile portfolio based on SUE yields an annualized Sharpe ratio of 7.31, indicating a robust post-earnings announcement drift anomaly. We conclude that only SUE is a valid signal in this dataset, and propose a simple long-only tilt toward high-SUE stocks as the preferred strategy.\n\n## Methods\nWe use a monthly panel of 500 stocks over 120 months, totaling 60,000 stock-month observations. The prediction target is `ret_next`, the total stock return over month t+1. We evaluate ten candidate features: `book_to_market`, `gross_prof`, `log_mktcap`, `asset_growth`, `accruals`, `sue`, `idio_vol`, `leverage`, `turnover`, and `rd_intensity`.\n\nFor each feature, we compute within-month Spearman rank correlations (rank IC) between the feature and `ret_next`, then average over 120 months. We assess statistical significance using the t-statistic: mean rank IC divided by its standard deviation, multiplied by √120. A feature is considered a valid signal if its rank IC t-statistic exceeds 2.0 in absolute value and its sign is economically consistent with prior literature.\n\nWe also examine long-short quintile portfolio returns: each month, stocks are sorted into quintiles by the feature; the long-short return is the return of the top quintile minus the bottom quintile, equally weighted. We annualize the Sharpe ratio by multiplying the monthly Sharpe by √12.\n\n## Results\nTable 1 summarizes the signal statistics. The standout result is `sue` (standardized unexpected earnings), with a mean rank IC of 0.0998, IC standard deviation of 0.0470, and t-statistic of 23.25. The IC is positive in 99% of months. The long-short quintile portfolio earns an average monthly return of 3.04% and an annualized Sharpe ratio of 7.31. This indicates a strong positive relationship: stocks with higher earnings surprises outperform stocks with lower surprises over the next month.\n\nAll other features have rank IC t-statistics below 1.7 in absolute value. The next strongest are `asset_growth` (t = 1.64, IC = 0.0061) and `accruals` (t = 1.34, IC = 0.0055), but these are not statistically significant at conventional levels and their long-short Sharpe ratios are below 1.0. `book_to_market`, `gross_prof`, `log_mktcap`, `idio_vol`, `leverage`, `turnover`, and `rd_intensity` all have t-statistics near zero, indicating no reliable univariate predictive power in this sample.\n\n## Discussion\nThe dominance of `sue` is consistent with the post-earnings announcement drift (PEAD) anomaly documented extensively in the literature. The magnitude of the rank IC (≈0.10) and the near-perfect consistency across months suggest that the market underreacts to earnings news, and that this underreaction persists over the following month. The long-short Sharpe of 7.31 is unusually high, which may reflect the specific index universe, the equal-weighting scheme, and the absence of transaction costs in the reported statistics.\n\nThe lack of significance for other well-known factors such as book-to-market, gross profitability, and asset growth is surprising but plausible given the sample composition: the dataset consists of 500 large-cap index constituents each month, which may be a relatively efficient segment of the market. Additionally, the monthly horizon and the specific definitions of these characteristics may dilute their predictive power. The negative but insignificant IC for `book_to_market` and `leverage` is directionally consistent with value and leverage effects, but the magnitudes are too small to be actionable.\n\n## Limitations\nThis study is based solely on summary statistics and does not include portfolio construction details, transaction costs, or risk adjustments beyond the Sharpe ratio. The sample is limited to 500 index constituents per month, which may not generalize to the broader stock market. The extremely high Sharpe ratio for the SUE long-short strategy is likely overstated because it ignores trading costs, market impact, and short-sale constraints. The rank IC t-statistics assume independence across months, which may be violated by overlapping earnings announcements and persistent firm characteristics. Finally, the analysis is univariate; multivariate interactions among features are not explored.\n\n```json\n{\n  \"valid_signals\": [\n    {\"feature\": \"sue\", \"direction\": \"positive\", \"monthly_rank_ic\": 0.0998}\n  ],\n  \"rejected_signals\": [\n    {\"feature\": \"book_to_market\", \"reason\": \"Rank IC t-statistic of -0.72 is far below significance; no reliable predictive power.\"},\n    {\"feature\": \"gross_prof\", \"reason\": \"Rank IC t-statistic of 0.93 is below the 2.0 threshold; long-short Sharpe only 0.26.\"},\n    {\"feature\": \"log_mktcap\", \"reason\": \"Rank IC t-statistic of 0.02 indicates no relationship with future returns.\"},\n    {\"feature\": \"asset_growth\", \"reason\": \"Rank IC t-statistic of 1.64 is below significance; long-short Sharpe only 0.72.\"},\n    {\"feature\": \"accruals\", \"reason\": \"Rank IC t-statistic of 1.34 is below significance; long-short Sharpe only 0.70.\"},\n    {\"feature\": \"idio_vol\", \"reason\": \"Rank IC t-statistic of 1.14 is below significance; long-short Sharpe only 0.08.\"},\n    {\"feature\": \"leverage\", \"reason\": \"Rank IC t-statistic of -1.00 is below significance; long-short Sharpe near zero.\"},\n    {\"feature\": \"turnover\", \"reason\": \"Rank IC t-statistic of 0.02 indicates no relationship with future returns.\"},\n    {\"feature\": \"rd_intensity\", \"reason\": \"Rank IC t-statistic of -0.05 indicates no relationship with future returns.\"}\n  ],\n  \"strategy\": {\n    \"description\": \"Each month, rank stocks by SUE and go long the top quintile while shorting the bottom quintile, equally weighted. Alternatively, use a long-only tilt toward high-SUE stocks to avoid short-sale constraints.\",\n    \"expected_annual_return\": 0.3648,\n    \"expected_annual_sharpe\": 7.31\n  },\n  \"limitations\": [\n    \"Summary statistics do not account for transaction costs, market impact, or short-sale constraints, which would reduce the reported Sharpe ratio.\",\n    \"The sample is limited to 500 index constituents per month, limiting generalizability to smaller stocks or non-index names.\",\n    \"Rank IC t-statistics assume independence across months, which may be violated by overlapping earnings announcements and persistent firm characteristics.\",\n    \"The analysis is univariate and does not explore multivariate interactions or factor timing.\",\n    \"The extremely high Sharpe ratio for SUE may be inflated by the specific sample period and universe; out-of-sample validation is needed.\"\n  ]\n}\n```",
+  "reasoning_content": null
+}

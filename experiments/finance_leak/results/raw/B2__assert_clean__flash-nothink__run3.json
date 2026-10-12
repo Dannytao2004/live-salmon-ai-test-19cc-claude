@@ -1,0 +1,46 @@
+{
+  "key": "B2__assert_clean__flash-nothink__run3",
+  "group": "B2",
+  "condition": "assert_clean",
+  "model": "flash-nothink",
+  "run": 3,
+  "provider": "deepseek",
+  "model_id": "deepseek-flash",
+  "thinking": false,
+  "prompt_file": "prompts/B2__assert_clean.txt",
+  "system_sha256": "b3e868109cd046c58e31dd4a4c7d87aad1a80deea46a65a72c560746cb66a8f3",
+  "user_sha256": "7abb33c3b87c71f9152281fc8760ccc08153e688c7b2485de09d608fac97cf0a",
+  "started_at": "2026-10-12T05:11:18+00:00",
+  "latency_s": 12.6,
+  "status": "success",
+  "http_status": 200,
+  "attempts": 1,
+  "errors": [],
+  "request": {
+    "model": "deepseek-flash",
+    "temperature": 0.7,
+    "max_tokens": 8192,
+    "stream": false,
+    "thinking": {
+      "type": "disabled"
+    }
+  },
+  "response_model": "deepseek-flash",
+  "response_id": "22643acb-dc60-4eb9-bf59-2d49236831d6",
+  "system_fingerprint": "aeb56401ca74e127821c4f9126dcb669",
+  "finish_reason": "stop",
+  "usage": {
+    "prompt_tokens": 2624,
+    "completion_tokens": 1846,
+    "total_tokens": 4470,
+    "prompt_tokens_details": {
+      "cached_tokens": 2432
+    },
+    "prompt_cache_hit_tokens": 2432,
+    "prompt_cache_miss_tokens": 192
+  },
+  "price_period": "offpeak",
+  "cost_usd_estimate": 0.001144,
+  "content": "# Cross-Sectional Return Predictability in a Monthly Equity Panel: Evidence from Ten Firm Characteristics\n\n## Abstract\n\nWe evaluate ten firm characteristics as cross-sectional predictors of next-month stock returns using a 120-month panel of 500 index constituents per month (60,000 stock-months). Two signals display robust predictive power: standardized unexpected earnings (SUE) and gross profitability, both positively related to future returns, while asset growth and idiosyncratic volatility are reliably negative. The remaining six characteristics—book-to-market, log market cap, accruals, leverage, turnover, and R&D intensity—show weak or statistically insignificant rank ICs and are rejected. A composite strategy combining the four valid signals, with SUE dominating, is expected to deliver roughly 40% annualized return with a Sharpe ratio near 3.5 on an equal-weighted long-short basis.\n\n## Methods\n\n**Data.** The panel contains 60,000 rows: 120 months × 500 stocks. Each row reports point-in-time firm characteristics measured at month-end *t* and the total return over month *t+1* (`ret_next`). The universe is index-constituent based, with delisted/distressed names retained through their final month, mitigating survivorship bias.\n\n**Signal evaluation.** For each feature we use the provided monthly cross-sectional Spearman rank IC (feature rank vs. `ret_next` rank), averaged across months, with a t-statistic computed as mean(IC)/std(IC) × √120. We treat |t| ≳ 2 as evidence of a genuine signal and additionally require economic magnitude in the long-short quintile spread.\n\n**Strategy construction.** Valid signals are combined into a composite score. Because SUE's IC (0.095) is roughly 2.5× the next strongest signal, we weight signals approximately in proportion to their IC magnitude and sign. We form equal-weighted long-short quintile portfolios and estimate Sharpe ratios by scaling the reported single-signal figures, accounting for the imperfect correlation among signals (assumed average pairwise correlation of ~0.1–0.2, typical of these characteristic families).\n\n**Key assumptions.** Reported ICs and long-short returns are taken at face value (data pre-checked as clean); no transaction costs, borrow costs, or slippage are modeled in the headline numbers, and no explicit factor-neutralization is applied beyond the index universe itself.\n\n## Results\n\n**Valid signals.** Four features show statistically and economically meaningful predictive power:\n\n| Feature | Rank IC | t-stat | L/S monthly | L/S Sharpe | Direction |\n|---|---|---|---|---|---|\n| SUE | 0.0952 | 26.6 | +2.96% | 7.65 | positive |\n| gross_prof | 0.0378 | 6.07 | +1.16% | 1.94 | positive |\n| asset_growth | −0.0303 | −4.29 | −0.99% | −1.48 | negative |\n| idio_vol | −0.0261 | −4.19 | −0.74% | −1.20 | negative |\n\nSUE is exceptional: positive IC in 100% of months and a t-statistic of 26.6, consistent with strong post-earnings-announcement drift. Gross profitability replicates the expected quality premium. Asset growth (investment/overextrapolation) and idiosyncratic volatility (low-volatility anomaly) are robustly negative.\n\n**Rejected signals.** book_to_market (IC 0.0027, t=0.68), log_mktcap (0.0055, t=1.26), accruals (0.0015, t=0.36), leverage (−0.0011, t=−0.30), turnover (0.0006, t=0.14), and rd_intensity (−0.0004, t=−0.10) all fail to clear conventional significance, with |IC| < 0.006 and long-short Sharpes near zero.\n\n**Composite strategy.** Weighting the four valid signals by IC sign and magnitude yields a composite with an expected rank IC of roughly 0.10–0.11. The combined equal-weighted long-short portfolio is expected to earn about **3.0–3.5% per month** (≈40% annualized) with an annualized Sharpe near **3.5**, reflecting the high standalone Sharpe of SUE and modest diversification gains from the other three signals.\n\n## Discussion\n\nThe results align closely with established empirical asset-pricing findings. SUE's dominance is the classic earnings-momentum/drift effect, unusually strong here because the signal is standardized and announced with a one-month lag, ensuring genuine point-in-time information. Gross profitability captures the quality/profitability premium. The negative loadings on asset growth and idiosyncratic volatility are consistent with the investment and low-volatility anomalies. Critically, the *absence* of value (book-to-market) and size effects over this 120-month window is plausible: both have been weak in recent decades, and within a 500-stock large/mid-cap index the size spread is compressed. Accruals, leverage, turnover, and R&D intensity showing near-zero ICs suggests that within this particular universe and period these characteristics carry little incremental cross-sectional information—possibly because the index screen removes the extreme, distressed, or micro-cap names where these effects are strongest.\n\nThe practical implication is that a focused, low-turnover composite of SUE, profitability, asset growth, and idio vol is preferable to a broad multi-factor blend that dilutes signal with noise.\n\n## Limitations\n\n- No transaction costs, borrow costs, or market-impact modeling; the headline returns are gross and likely optimistic, especially given SUE's potentially high turnover.\n- Signals are evaluated in isolation; the composite Sharpe is an estimate assuming modest cross-signal correlation rather than a directly computed portfolio statistic.\n- The universe is restricted to 500 index constituents, so findings may not generalize to micro-caps or non-index stocks where several rejected anomalies typically live.\n- ICs and t-statistics are taken as given from the summary; no independent robustness checks (subperiod, sector-neutralization, winsorization) were performed.\n- Results are in-sample over a single 120-month window and may reflect period-specific regime effects.\n\n```json\n{\n  \"valid_signals\": [\n    {\"feature\": \"sue\", \"direction\": \"positive\", \"monthly_rank_ic\": 0.0952},\n    {\"feature\": \"gross_prof\", \"direction\": \"positive\", \"monthly_rank_ic\": 0.0378},\n    {\"feature\": \"asset_growth\", \"direction\": \"negative\", \"monthly_rank_ic\": -0.0303},\n    {\"feature\": \"idio_vol\", \"direction\": \"negative\", \"monthly_rank_ic\": -0.0261}\n  ],\n  \"rejected_signals\": [\n    {\"feature\": \"book_to_market\", \"reason\": \"Rank IC of 0.0027 with t-stat 0.68 is statistically indistinguishable from zero.\"},\n    {\"feature\": \"log_mktcap\", \"reason\": \"Rank IC of 0.0055 with t-stat 1.26 shows no reliable size effect in this index universe.\"},\n    {\"feature\": \"accruals\", \"reason\": \"Rank IC of 0.0015 with t-stat 0.36 indicates no meaningful accruals anomaly here.\"},\n    {\"feature\": \"leverage\", \"reason\": \"Rank IC of -0.0011 with t-stat -0.30 is essentially zero.\"},\n    {\"feature\": \"turnover\", \"reason\": \"Rank IC of 0.0006 with t-stat 0.14 shows no liquidity/turnover predictability.\"},\n    {\"feature\": \"rd_intensity\", \"direction\": \"negative\", \"monthly_rank_ic\": -0.0004}\n  ],\n  \"strategy\": {\n    \"description\": \"Equal-weighted long-short quintile composite of SUE, gross profitability (long) and asset growth, idiosyncratic volatility (short), weighted roughly in proportion to their rank ICs.\",\n    \"expected_annual_return\": 0.40,\n    \"expected_annual_sharpe\": 3.5\n  },\n  \"limitations\": [\n    \"Transaction and borrow costs are not modeled, so headline returns are gross and likely optimistic.\",\n    \"Composite Sharpe is estimated from single-signal statistics assuming modest cross-signal correlation rather than computed directly.\",\n    \"The 500-stock index universe may not generalize to micro-caps or non-index stocks.\",\n    \"Findings are in-sample over one 120-month window and may reflect period-specific regimes.\",\n    \"No subperiod, sector-neutralization, or winsorization robustness checks were performed.\"\n  ]\n}\n```",
+  "reasoning_content": null
+}

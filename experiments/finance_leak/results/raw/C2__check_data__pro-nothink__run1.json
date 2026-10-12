@@ -1,0 +1,46 @@
+{
+  "key": "C2__check_data__pro-nothink__run1",
+  "group": "C2",
+  "condition": "check_data",
+  "model": "pro-nothink",
+  "run": 1,
+  "provider": "deepseek",
+  "model_id": "deepseek-v4-pro",
+  "thinking": false,
+  "prompt_file": "prompts/C2__check_data.txt",
+  "system_sha256": "b3e868109cd046c58e31dd4a4c7d87aad1a80deea46a65a72c560746cb66a8f3",
+  "user_sha256": "d954f1444f52d814ef9687eca97acf3e80b3ef32e446b7122e1a6fa463b5801c",
+  "started_at": "2026-10-12T04:42:04+00:00",
+  "latency_s": 15.0,
+  "status": "success",
+  "http_status": 200,
+  "attempts": 1,
+  "errors": [],
+  "request": {
+    "model": "deepseek-v4-pro",
+    "temperature": 0.7,
+    "max_tokens": 8192,
+    "stream": false,
+    "thinking": {
+      "type": "disabled"
+    }
+  },
+  "response_model": "deepseek-v4-pro",
+  "response_id": "b853c711-3a48-4c32-bf05-a3d8b2b86326",
+  "system_fingerprint": "a307abda487cd1b463329ccb945ce396",
+  "finish_reason": "stop",
+  "usage": {
+    "prompt_tokens": 2612,
+    "completion_tokens": 1495,
+    "total_tokens": 4107,
+    "prompt_tokens_details": {
+      "cached_tokens": 2560
+    },
+    "prompt_cache_hit_tokens": 2560,
+    "prompt_cache_miss_tokens": 52
+  },
+  "price_period": "offpeak",
+  "cost_usd_estimate": 0.003051,
+  "content": "## Title: Standardized Unexpected Earnings as a Robust Cross-Sectional Return Predictor\n\n## Abstract\nWe examine the cross-sectional predictive power of ten firm characteristics for one-month-ahead stock returns in a monthly panel of 1,213 stocks over 120 months. Among the considered features, only standardized unexpected earnings (SUE) exhibits a statistically and economically significant rank correlation with future returns, with a mean monthly rank IC of 0.0998 (t = 23.25) and a quintile long-short return of 3.04% per month (annualized Sharpe 7.31). All other features have rank ICs indistinguishable from zero after accounting for sampling variability. A monthly-rebalanced strategy that buys the top SUE quintile and sells the bottom quintile yields an expected annualized return of approximately 36.5% before transaction costs. These results underscore the persistence of post-earnings-announcement drift in a broad equity index universe.\n\n## Methods\nWe use a monthly stock panel with 60,000 observations (1,213 unique stocks over 120 months, 500 stocks per month). The prediction target is the total stock return over the following month (`ret_next`). For each of the ten features, we compute the monthly cross-sectional Spearman rank correlation (rank IC) with `ret_next`, average it over the 120 months, and calculate a t-statistic as the mean divided by the standard error (standard deviation / √120). We also construct an equal-weighted quintile long-short portfolio each month (top minus bottom quintile of the feature) and report its mean monthly return and annualized Sharpe ratio (monthly mean / monthly std × √12). A feature is considered a valid signal if its rank IC t-statistic exceeds 2.0 in absolute value and its long-short portfolio has an economically meaningful Sharpe ratio.\n\n## Results\nTable 1 summarizes the rank IC and long-short performance for all features. SUE stands out with a rank IC of 0.0998 (t = 23.25), positive in 99% of months, and a quintile long-short monthly return of 3.04% (annualized Sharpe 7.31). All other features have rank ICs with absolute t-statistics below 1.7 and long-short Sharpe ratios below 0.75. In particular, asset_growth (IC t = 1.64, Sharpe 0.72) and accruals (IC t = 1.34, Sharpe 0.70) show weak positive associations that do not reach conventional significance. book_to_market, leverage, and rd_intensity show negative but insignificant rank ICs. log_mktcap, turnover, idio_vol, and gross_prof have near-zero rank ICs. Based on the SUE signal, a long-short quintile strategy would have generated an average monthly return of 3.04% with a monthly standard deviation of approximately 1.44% (implied by the Sharpe ratio), yielding an annualized return of about 36.5% (0.0304 × 12) before costs.\n\n## Discussion\nThe dominance of SUE is consistent with the post-earnings-announcement drift anomaly: stocks with positive earnings surprises continue to outperform, while negative surprises underperform. The effect is economically large and statistically robust, with a rank IC that is positive in 99% of months. The absence of significant predictive power for other well-known anomalies (value, size, profitability, asset growth, accruals, volatility, leverage, turnover, R&D intensity) may reflect the specific universe (broad index constituents) or the relatively short sample period. The weak positive ICs for asset_growth and accruals are directionally consistent with prior literature (asset growth negatively predicts returns, accruals negatively predict returns), but their signs here are opposite to the classical anomalies—suggesting either sample-specific noise or a different underlying mechanism. The long-short SUE strategy’s high Sharpe ratio implies that even after accounting for realistic transaction costs and short-sale constraints, the signal is likely to remain profitable, though capacity may be limited by the 500-stock universe.\n\n## Limitations\nThis analysis is based solely on summary statistics and does not account for transaction costs, market impact, or short-sale fees. The sample covers only 120 months and 1,213 stocks, all of which are broad index constituents, limiting generalizability to small caps or non-index stocks. The rank IC and long-short returns are computed in-sample; no out-of-sample validation is performed. The SUE signal may be subject to data-mining or survivorship bias in the underlying analyst forecast data. Finally, the long-short portfolio assumes equal weighting and monthly rebalancing without considering the implementation lag of SUE (earnings announcements occur in the month after quarter-end), which could reduce realized returns.\n\n```json\n{\n  \"valid_signals\": [\n    {\"feature\": \"sue\", \"direction\": \"positive\", \"monthly_rank_ic\": 0.0998}\n  ],\n  \"rejected_signals\": [\n    {\"feature\": \"book_to_market\", \"reason\": \"Rank IC t-statistic is -0.72, not statistically significant.\"},\n    {\"feature\": \"gross_prof\", \"reason\": \"Rank IC t-statistic is 0.93, not statistically significant.\"},\n    {\"feature\": \"log_mktcap\", \"reason\": \"Rank IC t-statistic is 0.02, essentially zero and not significant.\"},\n    {\"feature\": \"asset_growth\", \"reason\": \"Rank IC t-statistic is 1.64, below the 2.0 threshold for significance.\"},\n    {\"feature\": \"accruals\", \"reason\": \"Rank IC t-statistic is 1.34, below the 2.0 threshold for significance.\"},\n    {\"feature\": \"idio_vol\", \"reason\": \"Rank IC t-statistic is 1.14, not statistically significant.\"},\n    {\"feature\": \"leverage\", \"reason\": \"Rank IC t-statistic is -1.00, not statistically significant.\"},\n    {\"feature\": \"turnover\", \"reason\": \"Rank IC t-statistic is 0.02, essentially zero and not significant.\"},\n    {\"feature\": \"rd_intensity\", \"reason\": \"Rank IC t-statistic is -0.05, essentially zero and not significant.\"}\n  ],\n  \"strategy\": {\n    \"description\": \"Monthly rebalanced equal-weighted long-short portfolio: buy top quintile of SUE, sell bottom quintile of SUE.\",\n    \"expected_annual_return\": 0.365,\n    \"expected_annual_sharpe\": 7.31\n  },\n  \"limitations\": [\n    \"Analysis ignores transaction costs, market impact, and short-sale fees.\",\n    \"Sample is limited to 120 months and 1,213 broad index stocks, reducing generalizability.\",\n    \"No out-of-sample validation; results are in-sample only.\",\n    \"SUE implementation lag from earnings announcement timing is not accounted for.\",\n    \"Long-short performance assumes monthly rebalancing without capacity constraints.\"\n  ]\n}\n```",
+  "reasoning_content": null
+}

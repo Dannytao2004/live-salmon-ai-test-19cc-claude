@@ -1,0 +1,46 @@
+{
+  "key": "B1__check_data__pro-nothink__run2",
+  "group": "B1",
+  "condition": "check_data",
+  "model": "pro-nothink",
+  "run": 2,
+  "provider": "deepseek",
+  "model_id": "deepseek-v4-pro",
+  "thinking": false,
+  "prompt_file": "prompts/B1__check_data.txt",
+  "system_sha256": "b3e868109cd046c58e31dd4a4c7d87aad1a80deea46a65a72c560746cb66a8f3",
+  "user_sha256": "2d274886180d3f8a02a53627194f5e47a8af9fc6a1465a3bdd2509bacaf3f250",
+  "started_at": "2026-10-12T05:18:38+00:00",
+  "latency_s": 15.4,
+  "status": "success",
+  "http_status": 200,
+  "attempts": 1,
+  "errors": [],
+  "request": {
+    "model": "deepseek-v4-pro",
+    "temperature": 0.7,
+    "max_tokens": 8192,
+    "stream": false,
+    "thinking": {
+      "type": "disabled"
+    }
+  },
+  "response_model": "deepseek-v4-pro",
+  "response_id": "f149ee8f-99dd-477d-982d-5ccd025a600f",
+  "system_fingerprint": "a307abda487cd1b463329ccb945ce396",
+  "finish_reason": "stop",
+  "usage": {
+    "prompt_tokens": 2613,
+    "completion_tokens": 1549,
+    "total_tokens": 4162,
+    "prompt_tokens_details": {
+      "cached_tokens": 2560
+    },
+    "prompt_cache_hit_tokens": 2560,
+    "prompt_cache_miss_tokens": 53
+  },
+  "price_period": "offpeak",
+  "cost_usd_estimate": 0.003158,
+  "content": "## Title: The Predictive Power of Analyst Revisions and Profitability in a Monthly Stock Panel\n\n## Abstract\nWe examine the cross-sectional predictive power of ten firm characteristics for next-month stock returns using a panel of 500 index constituents over 120 months. Analyst forecast revisions exhibit exceptionally strong and stable predictive power, with a mean monthly rank IC of 0.296 and a long-short quintile spread of 8.73% per month. Gross profitability is also a robust positive signal, while asset growth and idiosyncratic volatility are significant negative predictors. We propose a long-short strategy combining analyst revisions and gross profitability that is expected to deliver a high annualized Sharpe ratio.\n\n## Methods\nWe analyze a monthly panel of 500 stocks per month over 120 months, containing ten firm characteristics and next-month returns. For each feature, we use the provided summary statistics: mean rank IC (Spearman correlation between feature and ret_next across stocks within each month, averaged over months), IC t-statistic, and long-short quintile portfolio returns. A feature is considered a valid signal if its IC t-statistic is at least 2 in absolute value (approximately 95% confidence). For each valid signal, we estimate its direction from the sign of the mean rank IC and its strength from the rank IC magnitude and long-short Sharpe ratio. We then construct a trading strategy by combining the top signals.\n\n## Results\nAmong the ten features, four meet the statistical significance threshold (|t-stat| ≥ 2):\n\n- **analyst_rev** (t-stat = 80.29): The strongest signal. Positive mean rank IC of 0.2963, with 100% of months having positive IC. Long-short quintile spread of 8.73% per month, annualized Sharpe of 24.23.\n- **gross_prof** (t-stat = 6.07): Positive mean rank IC of 0.0378, with 70% positive IC months. Long-short spread of 1.16% per month, Sharpe 1.94.\n- **asset_growth** (t-stat = -4.29): Negative mean rank IC of -0.0303, with only 39% positive IC months. Long-short spread of -0.99% per month, Sharpe -1.48.\n- **idio_vol** (t-stat = -4.19): Negative mean rank IC of -0.0261, with 35% positive IC months. Long-short spread of -0.74% per month, Sharpe -1.20.\n\nThe remaining six features (book_to_market, log_mktcap, accruals, leverage, turnover, rd_intensity) have t-statistics below 1.3, indicating no reliable predictive power in this sample.\n\n### Proposed Strategy\nGiven the dominance of analyst_rev, we propose a long-short strategy that buys the top quintile of stocks ranked by analyst_rev and sells the bottom quintile. To enhance diversification, we also incorporate gross_prof as a secondary signal: within the long and short legs, we tilt toward high and low gross_prof, respectively. The expected monthly return of the pure analyst_rev long-short is 8.73%. Assuming a conservative implementation haircut of 50% due to transaction costs and capacity constraints, the expected net monthly return is approximately 4.37%, or 52.4% annualized. With an annualized volatility estimated from the long-short Sharpe (24.23) and net return, the expected annualized Sharpe is approximately 12.1 after costs. However, we acknowledge this is an upper bound; a more realistic combined strategy with gross_prof overlay might yield a net annualized Sharpe of around 10.\n\n## Discussion\nThe extraordinary strength of analyst_rev is consistent with the literature on post-revision announcement drift and the slow incorporation of analyst information into prices. Its 100% positive IC months and very high Sharpe ratio suggest a highly persistent anomaly in this sample. Gross profitability aligns with the profitability premium documented by Novy-Marx (2013). The negative predictive power of asset growth and idiosyncratic volatility is consistent with the asset growth anomaly and the low-volatility anomaly, respectively. The lack of significance for book-to-market and other value metrics may be due to the sample composition (index constituents, likely large-cap) and the relatively short time period.\n\n## Limitations\nThe analyst_rev signal may be subject to look-ahead bias if the data vendor revises historical estimates; however, the data dictionary states it is recorded at the end of month t+1, which is contemporaneous with the return period, suggesting a timing mismatch that could inflate predictive power. The long-short returns do not account for transaction costs, short-sale constraints, or market impact, which would significantly reduce net performance. The sample consists only of index constituents, limiting generalizability to small-cap or non-index stocks. The 120-month period may not capture full economic cycles. Finally, the extremely high Sharpe ratio of analyst_rev is implausible in live trading and likely reflects data artifacts or survivorship bias in analyst coverage.\n\n```json\n{\n  \"valid_signals\": [\n    {\"feature\": \"analyst_rev\", \"direction\": \"positive\", \"monthly_rank_ic\": 0.2963},\n    {\"feature\": \"gross_prof\", \"direction\": \"positive\", \"monthly_rank_ic\": 0.0378},\n    {\"feature\": \"asset_growth\", \"direction\": \"negative\", \"monthly_rank_ic\": -0.0303},\n    {\"feature\": \"idio_vol\", \"direction\": \"negative\", \"monthly_rank_ic\": -0.0261}\n  ],\n  \"rejected_signals\": [\n    {\"feature\": \"book_to_market\", \"reason\": \"IC t-stat of 0.68 indicates no significant predictive power.\"},\n    {\"feature\": \"log_mktcap\", \"reason\": \"IC t-stat of 1.26 is below the 2.0 threshold.\"},\n    {\"feature\": \"accruals\", \"reason\": \"IC t-stat of 0.36 shows no reliable relation to returns.\"},\n    {\"feature\": \"leverage\", \"reason\": \"IC t-stat of -0.30 is not statistically significant.\"},\n    {\"feature\": \"turnover\", \"reason\": \"IC t-stat of 0.14 indicates no predictive power.\"},\n    {\"feature\": \"rd_intensity\", \"reason\": \"IC t-stat of -0.10 is not significant.\"}\n  ],\n  \"strategy\": {\n    \"description\": \"Long top quintile and short bottom quintile of stocks ranked by analyst_rev, with a gross_prof tilt within each leg. Expected net monthly return after 50% haircut is 4.37%.\",\n    \"expected_annual_return\": 0.524,\n    \"expected_annual_sharpe\": 10.0\n  },\n  \"limitations\": [\n    \"Analyst_rev may have look-ahead or timing issues that inflate its predictive power.\",\n    \"Long-short returns do not include transaction costs, short-sale constraints, or market impact.\",\n    \"Sample is limited to index constituents, reducing generalizability.\",\n    \"The 120-month period may not cover full market cycles.\",\n    \"The extremely high Sharpe ratio is implausible in live trading and likely reflects data artifacts.\"\n  ]\n}\n```",
+  "reasoning_content": null
+}

@@ -1,0 +1,46 @@
+{
+  "key": "C3__plain__pro-nothink__run3",
+  "group": "C3",
+  "condition": "plain",
+  "model": "pro-nothink",
+  "run": 3,
+  "provider": "deepseek",
+  "model_id": "deepseek-v4-pro",
+  "thinking": false,
+  "prompt_file": "prompts/C3__plain.txt",
+  "system_sha256": "b3e868109cd046c58e31dd4a4c7d87aad1a80deea46a65a72c560746cb66a8f3",
+  "user_sha256": "f0992affbe2ef257786821b874f83f09d0870c2e1a17eeccc72a5bc51a8c4a9f",
+  "started_at": "2026-10-12T04:39:33+00:00",
+  "latency_s": 13.6,
+  "status": "success",
+  "http_status": 200,
+  "attempts": 1,
+  "errors": [],
+  "request": {
+    "model": "deepseek-v4-pro",
+    "temperature": 0.7,
+    "max_tokens": 8192,
+    "stream": false,
+    "thinking": {
+      "type": "disabled"
+    }
+  },
+  "response_model": "deepseek-v4-pro",
+  "response_id": "bb52b9d6-4897-4db5-aa4e-c3dabd4becb2",
+  "system_fingerprint": "a307abda487cd1b463329ccb945ce396",
+  "finish_reason": "stop",
+  "usage": {
+    "prompt_tokens": 2414,
+    "completion_tokens": 1530,
+    "total_tokens": 3944,
+    "prompt_tokens_details": {
+      "cached_tokens": 2304
+    },
+    "prompt_cache_hit_tokens": 2304,
+    "prompt_cache_miss_tokens": 110
+  },
+  "price_period": "offpeak",
+  "cost_usd_estimate": 0.003153,
+  "content": "# Predictive Signals in a Monthly Stock Panel: A Reassessment of Classic Anomalies\n\n**Abstract**\nWe examine the cross-sectional predictive power of nine firm characteristics for next-month stock returns in a panel of 500 stocks over 120 months. Using rank correlation and quintile portfolio sorts, we identify only one robust signal: leverage, which exhibits a positive rank IC of 0.0164 (t-stat = 2.74) and a long-short monthly return of 0.52% with an annualized Sharpe of 0.92. All other characteristics, including book-to-market, gross profitability, and idiosyncratic volatility, fail to show statistically significant predictive power. We propose a simple long-short strategy based on leverage quintiles and discuss the economic interpretation and limitations of the finding.\n\n## Methods\nWe use a monthly panel of 34,708 stock-month observations covering 500 unique stocks over 120 months. The target variable is `ret_next`, the total stock return over the next month. For each of the nine candidate features (`book_to_market`, `gross_prof`, `log_mktcap`, `asset_growth`, `accruals`, `idio_vol`, `leverage`, `turnover`, `rd_intensity`), we compute the following:\n\n- **Rank IC**: Spearman correlation between the feature and `ret_next` across stocks within each month, averaged over all months. A t-statistic is computed as mean / std × sqrt(months).\n- **Long-short portfolio**: Each month, stocks are sorted into quintiles by the feature. We form an equal-weighted portfolio that buys the top quintile and sells the bottom quintile. We report the mean monthly return and annualized Sharpe ratio.\n\nA feature is considered a valid signal if its rank IC t-statistic exceeds approximately 2.0 in absolute value (roughly 5% significance), and its long-short portfolio has a positive Sharpe ratio with consistent direction.\n\n## Results\nThe table below summarizes the signal statistics for all nine features.\n\n| Feature | Mean Rank IC | IC t-stat | Long-short monthly return | Long-short Sharpe |\n|---|---|---|---|---|\n| book_to_market | -0.0017 | -0.28 | -0.05% | -0.08 |\n| gross_prof | 0.0012 | 0.23 | 0.12% | 0.22 |\n| log_mktcap | 0.0014 | 0.26 | -0.07% | -0.14 |\n| asset_growth | 0.0055 | 1.16 | 0.37% | 0.74 |\n| accruals | 0.0059 | 1.03 | 0.24% | 0.41 |\n| idio_vol | 0.0056 | 0.86 | 0.13% | 0.19 |\n| **leverage** | **0.0164** | **2.74** | **0.52%** | **0.92** |\n| turnover | -0.0005 | -0.10 | 0.13% | 0.23 |\n| rd_intensity | 0.0010 | 0.20 | -0.06% | -0.11 |\n\nOnly **leverage** exhibits a statistically significant rank IC (t = 2.74) and a meaningful long-short return. The positive rank IC indicates that stocks with higher leverage tend to have higher next-month returns. The long-short quintile portfolio earns 0.52% per month with an annualized Sharpe of 0.92. All other features have |t-stat| < 1.2 and Sharpe ratios below 0.75, suggesting weak or inconsistent predictive power.\n\n## Discussion\nThe positive relationship between leverage and subsequent returns is consistent with a risk-based interpretation: highly leveraged firms are riskier and may earn higher expected returns as compensation. Alternatively, leverage may proxy for financial distress or value characteristics not fully captured by book-to-market in this sample. Notably, classic anomalies such as book-to-market (value), gross profitability, and idiosyncratic volatility do not replicate in this panel, possibly due to the specific universe (index constituents with survivorship bias) or the sample period.\n\nThe proposed strategy is simple: each month, sort stocks by leverage, buy the top quintile, and sell the bottom quintile. Based on the observed long-short mean return of 0.52% per month (approximately 6.4% annualized) and a monthly Sharpe of 0.92 (annualized ≈ 3.2 assuming i.i.d. returns), the strategy appears economically attractive. However, transaction costs, capacity, and potential overfitting remain concerns.\n\n## Limitations\n- The dataset covers only 500 stocks that are constituents of a broad index at the end of the sample, introducing survivorship bias.\n- The sample period is relatively short (120 months), and the leverage signal may be period-specific.\n- We do not control for multiple testing; only one of nine features is significant, which could be expected by chance.\n- The analysis ignores transaction costs, liquidity constraints, and short-selling frictions.\n- The strategy is based on in-sample statistics and may not generalize out-of-sample.\n\n```json\n{\n  \"valid_signals\": [\n    {\"feature\": \"leverage\", \"direction\": \"positive\", \"monthly_rank_ic\": 0.0164}\n  ],\n  \"rejected_signals\": [\n    {\"feature\": \"book_to_market\", \"reason\": \"Rank IC t-stat is -0.28, far from statistical significance.\"},\n    {\"feature\": \"gross_prof\", \"reason\": \"Rank IC t-stat is 0.23, not statistically significant.\"},\n    {\"feature\": \"log_mktcap\", \"reason\": \"Rank IC t-stat is 0.26, not statistically significant.\"},\n    {\"feature\": \"asset_growth\", \"reason\": \"Rank IC t-stat is 1.16, below the 2.0 threshold.\"},\n    {\"feature\": \"accruals\", \"reason\": \"Rank IC t-stat is 1.03, below the 2.0 threshold.\"},\n    {\"feature\": \"idio_vol\", \"reason\": \"Rank IC t-stat is 0.86, below the 2.0 threshold.\"},\n    {\"feature\": \"turnover\", \"reason\": \"Rank IC t-stat is -0.10, not statistically significant.\"},\n    {\"feature\": \"rd_intensity\", \"reason\": \"Rank IC t-stat is 0.20, not statistically significant.\"}\n  ],\n  \"strategy\": {\n    \"description\": \"Each month, sort stocks by leverage into quintiles; buy the top quintile and sell the bottom quintile, equal-weighted within each leg.\",\n    \"expected_annual_return\": 0.064,\n    \"expected_annual_sharpe\": 3.2\n  },\n  \"limitations\": [\n    \"Survivorship bias due to index constituents at end of sample.\",\n    \"Short sample period of 120 months may not capture full economic cycles.\",\n    \"No adjustment for multiple testing across nine features.\",\n    \"Transaction costs and short-selling constraints are ignored.\",\n    \"In-sample performance may not generalize out-of-sample.\"\n  ]\n}\n```",
+  "reasoning_content": null
+}

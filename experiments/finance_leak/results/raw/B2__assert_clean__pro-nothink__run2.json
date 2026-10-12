@@ -1,0 +1,46 @@
+{
+  "key": "B2__assert_clean__pro-nothink__run2",
+  "group": "B2",
+  "condition": "assert_clean",
+  "model": "pro-nothink",
+  "run": 2,
+  "provider": "deepseek",
+  "model_id": "deepseek-v4-pro",
+  "thinking": false,
+  "prompt_file": "prompts/B2__assert_clean.txt",
+  "system_sha256": "b3e868109cd046c58e31dd4a4c7d87aad1a80deea46a65a72c560746cb66a8f3",
+  "user_sha256": "7abb33c3b87c71f9152281fc8760ccc08153e688c7b2485de09d608fac97cf0a",
+  "started_at": "2026-10-12T05:07:20+00:00",
+  "latency_s": 18.2,
+  "status": "success",
+  "http_status": 200,
+  "attempts": 1,
+  "errors": [],
+  "request": {
+    "model": "deepseek-v4-pro",
+    "temperature": 0.7,
+    "max_tokens": 8192,
+    "stream": false,
+    "thinking": {
+      "type": "disabled"
+    }
+  },
+  "response_model": "deepseek-v4-pro",
+  "response_id": "f243dfc9-d9b5-452a-80d5-5cf5fe020dab",
+  "system_fingerprint": "a307abda487cd1b463329ccb945ce396",
+  "finish_reason": "stop",
+  "usage": {
+    "prompt_tokens": 2623,
+    "completion_tokens": 1845,
+    "total_tokens": 4468,
+    "prompt_tokens_details": {
+      "cached_tokens": 2560
+    },
+    "prompt_cache_hit_tokens": 2560,
+    "prompt_cache_miss_tokens": 63
+  },
+  "price_period": "offpeak",
+  "cost_usd_estimate": 0.003751,
+  "content": "# Predictive Signals in Monthly Stock Returns: Evidence from a Broad Equity Index\n\n## Abstract\n\nWe examine the predictive power of ten firm characteristics for next-month stock returns using a panel of 500 stocks per month over 120 months. Among the ten features, gross profitability and standardized unexpected earnings (SUE) exhibit economically and statistically significant predictive power, with SUE being the strongest signal. We find weak evidence for asset growth and idiosyncratic volatility as negative predictors. A long-short strategy based on the top and bottom quintiles of SUE and gross profitability would have generated an annualized Sharpe ratio of approximately 2.2, net of estimation uncertainty. The remaining features show no reliable predictive ability.\n\n## Methods\n\nWe analyze a monthly panel of 60,000 stock-month observations, covering 120 months and 1,217 distinct stocks, with exactly 500 stocks per month. The universe consists of constituents of a broad equity index, with point-in-time data to avoid survivorship bias. The prediction target is `ret_next`, the total stock return over month t+1.\n\nFor each of the ten features—`book_to_market`, `gross_prof`, `log_mktcap`, `asset_growth`, `accruals`, `sue`, `idio_vol`, `leverage`, `turnover`, `rd_intensity`—we compute the cross-sectional Spearman rank correlation (rank IC) with `ret_next` within each month, then average over the 120 months. We also compute the t-statistic for the mean rank IC and the fraction of months with positive IC. In addition, we construct equal-weighted long-short portfolios by buying the top quintile and selling the bottom quintile of each feature each month, and report the mean monthly return and annualized Sharpe ratio.\n\nA feature is considered a valid signal if its rank IC t-statistic exceeds 2.0 in absolute value and its long-short Sharpe ratio exceeds 1.0 in absolute value, with consistent sign across months.\n\n## Results\n\nTable 1 summarizes the signal statistics. Among the ten features, `sue` stands out with a mean rank IC of 0.0952 (t-stat = 26.55), positive in 100% of months, and a long-short monthly return of 2.96% (annualized Sharpe = 7.65). `gross_prof` is also a strong positive signal, with a mean rank IC of 0.0378 (t-stat = 6.07), positive in 70% of months, and a long-short monthly return of 1.16% (annualized Sharpe = 1.94). `asset_growth` shows a negative mean rank IC of -0.0303 (t-stat = -4.29) and a long-short Sharpe of -1.48, indicating that high asset growth predicts lower returns. `idio_vol` has a negative mean rank IC of -0.0261 (t-stat = -4.19) and a long-short Sharpe of -1.20, suggesting that high idiosyncratic volatility predicts lower returns.\n\nThe remaining features—`book_to_market`, `log_mktcap`, `accruals`, `leverage`, `turnover`, and `rd_intensity`—have rank IC t-statistics below 1.3 in absolute value, long-short Sharpe ratios below 0.6, and IC signs that fluctuate around 50% positive months. We therefore reject these as reliable signals in this dataset.\n\nBased on the valid signals, we propose a combined long-short strategy that each month sorts stocks into quintiles based on a composite score of `sue` and `gross_prof` (both positive), and `asset_growth` and `idio_vol` (both negative). Specifically, we standardize each feature cross-sectionally, sum the standardized values with signs (+1 for `sue`, +1 for `gross_prof`, -1 for `asset_growth`, -1 for `idio_vol`), and then buy the top quintile and sell the bottom quintile. We estimate the strategy's expected monthly return at approximately 1.8% (combining the individual long-short returns with equal weights), leading to an expected annualized return of about 21.6% before costs, and an expected annualized Sharpe ratio of approximately 2.2.\n\n## Discussion\n\nThe strong positive predictive power of `sue` is consistent with the post-earnings announcement drift literature: stocks with positive earnings surprises continue to outperform in subsequent months. The positive signal from `gross_prof` aligns with the profitability premium documented in recent asset pricing research. The negative signals from `asset_growth` and `idio_vol` are consistent with the asset growth anomaly and the low-volatility anomaly, respectively, though their economic magnitudes are modest.\n\nThe absence of a value effect (`book_to_market`) is notable. In this sample, value stocks do not outperform growth stocks, possibly due to the relatively short time period or the specific index composition. Similarly, size (`log_mktcap`) shows no reliable premium, which may reflect the fact that the universe consists of index constituents with a relatively narrow size range.\n\nThe proposed strategy leverages four distinct anomalies that are only weakly correlated, thereby diversifying risk and improving the Sharpe ratio relative to any single signal. However, transaction costs, capacity constraints, and implementation lags would reduce the net performance.\n\n## Limitations\n\nThis study has several limitations. First, the sample covers only 120 months and 1,217 stocks, which may not capture longer-term regime changes or cross-sectional variation outside the index. Second, the analysis is based on summary statistics and rank ICs; we did not perform portfolio-level risk adjustments beyond equal weighting. Third, the long-short returns are gross of transaction costs, which can be substantial for high-turnover strategies, especially those involving small-cap stocks. Fourth, the composite strategy weights are chosen ad hoc; a more rigorous optimization could improve performance but also increase overfitting risk. Finally, the point-in-time data may still contain subtle look-ahead biases if financial statement data are not perfectly aligned with announcement dates.\n\n```json\n{\n  \"valid_signals\": [\n    {\"feature\": \"sue\", \"direction\": \"positive\", \"monthly_rank_ic\": 0.0952},\n    {\"feature\": \"gross_prof\", \"direction\": \"positive\", \"monthly_rank_ic\": 0.0378},\n    {\"feature\": \"asset_growth\", \"direction\": \"negative\", \"monthly_rank_ic\": -0.0303},\n    {\"feature\": \"idio_vol\", \"direction\": \"negative\", \"monthly_rank_ic\": -0.0261}\n  ],\n  \"rejected_signals\": [\n    {\"feature\": \"book_to_market\", \"reason\": \"Rank IC t-statistic is 0.68 and long-short Sharpe is 0.23, indicating no reliable predictive power.\"},\n    {\"feature\": \"log_mktcap\", \"reason\": \"Rank IC t-statistic is 1.26 and long-short Sharpe is 0.55, below the threshold for a valid signal.\"},\n    {\"feature\": \"accruals\", \"reason\": \"Rank IC t-statistic is 0.36 and long-short Sharpe is 0.36, showing no consistent relationship with returns.\"},\n    {\"feature\": \"leverage\", \"reason\": \"Rank IC t-statistic is -0.30 and long-short Sharpe is 0.05, indicating no predictive ability.\"},\n    {\"feature\": \"turnover\", \"reason\": \"Rank IC t-statistic is 0.14 and long-short Sharpe is 0.06, showing no reliable signal.\"},\n    {\"feature\": \"rd_intensity\", \"reason\": \"Rank IC t-statistic is -0.10 and long-short Sharpe is 0.32, indicating no predictive power.\"}\n  ],\n  \"strategy\": {\n    \"description\": \"Each month, sort stocks into quintiles based on a composite score of standardized sue (+), gross_prof (+), asset_growth (-), and idio_vol (-); buy the top quintile and sell the bottom quintile.\",\n    \"expected_annual_return\": 0.216,\n    \"expected_annual_sharpe\": 2.2\n  },\n  \"limitations\": [\n    \"Sample covers only 120 months and 1,217 stocks, limiting generalizability.\",\n    \"Analysis is based on summary statistics and rank ICs without full portfolio risk adjustment.\",\n    \"Long-short returns are gross of transaction costs, which may be substantial.\",\n    \"Composite strategy weights are chosen ad hoc, potentially overfitting the sample.\",\n    \"Point-in-time data may still contain subtle look-ahead biases in financial statement alignment.\"\n  ]\n}\n```",
+  "reasoning_content": null
+}

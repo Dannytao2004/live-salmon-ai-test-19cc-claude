@@ -1,0 +1,46 @@
+{
+  "key": "C2__plain__pro-nothink__run1",
+  "group": "C2",
+  "condition": "plain",
+  "model": "pro-nothink",
+  "run": 1,
+  "provider": "deepseek",
+  "model_id": "deepseek-v4-pro",
+  "thinking": false,
+  "prompt_file": "prompts/C2__plain.txt",
+  "system_sha256": "b3e868109cd046c58e31dd4a4c7d87aad1a80deea46a65a72c560746cb66a8f3",
+  "user_sha256": "51c70b03bbd9d39ff3b650f5730d5b220b9fe48609b34f5b1156f9fdcf3c1c1d",
+  "started_at": "2026-10-12T04:35:37+00:00",
+  "latency_s": 16.7,
+  "status": "success",
+  "http_status": 200,
+  "attempts": 1,
+  "errors": [],
+  "request": {
+    "model": "deepseek-v4-pro",
+    "temperature": 0.7,
+    "max_tokens": 8192,
+    "stream": false,
+    "thinking": {
+      "type": "disabled"
+    }
+  },
+  "response_model": "deepseek-v4-pro",
+  "response_id": "a6da1cc4-c592-4977-9141-76c6a80fca78",
+  "system_fingerprint": "a307abda487cd1b463329ccb945ce396",
+  "finish_reason": "stop",
+  "usage": {
+    "prompt_tokens": 2607,
+    "completion_tokens": 1791,
+    "total_tokens": 4398,
+    "prompt_tokens_details": {
+      "cached_tokens": 256
+    },
+    "prompt_cache_hit_tokens": 256,
+    "prompt_cache_miss_tokens": 2351
+  },
+  "price_period": "offpeak",
+  "cost_usd_estimate": 0.005103,
+  "content": "# The Predictive Power of Earnings Surprise in a Monthly Stock Panel\n\n## Abstract\n\nWe analyze a monthly panel of 500 stocks over 120 months to identify cross-sectional predictors of next-month returns. Among ten candidate features, only standardized unexpected earnings (SUE) demonstrates a robust and economically significant relationship with future returns, with a mean monthly rank IC of 0.0998 (t-stat = 23.25) and a long-short quintile spread of 3.04% per month. All other features exhibit negligible or statistically insignificant rank correlations, with absolute t-statistics below 1.7. A strategy that buys the top quintile of SUE and sells the bottom quintile yields an annualized Sharpe ratio of 7.31. We conclude that earnings surprise is the dominant signal in this sample, while traditional value, quality, and risk factors are largely ineffective.\n\n## Methods\n\nWe use a point-in-time monthly panel of 500 stocks per month over 120 months (60,000 stock-month observations). The prediction target is `ret_next`, the total stock return over the following month. We evaluate ten candidate features: book-to-market ratio, gross profitability, log market capitalization, asset growth, accruals, standardized unexpected earnings (SUE), idiosyncratic volatility, leverage, share turnover, and R&D intensity.\n\nFor each feature, we compute the cross-sectional Spearman rank correlation with `ret_next` within each month, then average these monthly rank ICs over all 120 months. We report the mean rank IC, its standard deviation, and a t-statistic (mean divided by standard deviation times square root of 120). We also construct an equal-weighted long-short portfolio that buys the top quintile and sells the bottom quintile of each feature each month, and report the mean monthly return and annualized Sharpe ratio.\n\nA feature is considered a valid signal if its rank IC t-statistic exceeds 2.0 in absolute value and its long-short portfolio has an annualized Sharpe ratio above 1.0. Features that do not meet these thresholds are rejected.\n\n## Results\n\nAmong the ten features, only `sue` (standardized unexpected earnings) shows a statistically and economically significant relationship with next-month returns. Its mean monthly rank IC is 0.0998 with a t-statistic of 23.25, and the IC is positive in 99% of months. The long-short quintile portfolio earns an average of 3.04% per month with an annualized Sharpe ratio of 7.31.\n\nAll other features have rank IC t-statistics with absolute values below 1.7, and their long-short Sharpe ratios are below 1.0 in absolute value. Notably, `asset_growth` and `accruals` have modest positive ICs (0.0061 and 0.0055, respectively) with t-statistics of 1.64 and 1.34, and long-short Sharpe ratios of 0.72 and 0.70, but these do not meet our significance threshold. `book_to_market` has a slightly negative IC (-0.0030) and a negative long-short return, consistent with a weak growth tilt. `gross_prof`, `log_mktcap`, `idio_vol`, `leverage`, `turnover`, and `rd_intensity` all have ICs near zero with t-statistics below 1.2.\n\nThe dominance of SUE is consistent with the post-earnings-announcement drift literature: firms with positive earnings surprises continue to outperform in the following month.\n\n## Discussion\n\nThe results strongly support a single-factor strategy based on earnings surprise. The magnitude of the SUE long-short spread (3.04% monthly, 36.5% annualized) is unusually high relative to typical equity anomalies, likely reflecting a combination of a favorable sample period, a concentrated 500-stock universe, and the use of standardized surprises that capture both magnitude and consistency of earnings beats.\n\nThe lack of significance for book-to-market, size, and profitability is surprising given their prominence in the factor literature. One possible explanation is that the 120-month sample period is dominated by a regime in which these factors were out of favor. Another is that the 500-stock index universe is relatively homogeneous, reducing cross-sectional dispersion in these characteristics. The weak positive ICs for asset growth and accruals, while below our threshold, are directionally consistent with prior findings that high asset growth and high accruals predict lower returns; however, the signs here are positive, opposite to the typical anomaly, suggesting these features may be capturing a different effect in this sample.\n\nA practical implementation would be to rank stocks by SUE each month, go long the top quintile and short the bottom quintile, rebalancing monthly. Given the high Sharpe ratio, a scaled version of this strategy could be attractive, though transaction costs and capacity constraints would need to be considered.\n\n## Limitations\n\nThis analysis is based solely on summary statistics and aggregate signal metrics; we do not have access to the raw data to examine interactions, nonlinearities, or time variation in predictive power. The 500-stock universe is a point-in-time index that may introduce survivorship or selection biases. The SUE signal may be subject to look-ahead bias if the consensus forecast data are not truly point-in-time. The extremely high Sharpe ratio of the SUE strategy is unlikely to persist out-of-sample and may reflect data snooping or an unusually favorable period. We do not account for transaction costs, market impact, or short-selling constraints. Finally, the rejection of other features is based on a simple linear rank correlation and may miss nonlinear or interaction effects.\n\n```json\n{\n  \"valid_signals\": [\n    {\"feature\": \"sue\", \"direction\": \"positive\", \"monthly_rank_ic\": 0.0998}\n  ],\n  \"rejected_signals\": [\n    {\"feature\": \"book_to_market\", \"reason\": \"Rank IC t-statistic is -0.72 and long-short Sharpe is -0.27, far below significance thresholds.\"},\n    {\"feature\": \"gross_prof\", \"reason\": \"Rank IC t-statistic is 0.93 and long-short Sharpe is 0.26, not statistically or economically significant.\"},\n    {\"feature\": \"log_mktcap\", \"reason\": \"Rank IC t-statistic is 0.02 and long-short Sharpe is 0.08, essentially zero predictive power.\"},\n    {\"feature\": \"asset_growth\", \"reason\": \"Rank IC t-statistic is 1.64 and long-short Sharpe is 0.72, below the 2.0 t-stat and 1.0 Sharpe thresholds.\"},\n    {\"feature\": \"accruals\", \"reason\": \"Rank IC t-statistic is 1.34 and long-short Sharpe is 0.70, below the 2.0 t-stat and 1.0 Sharpe thresholds.\"},\n    {\"feature\": \"idio_vol\", \"reason\": \"Rank IC t-statistic is 1.14 and long-short Sharpe is 0.08, not significant.\"},\n    {\"feature\": \"leverage\", \"reason\": \"Rank IC t-statistic is -1.00 and long-short Sharpe is -0.05, not significant.\"},\n    {\"feature\": \"turnover\", \"reason\": \"Rank IC t-statistic is 0.02 and long-short Sharpe is 0.02, essentially zero predictive power.\"},\n    {\"feature\": \"rd_intensity\", \"reason\": \"Rank IC t-statistic is -0.05 and long-short Sharpe is 0.13, essentially zero predictive power.\"}\n  ],\n  \"strategy\": {\n    \"description\": \"Each month, rank stocks by standardized unexpected earnings (SUE), go long the top quintile and short the bottom quintile, rebalancing monthly.\",\n    \"expected_annual_return\": 0.365,\n    \"expected_annual_sharpe\": 7.31\n  },\n  \"limitations\": [\n    \"Analysis relies on summary statistics only; no access to raw data for deeper checks.\",\n    \"The 500-stock index universe may introduce selection or survivorship bias.\",\n    \"SUE signal may have look-ahead bias if consensus forecasts are not truly point-in-time.\",\n    \"Extremely high Sharpe ratio is unlikely to persist out-of-sample and may reflect data snooping.\",\n    \"Transaction costs, market impact, and short-selling constraints are not considered.\",\n    \"Rejection of other features is based on linear rank correlation and may miss nonlinear effects.\"\n  ]\n}\n```",
+  "reasoning_content": null
+}

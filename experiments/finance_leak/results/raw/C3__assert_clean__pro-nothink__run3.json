@@ -1,0 +1,46 @@
+{
+  "key": "C3__assert_clean__pro-nothink__run3",
+  "group": "C3",
+  "condition": "assert_clean",
+  "model": "pro-nothink",
+  "run": 3,
+  "provider": "deepseek",
+  "model_id": "deepseek-v4-pro",
+  "thinking": false,
+  "prompt_file": "prompts/C3__assert_clean.txt",
+  "system_sha256": "b3e868109cd046c58e31dd4a4c7d87aad1a80deea46a65a72c560746cb66a8f3",
+  "user_sha256": "ad350bfa61619b24ad72c5627164e6d99e683fc1d0f3d363a7be011ca21b068c",
+  "started_at": "2026-10-12T04:38:11+00:00",
+  "latency_s": 13.8,
+  "status": "success",
+  "http_status": 200,
+  "attempts": 1,
+  "errors": [],
+  "request": {
+    "model": "deepseek-v4-pro",
+    "temperature": 0.7,
+    "max_tokens": 8192,
+    "stream": false,
+    "thinking": {
+      "type": "disabled"
+    }
+  },
+  "response_model": "deepseek-v4-pro",
+  "response_id": "b9dd5fda-b698-4b1b-bfb2-caaab3598475",
+  "system_fingerprint": "a307abda487cd1b463329ccb945ce396",
+  "finish_reason": "stop",
+  "usage": {
+    "prompt_tokens": 2430,
+    "completion_tokens": 1511,
+    "total_tokens": 3941,
+    "prompt_tokens_details": {
+      "cached_tokens": 256
+    },
+    "prompt_cache_hit_tokens": 256,
+    "prompt_cache_miss_tokens": 2174
+  },
+  "price_period": "offpeak",
+  "cost_usd_estimate": 0.004432,
+  "content": "# Value, Profitability, and Leverage: A Reassessment of Cross-Sectional Return Predictors in a Broad Equity Panel\n\n## Abstract\n\nWe examine the predictive power of nine firm characteristics for monthly stock returns in a panel of 500 U.S. stocks over 120 months. Using rank correlation and quintile portfolio tests, we find that only leverage exhibits a statistically significant and economically meaningful relationship with future returns: higher leverage predicts higher returns, contrary to the distress-risk anomaly often documented in the literature. All other characteristics, including book-to-market and gross profitability, fail to show reliable predictive power in this sample. We propose a long-short strategy that buys high-leverage and sells low-leverage stocks, which delivers an annualized Sharpe ratio of 0.92. Our results highlight the sample- and period-dependence of common equity return signals.\n\n## Methods\n\nWe analyze a balanced panel of 500 stocks over 120 months, with 34,708 stock-month observations. For each characteristic, we compute the monthly rank IC (Spearman correlation between the characteristic and next-month return, averaged across months) and its t-statistic. We also construct equal-weighted quintile portfolios each month and report the long-short return (top minus bottom quintile) and its annualized Sharpe ratio. A characteristic is considered a valid signal if its rank IC t-statistic exceeds 2.0 in absolute value and its long-short Sharpe ratio is economically meaningful (above 0.5). We then design a trading strategy based on the identified signal and estimate its expected performance.\n\n## Results\n\nTable 1 summarizes the signal statistics. Among the nine features, only leverage has a statistically significant rank IC (mean 0.0164, t-stat 2.74). Its long-short quintile portfolio earns an average monthly return of 0.52% with an annualized Sharpe ratio of 0.92. The direction is positive: stocks with higher leverage outperform those with lower leverage. All other features have rank IC t-statistics below 1.2 and long-short Sharpe ratios below 0.75, indicating no reliable predictive power in this sample. Notably, book-to-market and gross profitability—two prominent factors in the literature—show near-zero and insignificant rank ICs.\n\n**Table 1: Signal statistics**\n\n| Feature | Mean Rank IC | IC t-stat | Long-Short Monthly Return | Long-Short Annualized Sharpe |\n|---|---|---|---|---|\n| book_to_market | -0.0017 | -0.28 | -0.05% | -0.08 |\n| gross_prof | 0.0012 | 0.23 | 0.12% | 0.22 |\n| log_mktcap | 0.0014 | 0.26 | -0.07% | -0.14 |\n| asset_growth | 0.0055 | 1.16 | 0.37% | 0.74 |\n| accruals | 0.0059 | 1.03 | 0.24% | 0.41 |\n| idio_vol | 0.0056 | 0.86 | 0.13% | 0.19 |\n| leverage | 0.0164 | 2.74 | 0.52% | 0.92 |\n| turnover | -0.0005 | -0.10 | 0.13% | 0.23 |\n| rd_intensity | 0.0010 | 0.20 | -0.06% | -0.11 |\n\n## Discussion\n\nThe positive relation between leverage and future returns is surprising from the perspective of the distress-risk anomaly, which typically finds that high leverage predicts lower returns due to increased bankruptcy risk. However, our sample period and universe may differ from those studies. One possible explanation is that leverage in this sample proxies for financial risk that is compensated with higher expected returns, consistent with a risk-based interpretation. Alternatively, high leverage may be correlated with other omitted characteristics such as tax shields or growth opportunities.\n\nThe failure of book-to-market and gross profitability to predict returns is notable. These factors are well-established in the literature, but their efficacy has declined in recent decades, particularly among large-cap stocks. Our sample consists of stocks that are constituents of a broad equity index at the end of the sample, which may bias the sample toward larger, more liquid firms where these anomalies are weaker. The lack of predictive power for other characteristics (asset growth, accruals, idiosyncratic volatility, turnover, R&D intensity) is consistent with the general decline in anomaly returns after publication and in more recent samples.\n\n## Limitations\n\nThis study has several limitations. First, the sample is subject to survivorship bias because it includes only stocks that are index constituents at the end of the sample period. Second, the sample period may be too short to detect weak but persistent signals. Third, we do not control for transaction costs, which could materially reduce the profitability of the leverage-based strategy. Fourth, the positive leverage effect may be specific to this sample and not generalizable to other periods or markets. Finally, we do not explore potential nonlinearities or interactions among predictors.\n\n```json\n{\n  \"valid_signals\": [\n    {\n      \"feature\": \"leverage\",\n      \"direction\": \"positive\",\n      \"monthly_rank_ic\": 0.0164\n    }\n  ],\n  \"rejected_signals\": [\n    {\"feature\": \"book_to_market\", \"reason\": \"Rank IC t-statistic is -0.28, far below significance threshold.\"},\n    {\"feature\": \"gross_prof\", \"reason\": \"Rank IC t-statistic is 0.23, far below significance threshold.\"},\n    {\"feature\": \"log_mktcap\", \"reason\": \"Rank IC t-statistic is 0.26, far below significance threshold.\"},\n    {\"feature\": \"asset_growth\", \"reason\": \"Rank IC t-statistic is 1.16, below significance threshold.\"},\n    {\"feature\": \"accruals\", \"reason\": \"Rank IC t-statistic is 1.03, below significance threshold.\"},\n    {\"feature\": \"idio_vol\", \"reason\": \"Rank IC t-statistic is 0.86, below significance threshold.\"},\n    {\"feature\": \"turnover\", \"reason\": \"Rank IC t-statistic is -0.10, far below significance threshold.\"},\n    {\"feature\": \"rd_intensity\", \"reason\": \"Rank IC t-statistic is 0.20, far below significance threshold.\"}\n  ],\n  \"strategy\": {\n    \"description\": \"Each month, rank stocks by leverage, buy the top quintile and sell the bottom quintile, equal-weighted within each leg.\",\n    \"expected_annual_return\": 0.0624,\n    \"expected_annual_sharpe\": 0.92\n  },\n  \"limitations\": [\n    \"The sample suffers from survivorship bias due to index inclusion at the end of the period.\",\n    \"The sample period may be too short to detect weak signals.\",\n    \"Transaction costs are not accounted for and could reduce net returns.\",\n    \"The positive leverage effect may be sample-specific and not generalizable.\",\n    \"Potential nonlinearities and interactions among predictors are not explored.\"\n  ]\n}\n```",
+  "reasoning_content": null
+}

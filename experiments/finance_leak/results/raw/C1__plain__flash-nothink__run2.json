@@ -1,0 +1,46 @@
+{
+  "key": "C1__plain__flash-nothink__run2",
+  "group": "C1",
+  "condition": "plain",
+  "model": "flash-nothink",
+  "run": 2,
+  "provider": "deepseek",
+  "model_id": "deepseek-flash",
+  "thinking": false,
+  "prompt_file": "prompts/C1__plain.txt",
+  "system_sha256": "b3e868109cd046c58e31dd4a4c7d87aad1a80deea46a65a72c560746cb66a8f3",
+  "user_sha256": "d5361a32869f1c36f359cd8826f8bdd54e7d043198c276901e0ed52075c99713",
+  "started_at": "2026-10-12T05:12:21+00:00",
+  "latency_s": 12.0,
+  "status": "success",
+  "http_status": 200,
+  "attempts": 1,
+  "errors": [],
+  "request": {
+    "model": "deepseek-flash",
+    "temperature": 0.7,
+    "max_tokens": 8192,
+    "stream": false,
+    "thinking": {
+      "type": "disabled"
+    }
+  },
+  "response_model": "deepseek-flash",
+  "response_id": "099ea52a-9611-4e7b-b307-1fb75f9fc77f",
+  "system_fingerprint": "aeb56401ca74e127821c4f9126dcb669",
+  "finish_reason": "stop",
+  "usage": {
+    "prompt_tokens": 2610,
+    "completion_tokens": 1973,
+    "total_tokens": 4583,
+    "prompt_tokens_details": {
+      "cached_tokens": 2432
+    },
+    "prompt_cache_hit_tokens": 2432,
+    "prompt_cache_miss_tokens": 178
+  },
+  "price_period": "offpeak",
+  "cost_usd_estimate": 0.001218,
+  "content": "# Cross-Sectional Return Prediction in a 500-Stock Monthly Panel: The Dominance of Analyst Revisions\n\n## Abstract\n\nWe examine ten firm characteristics as predictors of next-month stock returns using a 120-month panel of 500 index constituents per month (60,000 stock-months). Only one feature, `analyst_rev` (analyst consensus EPS revision scaled by price), exhibits a robust and economically large relationship with `ret_next`, with a mean monthly rank IC of 0.296 (t = 89.6) and a long-short quintile spread of 8.66% per month (annualized Sharpe 26.4). All other nine features display negligible rank ICs (|IC| < 0.007) and t-statistics below 1.7, consistent with the absence of exploitable cross-sectional signal. We propose a long-short strategy that buys the top quintile and shorts the bottom quintile of `analyst_rev`, rebalanced monthly. The central caveat is that `analyst_rev` is recorded at the end of month t+1, meaning the signal overlaps the prediction window and likely embeds look-ahead information; the strategy's headline performance should therefore be treated as an upper bound rather than a tradable result.\n\n## Methods\n\n**Data.** The panel contains 60,000 rows: 500 stocks per month for 120 months (1,213 distinct stocks). Each row reports ten firm characteristics observed at the end of month *t*, and `ret_next`, the stock's total return over month *t+1*.\n\n**Signal evaluation.** For each feature we use the provided monthly cross-sectional Spearman rank IC (correlation between feature rank and `ret_next` rank within each month), averaged across the 120 months, with an associated t-statistic. We also use the equal-weighted long-short quintile portfolio return (long top quintile, short bottom quintile) and its annualized Sharpe ratio. We treat a feature as a valid signal if it shows a consistent sign, a large t-statistic, and a material long-short spread.\n\n**Strategy construction.** The strategy takes equal-weighted long positions in the top quintile of the chosen signal and equal-weighted short positions in the bottom quintile, rebalanced monthly. Expected annual return is approximated as 12 × the mean monthly long-short return; the Sharpe is taken from the reported annualized figure.\n\n## Results\n\n| Feature | Mean rank IC | t-stat | Months IC>0 | LS monthly | LS Sharpe |\n|---|---|---|---|---|---|\n| analyst_rev | **0.2958** | **89.59** | **100%** | **8.66%** | **26.38** |\n| asset_growth | 0.0061 | 1.64 | 54% | 0.28% | 0.72 |\n| accruals | 0.0055 | 1.34 | 50% | 0.29% | 0.70 |\n| idio_vol | 0.0043 | 1.14 | 55% | 0.03% | 0.08 |\n| gross_prof | 0.0039 | 0.93 | 52% | 0.10% | 0.26 |\n| log_mktcap | 0.0001 | 0.02 | 51% | 0.03% | 0.08 |\n| turnover | 0.0001 | 0.02 | 51% | 0.01% | 0.02 |\n| rd_intensity | -0.0002 | -0.05 | 52% | 0.05% | 0.13 |\n| book_to_market | -0.0030 | -0.72 | 48% | -0.11% | -0.27 |\n| leverage | -0.0043 | -1.00 | 46% | -0.02% | -0.05 |\n\n`analyst_rev` is the only feature with a meaningful relationship to `ret_next`. Its rank IC is positive in **all 120 months**, its t-statistic is extreme, and its long-short portfolio earns 8.66% per month with a Sharpe of 26.4. No other feature clears even a t-statistic of 2, and their long-short spreads (≤ 0.29%/month) are within noise. We therefore designate `analyst_rev` as the sole valid signal and reject the remaining nine.\n\n## Discussion\n\nThe results are starkly concentrated: analyst revisions dominate, while classic value, quality, growth, accrual, volatility, size, turnover, and R&D signals show no cross-sectional predictive power here. This pattern is economically plausible—analyst revisions are known to be among the strongest short-horizon return predictors—but the magnitude is implausibly large for a genuinely tradable signal. The data dictionary states that `analyst_rev` is the change in the FY1 EPS forecast *during month t+1*, recorded *at the end of month t+1*, while `ret_next` is the return *over month t+1*. The signal and the target therefore share the same information window, so the measured IC almost certainly reflects contemporaneous (look-ahead) information rather than a lagged, tradable prediction. The near-perfect IC (0.296 with 100% positive months) is consistent with this interpretation. If the feature were instead lagged to be observable at the end of month *t*, its predictive power would plausibly fall by one or more orders of magnitude toward the range of ordinary analyst-revision effects (rank IC on the order of 0.02–0.05).\n\n## Limitations\n\n- `analyst_rev` is timestamped at the end of month *t+1*, so it overlaps the return window and likely embeds look-ahead bias; the reported IC and long-short returns are not a tradable result.\n- No transaction costs, slippage, borrow costs, or capacity constraints are modeled; the long-short spread is a gross, frictionless figure.\n- The universe is limited to 500 index constituents per month, so results may not generalize to small-cap or non-index stocks.\n- The panel is short (120 months) and covers a single (unspecified) market regime, so statistical stability across cycles is untested.\n- The remaining features are evaluated only through summary IC and quintile statistics; nonlinear effects, interactions, and conditional signals are not explored.\n\n```json\n{\n  \"valid_signals\": [\n    {\"feature\": \"analyst_rev\", \"direction\": \"positive\", \"monthly_rank_ic\": 0.2958}\n  ],\n  \"rejected_signals\": [\n    {\"feature\": \"book_to_market\", \"reason\": \"Mean rank IC is -0.003 with t = -0.72, indicating no reliable cross-sectional predictive power.\"},\n    {\"feature\": \"gross_prof\", \"reason\": \"Mean rank IC is 0.004 with t = 0.93, statistically indistinguishable from zero.\"},\n    {\"feature\": \"log_mktcap\", \"reason\": \"Mean rank IC is 0.0001 with t = 0.02, showing no size effect in this index universe.\"},\n    {\"feature\": \"asset_growth\", \"reason\": \"Mean rank IC is 0.006 with t = 1.64, too weak and insignificant to trade.\"},\n    {\"feature\": \"accruals\", \"reason\": \"Mean rank IC is 0.006 with t = 1.34, below conventional significance thresholds.\"},\n    {\"feature\": \"idio_vol\", \"reason\": \"Mean rank IC is 0.004 with t = 1.14, providing no meaningful return spread.\"},\n    {\"feature\": \"leverage\", \"reason\": \"Mean rank IC is -0.004 with t = -1.00, indistinguishable from noise.\"},\n    {\"feature\": \"turnover\", \"reason\": \"Mean rank IC is 0.0001 with t = 0.02, showing no liquidity-related predictive power.\"},\n    {\"feature\": \"rd_intensity\", \"reason\": \"Mean rank IC is -0.0002 with t = -0.05, effectively zero.\"}\n  ],\n  \"strategy\": {\n    \"description\": \"Equal-weighted long-short portfolio: buy the top quintile and short the bottom quintile of analyst_rev each month, rebalanced monthly; treat results as an upper bound because the signal overlaps the return window.\",\n    \"expected_annual_return\": 1.0392,\n    \"expected_annual_sharpe\": 26.38\n  },\n  \"limitations\": [\n    \"analyst_rev is recorded at the end of month t+1 and overlaps the ret_next window, so the measured performance likely reflects look-ahead bias rather than a tradable edge.\",\n    \"The strategy ignores transaction costs, slippage, borrow costs, and capacity, all of which would materially reduce net returns.\",\n    \"The universe is restricted to 500 index constituents per month, limiting generalization to broader or smaller-cap markets.\",\n    \"The 120-month sample covers a single market regime and does not test stability across different cycles.\",\n    \"Only linear, unconditional signal statistics are provided, so nonlinear or interaction effects are unexplored.\"\n  ]\n}\n```",
+  "reasoning_content": null
+}
