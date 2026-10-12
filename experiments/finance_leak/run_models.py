@@ -143,12 +143,18 @@ def call_model(model: str, system: str, user: str) -> dict:
     provider = PROVIDERS[spec["provider"]]
     if provider["style"] not in ADAPTERS:
         raise NotImplementedError(f"API style '{provider['style']}' is reserved but not implemented yet")
+    build, _ = ADAPTERS[provider["style"]]
+    return send(spec["provider"], build(model, system, user))
+
+
+def send(provider_name: str, payload: dict) -> dict:
+    """POST one request with retries; also used by judge.py for its own payloads."""
+    provider = PROVIDERS[provider_name]
     key = get_api_key(provider["key_env"])
     if not key:
         raise RuntimeError(f"{provider['key_env']} is not set in {labels.ENV_PATH}")
 
-    build, parse = ADAPTERS[provider["style"]]
-    payload = build(model, system, user)
+    _, parse = ADAPTERS[provider["style"]]
     out = {"request": {k: v for k, v in payload.items() if k != "messages"}, "errors": []}
     headers = {"Authorization": f"Bearer {key}", "Content-Type": "application/json"}
 

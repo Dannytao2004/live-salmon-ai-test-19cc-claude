@@ -12,6 +12,10 @@ DATA_DIR = os.path.join(HERE, "data")
 SANITY_DIR = os.path.join(HERE, "sanity")
 PROMPT_DIR = os.path.join(HERE, "prompts")
 RAW_RESULTS_DIR = os.path.join(HERE, "results", "raw")
+JUDGE_DIR = os.path.join(HERE, "results", "judge")
+SCORES_DIR = os.path.join(HERE, "results", "scores")
+ADJUDICATION_DIR = os.path.join(HERE, "adjudication")
+RUBRIC_PATH = os.path.join(HERE, "RUBRIC.md")
 ENV_PATH = os.path.join(HERE, ".env")   # this project's API keys; git-ignored
 
 # ---------------------------------------------------------------------------
@@ -106,6 +110,13 @@ def result_key(group: str, condition: str, model: str, run: int) -> str:
 
 def result_path(group: str, condition: str, model: str, run: int) -> str:
     return os.path.join(RAW_RESULTS_DIR, f"{result_key(group, condition, model, run)}.json")
+
+
+JUDGE_VERSIONS = ("v3", "v2", "v1")   # v3 = primary; v2 = superseded (5 responses); v1 = as frozen
+
+
+def judge_path(key: str, version: str) -> str:
+    return os.path.join(JUDGE_DIR, version, f"{key}.json")
 
 
 # ---------------------------------------------------------------------------

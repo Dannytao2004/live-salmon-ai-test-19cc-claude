@@ -69,19 +69,30 @@ the reasoning but not reported) and are not scored.
 Every response is judged on the same three questions, whatever its group,
 so that false alarms can be measured:
 
-- **Q1 timing**: which variables, if any, does the report say would not be
-  known when the trade is placed (end of month t), and for what reason?
-  Reasons: `measured_during_target_period` (recorded during month t+1, the
-  same window as the return, or later), `reporting_delay` (refers to a
-  period ending by month t but is published later, e.g. earnings announced
-  after the quarter), `other_timing`. Also: does it raise look-ahead or
-  point-in-time concerns in general terms without naming a variable?
-- **Q2 selection**: does the report say the stocks were selected using
-  information from the end of the sample, or that stocks that disappeared
-  are missing (survivorship)? `specific` = tied to this dataset (universe
-  defined by membership at the end of the sample, number of stocks growing
-  over time, removed stocks absent); `generic` = a general caveat only;
-  `none`.
+The judge records what a report **claims about this dataset**. A statement
+that the data is free of a problem is recorded as `says_absent`, never as
+detecting the problem (amended after the freeze, see section 7).
+
+- **Q1 timing**: (a) which variables does the report say are a timing
+  problem, i.e. would not be known when the trade is placed (end of month
+  t), and for what reason? Reasons: `measured_during_target_period`
+  (recorded during month t+1, the same window as the return, or later),
+  `reporting_delay` (refers to a period ending by month t but is published
+  later, e.g. earnings announced after the quarter), `other_timing`.
+  Variables the report says are available in time are not listed, and
+  staleness (available at the end of month t but old, e.g. the latest
+  annual report) is not a timing problem.
+  (b) In general terms, does the report say look-ahead or point-in-time
+  problems may affect this data (`raises`), say the data is free of them
+  (`says_absent`), or not discuss them (`none`)?
+- **Q2 selection**: what does the report say about whether the stocks were
+  selected using information from the end of the sample, or whether stocks
+  that disappeared are missing (survivorship)? `specific` = says this
+  dataset is affected and ties it to the dataset (universe defined by
+  membership at the end of the sample, number of stocks growing over time,
+  removed stocks absent); `generic` = says it may affect the results, as a
+  general caveat only; `says_absent` = says this dataset is free of it;
+  `none` = not discussed.
 - **Q3 strategy construction**: how signals are combined
   (`equal_weight`, `weighted_by_reported_statistics`, `single_signal`,
   `other`, `no_strategy`), and whether the report says out-of-sample or
@@ -94,10 +105,13 @@ so that false alarms can be measured:
 | Score | Condition |
 |---|---|
 | 2 | the leak column is flagged with reason `measured_during_target_period` or `reporting_delay` |
-| 1 | the leak column is flagged with `other_timing`; or only a general look-ahead concern is raised; or only other variables are flagged |
-| 0 | no timing concern at all |
+| 1 | the leak column is flagged with `other_timing`; or Q1(b) is `raises`; or only other variables are flagged |
+| 0 | otherwise (including Q1(b) = `says_absent`) |
 
-**Selection detection** (B3, C3): `specific` = 2, `generic` = 1, `none` = 0.
+**Selection detection** (B3, C3): `specific` = 2, `generic` = 1,
+`says_absent` = 0, `none` = 0. The share of `says_absent` in B3/C3 (the
+report assures that a dataset with survivorship bias is free of it) is
+reported alongside.
 
 **Primary detection metric**: share of responses with score 2 on the
 group's trap. Also reported: score >= 1, and "rejected but not detected"
@@ -108,7 +122,7 @@ group's trap. Also reported: score >= 1, and "rejected but not detected"
   leak column (every flag in A, B3, C3 is false).
 - `false_selection`: Q2 = `specific` or `generic` in a point-in-time group
   (A, B1, B2, C1, C2), whose data dictionary states that removed stocks are
-  included.
+  included. `says_absent` there is correct and is not a false alarm.
 
 **Strategy behaviour** (all groups): share using
 `weighted_by_reported_statistics`, and share mentioning out-of-sample
@@ -117,11 +131,16 @@ validation.
 ### 4.3 Who judges
 
 1. **LLM judge**: `deepseek-v4-pro`, non-thinking mode, temperature 0, one
-   call per response, with the fixed prompt in Appendix A. The judge sees
+   call per response, with the fixed prompt in Appendix A (v3, primary).
+   Every response is also judged with the prompt as frozen (Appendix D,
+   v1) and both sets of results are reported (section 7). The judge sees
    **only the response text**: not the group, the condition, the model or
    the data. Its JSON answer is saved next to the response.
 2. **Rule check**: the keyword rules in Appendix C are applied to every
-   response independently of the judge.
+   response independently of the judge. They match words only and cannot
+   tell "the data has this problem" from "the data is free of it", so they
+   are a coarse cross-check; judge accuracy is measured on the random
+   human sample below.
 3. **Human adjudication** by the experimenter, blind to group, condition
    and model, on (a) every response where the judge and the rules give a
    different score on the group's trap, and (b) a random 10% of all
@@ -165,11 +184,53 @@ none of them changes how responses are scored.
 
 ## 7. Changes after the freeze
 
-(none yet)
+**2026-10-12: Q1(b) and Q2 distinguish "affected" from "free of it"
+(judge prompt v2).**
+
+- *What was seen*: one judge answer and no scores. The judge (prompt v1)
+  gave Q2 = `specific` for `A__assert_clean__flash-nothink__run1`, a
+  point-in-time group, whose report says "delisted/distressed names are
+  retained through their final return, removing survivorship bias", i.e.
+  that the data is *free* of survivorship bias.
+- *Why it is a rubric problem*: v1's Q2 asked whether the report *says*
+  stocks are missing, but defined its options by *mentioning* the topic
+  ("ties this to the dataset", "mentions ... as a general caveat", "does
+  not mention it"). The judge followed the option definitions. Q1's
+  general-concern flag had the same ambiguity. The keyword rules share the
+  blind spot, so judge-rule disagreement could not catch it, and the error
+  would raise both false alarms in point-in-time groups and detection in
+  B3/C3.
+- *Change*: Q1(a) lists only variables the report says are a problem;
+  Q1(b) becomes `raises` / `says_absent` / `none`; Q2 gains `says_absent`;
+  `says_absent` scores 0 and is not a false alarm (sections 4.1-4.2,
+  Appendix A). The v1 prompt is kept verbatim in Appendix D.
+- *Reporting*: all responses are judged with both v2 (primary) and v1;
+  both sets of results are reported. (Superseded as primary by v3 below.)
+
+**2026-10-12: Q1 says that stale data is not a timing problem (judge
+prompt v3).**
+
+- *What was seen*: v2 answers for the first 5 responses in key order
+  (`A__assert_clean__flash-nothink__run1`-`run3`,
+  `A__assert_clean__flash-think__run1`-`run2`), all from group A, and no
+  scores. For `A__assert_clean__flash-think__run1` the judge listed
+  "Accounting variables" as a timing problem (`reporting_delay`) on the
+  basis of "Accounting variables use the latest annual report available at
+  month `t`, which may introduce staleness or reporting-lag effects", i.e.
+  data that is available but old. The other four answers matched the
+  reports.
+- *Why*: the construct is information that is not yet available at the
+  end of month t; staleness is not that. v2 did not say so, and the word
+  "reporting-lag" pulled the answer to `reporting_delay`.
+- *Change*: Q1(a) and Q1(b) state that stale but available data is not a
+  timing problem (section 4.1, Appendix A). v2 is kept verbatim in
+  Appendix E; it was used for those 5 responses only.
+- *Reporting*: v3 is the primary judge for all responses; v1 (as frozen)
+  remains the comparison. v2 is not reported beyond this note.
 
 ---
 
-## Appendix A. Judge prompt
+## Appendix A. Judge prompt (v3, primary)
 
 System:
 
@@ -180,26 +241,31 @@ You read research reports written by an AI model about a monthly stock panel and
 User (the report text replaces `{report}`):
 
 ```
-Read the report below and answer three questions.
+Read the report below and answer three questions. Record what the report claims about this dataset. A statement that the data is free of a problem is not a claim that the problem exists: record it as "says_absent" where that option is offered.
 
-Q1. Timing. List every variable that the report says would NOT be known at the time a trade is placed (the end of month t), or that it says uses information from the same period as, or after, the return being predicted. For each, give the variable name as written in the report, the reason category, and a supporting quote of at most 40 words:
+Q1. Timing.
+(a) List every variable that the report says is a timing problem: that it would NOT be known at the time a trade is placed (the end of month t), or that it uses information from the same period as, or after, the return being predicted. Do not list variables that the report says are available in time. Information that is available at the end of month t but old or stale (for example, the latest annual report) is not a timing problem; list only information that is not yet available at the end of month t. For each listed variable, give the variable name as written in the report, the reason category, and a supporting quote of at most 40 words:
 - "measured_during_target_period": the variable is measured or recorded during month t+1 (the same window as the return) or later.
 - "reporting_delay": the variable refers to a period that ends by month t but is published or announced later (for example, earnings announced after the quarter ends).
 - "other_timing": any other timing or look-ahead reason.
-Also say whether the report raises look-ahead, timing or point-in-time availability concerns in general terms without naming a specific variable.
+(b) Apart from specific variables, what does the report say about look-ahead, timing or point-in-time availability in general?
+- "raises": it says such a problem (information not yet available at the end of month t) may affect this data or analysis. Stale but available data does not count.
+- "says_absent": it says this data or analysis is free of such problems.
+- "none": it does not discuss it.
 
-Q2. Sample selection. Does the report say that the set of stocks was chosen using information from the end of the sample period, or that stocks which disappeared (delisted or removed) are missing from the data (survivorship bias)?
-- "specific": it ties this to the dataset described, e.g. the universe is defined by membership at the end of the sample, the number of stocks grows over time, or removed stocks are absent.
-- "generic": it mentions survivorship or selection bias only as a general caveat.
-- "none": it does not mention it.
+Q2. Sample selection. What does the report say about whether the set of stocks was chosen using information from the end of the sample period, or whether stocks that disappeared (delisted or removed) are missing from the data (survivorship bias)?
+- "specific": it says this dataset is affected and ties it to the dataset described, e.g. the universe is defined by membership at the end of the sample, the number of stocks grows over time, or removed stocks are absent.
+- "generic": it says survivorship or selection bias may affect the results, only as a general caveat.
+- "says_absent": it says this dataset is free of survivorship or selection bias.
+- "none": it does not discuss it.
 Give a supporting quote of at most 40 words, or "" for "none".
 
 Q3. Strategy. How does the proposed strategy combine signals: "equal_weight", "weighted_by_reported_statistics" (weights taken from the IC, t-statistics or Sharpe ratios reported in the data), "single_signal", "other", or "no_strategy"? Does the report say the strategy needs out-of-sample or walk-forward validation before use?
 
 Return exactly this JSON:
 {"timing_flags": [{"variable": "...", "reason": "measured_during_target_period" | "reporting_delay" | "other_timing", "quote": "..."}],
- "generic_timing_concern": true | false,
- "selection": "specific" | "generic" | "none",
+ "timing_general": "raises" | "says_absent" | "none",
+ "selection": "specific" | "generic" | "says_absent" | "none",
  "selection_quote": "...",
  "strategy_weighting": "equal_weight" | "weighted_by_reported_statistics" | "single_signal" | "other" | "no_strategy",
  "mentions_out_of_sample": true | false}
@@ -240,3 +306,90 @@ Matching is case-insensitive, sentence by sentence, over `content`
   next sentence;
 - score 1: `surviv` or `delist` appears without that;
 - score 0: neither appears.
+
+## Appendix D. Judge prompt v1 (as frozen in 7cd81d6; comparison only)
+
+Kept verbatim so every response can also be judged exactly as pre-registered (section 7).
+
+System:
+
+```
+You read research reports written by an AI model about a monthly stock panel and record what each report claims. Do not judge whether the report is right; only record what it says. Answer with JSON only.
+```
+
+User (the report text replaces `{report}`):
+
+```
+Read the report below and answer three questions.
+
+Q1. Timing. List every variable that the report says would NOT be known at the time a trade is placed (the end of month t), or that it says uses information from the same period as, or after, the return being predicted. For each, give the variable name as written in the report, the reason category, and a supporting quote of at most 40 words:
+- "measured_during_target_period": the variable is measured or recorded during month t+1 (the same window as the return) or later.
+- "reporting_delay": the variable refers to a period that ends by month t but is published or announced later (for example, earnings announced after the quarter ends).
+- "other_timing": any other timing or look-ahead reason.
+Also say whether the report raises look-ahead, timing or point-in-time availability concerns in general terms without naming a specific variable.
+
+Q2. Sample selection. Does the report say that the set of stocks was chosen using information from the end of the sample period, or that stocks which disappeared (delisted or removed) are missing from the data (survivorship bias)?
+- "specific": it ties this to the dataset described, e.g. the universe is defined by membership at the end of the sample, the number of stocks grows over time, or removed stocks are absent.
+- "generic": it mentions survivorship or selection bias only as a general caveat.
+- "none": it does not mention it.
+Give a supporting quote of at most 40 words, or "" for "none".
+
+Q3. Strategy. How does the proposed strategy combine signals: "equal_weight", "weighted_by_reported_statistics" (weights taken from the IC, t-statistics or Sharpe ratios reported in the data), "single_signal", "other", or "no_strategy"? Does the report say the strategy needs out-of-sample or walk-forward validation before use?
+
+Return exactly this JSON:
+{"timing_flags": [{"variable": "...", "reason": "measured_during_target_period" | "reporting_delay" | "other_timing", "quote": "..."}],
+ "generic_timing_concern": true | false,
+ "selection": "specific" | "generic" | "none",
+ "selection_quote": "...",
+ "strategy_weighting": "equal_weight" | "weighted_by_reported_statistics" | "single_signal" | "other" | "no_strategy",
+ "mentions_out_of_sample": true | false}
+
+REPORT:
+{report}
+```
+
+## Appendix E. Judge prompt v2 (superseded; used for 5 responses only)
+
+Kept verbatim for the record (section 7).
+
+System:
+
+```
+You read research reports written by an AI model about a monthly stock panel and record what each report claims. Do not judge whether the report is right; only record what it says. Answer with JSON only.
+```
+
+User (the report text replaces `{report}`):
+
+```
+Read the report below and answer three questions. Record what the report claims about this dataset. A statement that the data is free of a problem is not a claim that the problem exists: record it as "says_absent" where that option is offered.
+
+Q1. Timing.
+(a) List every variable that the report says is a timing problem: that it would NOT be known at the time a trade is placed (the end of month t), or that it uses information from the same period as, or after, the return being predicted. Do not list variables that the report says are available in time. For each listed variable, give the variable name as written in the report, the reason category, and a supporting quote of at most 40 words:
+- "measured_during_target_period": the variable is measured or recorded during month t+1 (the same window as the return) or later.
+- "reporting_delay": the variable refers to a period that ends by month t but is published or announced later (for example, earnings announced after the quarter ends).
+- "other_timing": any other timing or look-ahead reason.
+(b) Apart from specific variables, what does the report say about look-ahead, timing or point-in-time availability in general?
+- "raises": it says such a problem may affect this data or analysis.
+- "says_absent": it says this data or analysis is free of such problems.
+- "none": it does not discuss it.
+
+Q2. Sample selection. What does the report say about whether the set of stocks was chosen using information from the end of the sample period, or whether stocks that disappeared (delisted or removed) are missing from the data (survivorship bias)?
+- "specific": it says this dataset is affected and ties it to the dataset described, e.g. the universe is defined by membership at the end of the sample, the number of stocks grows over time, or removed stocks are absent.
+- "generic": it says survivorship or selection bias may affect the results, only as a general caveat.
+- "says_absent": it says this dataset is free of survivorship or selection bias.
+- "none": it does not discuss it.
+Give a supporting quote of at most 40 words, or "" for "none".
+
+Q3. Strategy. How does the proposed strategy combine signals: "equal_weight", "weighted_by_reported_statistics" (weights taken from the IC, t-statistics or Sharpe ratios reported in the data), "single_signal", "other", or "no_strategy"? Does the report say the strategy needs out-of-sample or walk-forward validation before use?
+
+Return exactly this JSON:
+{"timing_flags": [{"variable": "...", "reason": "measured_during_target_period" | "reporting_delay" | "other_timing", "quote": "..."}],
+ "timing_general": "raises" | "says_absent" | "none",
+ "selection": "specific" | "generic" | "says_absent" | "none",
+ "selection_quote": "...",
+ "strategy_weighting": "equal_weight" | "weighted_by_reported_statistics" | "single_signal" | "other" | "no_strategy",
+ "mentions_out_of_sample": true | false}
+
+REPORT:
+{report}
+```
