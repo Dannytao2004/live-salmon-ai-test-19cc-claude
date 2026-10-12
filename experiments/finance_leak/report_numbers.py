@@ -58,9 +58,17 @@ def main() -> None:
         "by_mode": {g: {("thinking" if th else "non_thinking"): frac(y.fake_alpha) for th, y in x.groupby("thinking")}
                     for g, x in C.groupby("group")},
         "by_condition": {c: frac(x.fake_alpha) for c, x in C.groupby("condition", sort=False)},
-        "no_fake_alpha": int((~C.fake_alpha.astype(bool)).sum()),
+        "no_fake_alpha": f"{int((~C.fake_alpha.astype(bool)).sum())}/{len(C)}",
     }
-    n["no_strategy_all"] = int((A.judge_strategy_weighting == "no_strategy").sum())
+    n["no_strategy_all"] = f"{int((A.judge_strategy_weighting == 'no_strategy').sum())}/{len(A)}"
+    n["upstream_live_salmon"] = {"dead_salmon_false_positives": "0/9",
+                                 "source": "repository-root REPORT.md (upstream), Key finding: 'all 9 papers "
+                                           "correctly reported null findings with zero false positives'"}
+    n["detected_by_group_by_rater"] = {}
+    for rater in ("agent_v4", "deepseek_v3", "deepseek_v1"):
+        d = pd.read_csv(os.path.join(labels.SCORES_DIR, f"responses_{rater}.csv"))
+        n["detected_by_group_by_rater"][rater] = {g: frac(x.final_trap_score == 2)
+                                                  for g, x in d.groupby("group") if g != "A"}
 
     n["claimed_sharpe_median"] = A.groupby("group").claimed_sharpe.median().round(2).to_dict()
     leak_ls = {g: float(sanity[(sanity.group == g) & (sanity.feature == f)].ls_sharpe_ann.iloc[0])

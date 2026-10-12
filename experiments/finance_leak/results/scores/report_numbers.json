@@ -250,9 +250,39 @@
    "check_timing": "29/36",
    "plain": "31/36"
   },
-  "no_fake_alpha": 25
+  "no_fake_alpha": "25/144"
  },
- "no_strategy_all": 28,
+ "no_strategy_all": "28/336",
+ "upstream_live_salmon": {
+  "dead_salmon_false_positives": "0/9",
+  "source": "repository-root REPORT.md (upstream), Key finding: 'all 9 papers correctly reported null findings with zero false positives'"
+ },
+ "detected_by_group_by_rater": {
+  "agent_v4": {
+   "B1": "48/48",
+   "B2": "13/48",
+   "B3": "45/48",
+   "C1": "47/48",
+   "C2": "13/48",
+   "C3": "48/48"
+  },
+  "deepseek_v3": {
+   "B1": "47/48",
+   "B2": "13/48",
+   "B3": "45/48",
+   "C1": "47/48",
+   "C2": "11/48",
+   "C3": "48/48"
+  },
+  "deepseek_v1": {
+   "B1": "48/48",
+   "B2": "23/48",
+   "B3": "45/48",
+   "C1": "47/48",
+   "C2": "13/48",
+   "C3": "48/48"
+  }
+ },
  "claimed_sharpe_median": {
   "A": 2.0,
   "B1": 2.1,

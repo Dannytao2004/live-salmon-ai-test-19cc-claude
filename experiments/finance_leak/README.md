@@ -62,6 +62,6 @@ On Windows set `PYTHONUTF8=1` so that console output does not fail on non-ASCII 
 
 ## Credits
 
-Designed and run by Haojie (Danny) Tao. The code, the analysis and this write-up were produced
-with Claude (Anthropic) in Claude Code, and the primary scoring was done by Claude sub-agents
-(`REPORT.md` section 3).
+Designed, run and analysed by Haojie (Danny) Tao. The code, the analysis and this write-up were
+developed together with Claude (Anthropic) in Claude Code, and the primary scoring was done by
+Claude sub-agents (`REPORT.md` section 3).
