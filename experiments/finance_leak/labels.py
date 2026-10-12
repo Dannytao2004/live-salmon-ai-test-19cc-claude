@@ -11,6 +11,8 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 DATA_DIR = os.path.join(HERE, "data")
 SANITY_DIR = os.path.join(HERE, "sanity")
 PROMPT_DIR = os.path.join(HERE, "prompts")
+RAW_RESULTS_DIR = os.path.join(HERE, "results", "raw")
+ENV_PATH = os.path.join(HERE, ".env")   # this project's API keys; git-ignored
 
 # ---------------------------------------------------------------------------
 # Groups and traps
@@ -49,6 +51,19 @@ CONDITIONS = {
 }
 
 # ---------------------------------------------------------------------------
+# Models: label -> provider, provider's model id, and provider-specific
+# options. The label is what appears in result file names and tables.
+# Providers themselves (endpoints, API key variables) live in run_models.py.
+# ---------------------------------------------------------------------------
+MODELS = {
+    "flash-think":   {"provider": "deepseek", "model_id": "deepseek-flash", "thinking": True},
+    "flash-nothink": {"provider": "deepseek", "model_id": "deepseek-flash", "thinking": False},
+    "pro-think":     {"provider": "deepseek", "model_id": "deepseek-v4-pro", "thinking": True},
+    "pro-nothink":   {"provider": "deepseek", "model_id": "deepseek-v4-pro", "thinking": False},
+}
+RUNS_PER_CELL = 3
+
+# ---------------------------------------------------------------------------
 # Fields of the JSON block every model must end its answer with.
 # ---------------------------------------------------------------------------
 FIELD_VALID = "valid_signals"
@@ -83,6 +98,14 @@ def prompt_key(group: str, condition: str) -> str:
 
 def prompt_path(group: str, condition: str) -> str:
     return os.path.join(PROMPT_DIR, f"{prompt_key(group, condition)}.txt")
+
+
+def result_key(group: str, condition: str, model: str, run: int) -> str:
+    return f"{group}__{condition}__{model}__run{run}"
+
+
+def result_path(group: str, condition: str, model: str, run: int) -> str:
+    return os.path.join(RAW_RESULTS_DIR, f"{result_key(group, condition, model, run)}.json")
 
 
 # ---------------------------------------------------------------------------
