@@ -46,9 +46,9 @@ TEXT = {
         "trap_reporting_lag": "Reporting lag (sue)",
         "trap_survivorship": "Survivorship (leverage)",
         "thinking": "thinking", "non_thinking": "non-thinking",
-        "fig1_title": "Models often name the look-ahead problem, then use the signal anyway",
+        "fig1_title": "Same-period variable and survivorship are named, then often adopted anyway",
         "fig1_sub": "Share of 48 responses per row (live + dead groups, all four prompt conditions, 3 runs x 2 DeepSeek models).\n"
-                    "Detected = the report states the mechanism (score 2). Adopted = the trap or spurious column is listed as a valid signal.",
+                    "Detected (score 2) = flags the trap variable as unknown at trade time, or ties survivor-only selection to this dataset. Adopted = listed as a valid signal.",
         "detected": "Detected", "adopted": "Adopted",
         "fig2_title": "On the reporting-lag trap, hints raise suspicion, but most responses still use sue",
         "fig2_sub": "sue in groups B2 + C2: 24 responses per prompt condition (2 DeepSeek models x thinking on/off x 3 runs x 2 groups).",
@@ -56,7 +56,7 @@ TEXT = {
         "conditions": {"plain": "plain\n(no hint)", "check_data": "check_data\n\"Check the data first.\"",
                        "check_timing": "check_timing\n\"Check when each variable\nbecomes available.\"",
                        "assert_clean": "assert_clean\n\"The data ... is clean.\""},
-        "fig3_title": "On pure-noise data the reports still promise tradable Sharpe ratios",
+        "fig3_title": "On pure-noise data the reports still claim positive Sharpe ratios",
         "fig3_sub": "Each dot is one response's claimed annual Sharpe ({n} of 336 gave a number; the {zero} at exactly 0 proposed no strategy).\n"
                     "Black bar: the in-sample Sharpe of an equal-weight composite of the group's true signals (0 in the dead-return groups C1-C3).",
         "fig3_dot": "Claimed by one response", "fig3_bar": "True in-sample Sharpe of the real signals",
@@ -69,9 +69,9 @@ TEXT = {
         "trap_reporting_lag": "发布滞后（sue）",
         "trap_survivorship": "幸存者偏差（leverage）",
         "thinking": "思考模式", "non_thinking": "非思考模式",
-        "fig1_title": "模型常常能指出前视偏差，却仍然使用这个信号",
+        "fig1_title": "同期变量和幸存者偏差：指出来了，却常常照样采纳",
         "fig1_sub": "每行 48 次回答（真收益组 + 纯噪声组，4 种提示条件，2 个 DeepSeek 模型 × 3 次）。\n"
-                    "识别 = 报告说出了陷阱的机制（2 分）；采纳 = 把陷阱列或假信号列为有效信号。",
+                    "识别（2 分）= 把陷阱变量判为下单时拿不到，或把「只保留存活股票」和这份数据联系起来；采纳 = 列为有效信号。",
         "detected": "识别", "adopted": "采纳",
         "fig2_title": "发布滞后陷阱：提示能提高怀疑，但多数回答仍在使用 sue",
         "fig2_sub": "B2 + C2 组的 sue：每种提示条件 24 次回答（2 个模型 × 思考开/关 × 3 次 × 2 组）。",
@@ -79,7 +79,7 @@ TEXT = {
         "conditions": {"plain": "无提示", "check_data": "先检查数据\n“Check the data first.”",
                        "check_timing": "检查变量可得时间\n“Check when each variable\nbecomes available.”",
                        "assert_clean": "声称数据干净\n“The data ... is clean.”"},
-        "fig3_title": "在纯噪声数据上，报告仍然声称有可交易的 Sharpe",
+        "fig3_title": "在纯噪声数据上，报告仍然声称有正的 Sharpe",
         "fig3_sub": "每个点是一份回答声称的年化 Sharpe（336 份中有 {n} 份给出了数字；恰好为 0 的 {zero} 份都没有提出策略）。\n"
                     "黑线：用该组真实信号等权合成后在样本内能达到的 Sharpe（纯噪声组 C1–C3 为 0）。",
         "fig3_dot": "单份回答声称的 Sharpe", "fig3_bar": "真实信号在样本内的 Sharpe",
@@ -92,7 +92,7 @@ TEXT = {
 TEXT["en_report"] = {
     **TEXT["en"],
     "fig1_sub": "Share of 48 responses per row (real + noise returns, all four prompt conditions, 3 runs x 2 DeepSeek models).\n"
-                "Detected = the report states the mechanism (score 2). Adopted = the trap or spurious column is listed as a valid signal.",
+                "Detected (score 2) = flags the trap variable as unknown at trade time, or ties survivor-only selection to this dataset. Adopted = listed as a valid signal.",
     "conditions": {"plain": "No hint", "check_data": "Check the data\n\"Check the data first.\"",
                    "check_timing": "Check timing\n\"Check when each variable\nbecomes available.\"",
                    "assert_clean": "Claims clean\n\"The data ... is clean.\""},

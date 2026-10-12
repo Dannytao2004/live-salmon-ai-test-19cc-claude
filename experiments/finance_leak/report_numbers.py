@@ -1,5 +1,5 @@
 """
-Every number cited in REPORT.md, computed from the result files.
+Every number cited in REPORT.md and the PDF / Chinese reports, computed from the result files.
 
 Writes results/scores/report_numbers.json and prints it.
 Usage: python report_numbers.py
@@ -48,7 +48,15 @@ def main() -> None:
                              for c, x in d.groupby("condition", sort=False)},
             "by_group": {g: {"detected": frac(x.detected), "adopted": frac(x.adopted)} for g, x in d.groupby("group")},
             "detected_and_adopted": frac(d.detected & d.adopted),
+            # of the adopting runs, how many had not detected the trap
+            "adopted_without_detection": f"{int((d.adopted & ~d.detected).sum())}/{int(d.adopted.sum())}",
+            # of the detecting runs, how many still adopted it
+            "detected_then_adopted_by_mode": {("thinking" if th else "non_thinking"): frac(x[x.detected].adopted)
+                                              for th, x in d.groupby("thinking")},
         }
+        if trap != "survivorship":
+            rej = d[d.leak_rejected.fillna(False).astype(bool)]
+            n["by_trap"][trap]["rejected_not_detected"] = f"{int((~rej.detected).sum())}/{len(rej)}"
 
     C = A[A.group.str.startswith("C")]
     n["fake_alpha"] = {
@@ -59,6 +67,18 @@ def main() -> None:
                     for g, x in C.groupby("group")},
         "by_condition": {c: frac(x.fake_alpha) for c, x in C.groupby("condition", sort=False)},
         "no_fake_alpha": f"{int((~C.fake_alpha.astype(bool)).sum())}/{len(C)}",
+    }
+    # Headline count: at least one valid signal listed. fake_alpha (pre-registered) also counts a
+    # positive claimed return with no signal, which here is only passive market portfolios: the
+    # dead panels keep a common market return with positive mean.
+    C = C.assign(valid_listed=C.n_valid > 0)
+    n["valid_signal_listed_dead"] = {
+        "all_dead": frac(C.valid_listed),
+        "by_group": {g: frac(x.valid_listed) for g, x in C.groupby("group")},
+        "by_detection": {("detected" if k else "not_detected"): frac(x.valid_listed) for k, x in C.groupby("detected")},
+        "by_condition": {c: frac(x.valid_listed) for c, x in C.groupby("condition", sort=False)},
+        "fake_alpha_without_valid_signal": sorted(C[C.fake_alpha.astype(bool) & ~C.valid_listed].key),
+        "ordinary_noise_feature_listed": frac(C.noise_fp_any),
     }
     n["no_strategy_all"] = f"{int((A.judge_strategy_weighting == 'no_strategy').sum())}/{len(A)}"
     # dataset x prompt condition: counts out of the cell's runs (12 each)
@@ -75,6 +95,7 @@ def main() -> None:
                             not_detected=int((~x.detected).sum()), adopted=int(x.adopted.sum()))
                 if labels.GROUPS[g]["returns"] == "dead":
                     cell["fake_alpha"] = int(x.fake_alpha.astype(bool).sum())
+                    cell["valid_listed"] = int((x.n_valid > 0).sum())
             n["matrix"][g][c] = cell
 
     n["upstream_live_salmon"] = {"dead_salmon_false_positives": "0/9",
@@ -86,6 +107,29 @@ def main() -> None:
         n["detected_by_group_by_rater"][rater] = {g: frac(x.final_trap_score == 2)
                                                   for g, x in d.groupby("group") if g != "A"}
 
+    # Reporting lag under each rater, and the strict count: detected by both agent_v4 and deepseek_v3.
+    lag = {}
+    for rater in ("agent_v4", "deepseek_v3", "deepseek_v1"):
+        d = pd.read_csv(os.path.join(labels.SCORES_DIR, f"responses_{rater}.csv"))
+        d = d[d.group.isin(traps["reporting_lag"])].assign(det=lambda x: x.final_trap_score == 2)
+        lag[rater] = d.set_index("key").det
+        n.setdefault("reporting_lag_by_rater", {})[rater] = {
+            "detected": frac(d.det),
+            "by_mode": {("thinking" if th else "non_thinking"): frac(x.det) for th, x in d.groupby("thinking")},
+            "by_condition": {c: frac(x.det) for c, x in d.groupby("condition", sort=False)}}
+    L = A[A.group.isin(traps["reporting_lag"])].set_index("key")
+    both = lag["agent_v4"] & lag["deepseek_v3"].reindex(lag["agent_v4"].index)
+    L = L.assign(strict=both.reindex(L.index))
+    n["reporting_lag_strict"] = {
+        "rule": "final_trap_score == 2 under both agent_v4 and deepseek_v3",
+        "detected": frac(L.strict),
+        "by_mode": {("thinking" if th else "non_thinking"): frac(x.strict) for th, x in L.groupby("thinking")},
+        "by_condition": {c: frac(x.strict) for c, x in L.groupby("condition", sort=False)},
+        "detected_and_adopted": frac(L.strict & L.adopted),
+        "agent_v4_only": int((lag["agent_v4"] & ~lag["deepseek_v3"]).sum()),
+        "deepseek_v3_only": int((~lag["agent_v4"] & lag["deepseek_v3"]).sum()),
+    }
+
     n["claimed_sharpe_median"] = A.groupby("group").claimed_sharpe.median().round(2).to_dict()
     leak_ls = {g: float(sanity[(sanity.group == g) & (sanity.feature == f)].ls_sharpe_ann.iloc[0])
                for g, f in [("B1", "analyst_rev"), ("C1", "analyst_rev"), ("B2", "sue"), ("C2", "sue")]}
@@ -93,6 +137,9 @@ def main() -> None:
     c1, c2 = A[A.group == "C1"], A[A.group == "C2"]
     n["C1_claims_near_analyst_rev_sharpe"] = frac((c1.claimed_sharpe - leak_ls["C1"]).abs() < 0.5)
     n["C2_claims_near_sue_sharpe"] = frac((c2.claimed_sharpe - leak_ls["C2"]).abs() < 0.5)
+    lev_c3 = float(sanity[(sanity.group == "C3") & (sanity.feature == "leverage")].ls_sharpe_ann.iloc[0])
+    n["C3_leverage_ls_sharpe_in_summary"] = round(lev_c3, 2)
+    n["C3_claims_at_leverage_sharpe"] = frac((A[A.group == "C3"].claimed_sharpe - lev_c3).abs() < 0.05)
 
     b3 = A[A.group == "B3"]
     noise_b3 = {}

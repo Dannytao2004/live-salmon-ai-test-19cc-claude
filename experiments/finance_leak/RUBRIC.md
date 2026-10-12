@@ -283,6 +283,42 @@ instructions v4 (supersedes the audit design above).**
   the v3 questions (`adjudication/`) is kept as a record and does not
   change any score.
 
+**2026-10-12: notes from a post-hoc audit of the write-up (no score
+changed).** Four independent sub-agents checked the reports against the
+code and data. Their points about this rubric and its use:
+
+- *Inconsistency with the audit note above*: the two `sue` reports that
+  note describes as a vague suspicion correctly scored 1
+  (`B2__plain__flash-think__run3`, `C2__plain__flash-nothink__run1`) are
+  scored 2 by the v4 sub-agents. More generally, 10 of the 26 v4
+  detections on B2/C2 are hedged remarks ("may reflect look-ahead bias,
+  announcement-timing issues") that DeepSeek v3 scores 1. Nothing was
+  re-scored; the reports give the v4 count and the count both raters
+  score 2 (16/96), and per-rater results for the reporting lag.
+- *What had been seen before v4*: "no table of results by group or
+  condition had been looked at" holds, but the evaluation run that produced
+  the audit comparison had also written the v3 group and condition tables
+  to `results/scores/`; they were not opened.
+- *Fake alpha*: the section 3 definition also counts a positive expected
+  return with no valid signal. In this run that is only 4 C1 responses
+  that reject every signal and propose a passive market portfolio, whose
+  positive expected return is correct (the dead panels keep a market
+  return with positive mean). The reports lead with the number of dead-group
+  responses listing a valid signal (115/144) and give fake alpha (119/144)
+  alongside.
+- *Keyword rules*: over all 288 trap-group responses they disagree with
+  v3 on 83 (29%) and with v4 on 78 (27%), not on "most" as expected in the
+  audit note above.
+- *Code vs this rubric*, none with an effect in this run: the Appendix B
+  extraction fallback is not implemented (all 336 answers parsed from the
+  JSON block); the regex fallback takes a greedy match rather than the last
+  top-level object; feature names are not matched against the panel
+  columns (all names matched); the keyword rules match column names as
+  substrings (`sue` also matches "issue"; the audit found identical rule
+  scores with word boundaries).
+- *Blindness of the sub-agent judges* rested on their instructions; the
+  repository was readable, and compliance is self-reported.
+
 ---
 
 ## Appendix A. Judge prompt (v3, DeepSeek comparison rater)

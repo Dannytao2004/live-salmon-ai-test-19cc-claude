@@ -1,8 +1,8 @@
 # finance_leak: look-ahead traps for AI scientists
 
 A finance variant of the Live Salmon Test. Synthetic monthly stock panels with a known
-data-generating process each hide one classic look-ahead trap (a same-period variable, a
-reporting-lag misalignment, or survivorship selection); an AI "quantitative researcher" gets a
+data-generating process each hide at most one classic look-ahead trap (a same-period variable, a
+reporting-lag misalignment, or survivorship selection; the control has none); an AI "quantitative researcher" gets a
 text summary and must find signals, propose a strategy and write a short paper. Results:
 **[REPORT.md](REPORT.md)**; a shorter summary as PDF: **[report_build/REPORT.pdf](report_build/REPORT.pdf)**. Scoring rules, pre-registered and with every later change recorded:
 **[RUBRIC.md](RUBRIC.md)**.
@@ -21,9 +21,9 @@ Nothing outside this folder was modified.
 | `judge.py` | DeepSeek comparison judge, prompts read verbatim from `RUBRIC.md` (`results/judge/v1`, `v3`) |
 | `agent_scoring.py` | prepares anonymous packets for the Claude sub-agent judge and collects their answers (`scoring/`, `results/judge/agent_v4*/`) |
 | `adjudication/` | the earlier 30-response audit with the v3 questions (record only; see `RUBRIC.md` section 7) |
-| `evaluate.py` | all metrics and tables (`results/scores/`) |
+| `evaluate.py` | all metrics and tables (`results/scores/`). `responses_v1.csv`, `responses_v3.csv`, `summary_v1.md`, `summary_v3.md`, `table_v1_*`, `table_v3_*` and `audit_comparison.csv` there come from the run before the switch to the v4 judge and are kept as a record (`RUBRIC.md` section 7) |
 | `make_figures.py` | the three figures and their data (`figures/`) |
-| `report_numbers.py` | every number cited in `REPORT.md` (`results/scores/report_numbers.json`) |
+| `report_numbers.py` | every result number cited in `REPORT.md` and the PDF (`results/scores/report_numbers.json`) |
 | `report_build/` | the PDF summary: template, build script, `REPORT.html` and `REPORT.pdf` |
 | `.env.example` | template for the git-ignored `.env` that holds API keys |
 
@@ -41,8 +41,11 @@ python report_numbers.py     # numbers cited in REPORT.md, offline
 python report_build/build_report.py   # REPORT.html and REPORT.pdf (needs Chrome or Edge), offline
 ```
 
-The last three rebuild every table, figure and number in `REPORT.md` from the committed
-responses and judge answers, without any API call.
+`evaluate.py`, `make_figures.py` and `report_numbers.py` rebuild every result table, figure and
+number in `REPORT.md` from the committed responses and judge answers, without any API call
+(`evaluate.py` reads the git-ignored panels, so run `generate_data.py` first). `build_report.py`
+also checks that every fraction in the PDF text and in `REPORT.md` exists in
+`report_numbers.json`.
 
 Re-running the experiment itself needs API access (copy `.env.example` to `.env` and fill in
 `DEEPSEEK_API_KEY`; keys are read only from that file):

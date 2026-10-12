@@ -4,8 +4,10 @@ Build the report as a self-contained HTML file and print it to PDF.
 - Figures: rendered by make_figures.py as SVG (text kept as text) and inlined.
 - Tables 1-4 (dataset x prompt condition) are generated from
   results/scores/report_numbers.json, never typed by hand.
-- Every fraction "a/b" in the hand-written text must appear in
-  report_numbers.json (or be a single matrix cell); the build fails otherwise.
+- Every fraction "a/b" in the hand-written text, and in ../REPORT.md, must appear
+  in report_numbers.json (or be a single matrix cell); the build fails before
+  writing anything otherwise. This only shows that each fraction exists in the
+  results, not that it is used for the right metric.
 - Styles are also written onto each element, so the HTML looks right in viewers
   that drop <style>.
 - The PDF is printed with headless Chrome or Edge.
@@ -41,12 +43,12 @@ TEXT = {
                  ("B2", "B2 \u2461 Reporting lag", "real"), ("C2", "C2 \u2461 Reporting lag", "noise"),
                  ("B3", "B3 \u2462 Survivorship", "real"), ("C3", "C3 \u2462 Survivorship", "noise")],
         "dataset": "Dataset", "returns": "Returns", "total": "Total",
-        "detect": ("detected", "missed"), "adopt": ("adopted", "not adopted"), "fake": ("reported", "not reported"),
-        "suspected": "+{x} suspected",
+        "detect": ("detected", "missed"), "adopt": ("adopted", "not adopted"), "fake": ("listed", "not listed"),
+        "suspected": "+{x} weaker concern",
         "control_head": "Dataset A", "control_rows": ("Found all 3 true factors (right sign)",
                                                      "Treated a noise feature as a signal"),
         "captions": ["Figure 1. Detection and use of each trap, thinking vs non-thinking (48 runs each).",
-                     "Figure 2. Reporting-lag trap (B2 + C2) under the four prompts: detected, suspected, adopted (24 runs each).",
+                     "Figure 2. Reporting-lag trap (B2 + C2) under the four prompts: detected, any timing concern, adopted (24 runs each).",
                      "Figure 3. Claimed annual Sharpe per response (dots) vs the in-sample Sharpe of the true signals (black bar)."],
     },
 }
@@ -174,16 +176,21 @@ def main() -> None:
     m = numbers["matrix"]
     html = open(os.path.join(BUILD_DIR, f"report_{args.lang}.tpl"), encoding="utf-8").read()
 
-    text = re.sub(r"<[^>]+>", " ", html)
     known = set(re.findall(r"\d+/\d+", json.dumps(numbers)))
     known |= {f"{v}/{cell['n']}" for g in m.values() for cell in g.values() for k, v in cell.items() if k != "n"}
-    found = re.findall(r"(?<![\w.])(\d+/\d+)(?![\w.])", text)
-    missing = sorted(set(found) - known)
+    fraction = re.compile(r"(?<![\w./])(\d+/\d+)(?![\w/]|\.\d)")
+    found = fraction.findall(re.sub(r"<[^>]+>", " ", html))
+    found_md = fraction.findall(open(os.path.join(EXP_DIR, "REPORT.md"), encoding="utf-8").read())
+    missing, missing_md = sorted(set(found) - known), sorted(set(found_md) - known)
+    print(f"hand-written fractions: {len(found)} in the template, {len(found_md)} in REPORT.md; "
+          f"not found in report_numbers.json: {missing or 'none'} / {missing_md or 'none'}")
+    if missing or missing_md:
+        sys.exit(1)
 
     pieces = {
         "{{TABLE_DETECT}}": matrix_table(m, t, "detected", t["detect"], BLUE, t["rows"], suspected=True),
         "{{TABLE_ADOPT}}": matrix_table(m, t, "adopted", t["adopt"], ORANGE, t["rows"]),
-        "{{TABLE_FAKE}}": matrix_table(m, t, "fake_alpha", t["fake"], ORANGE, [r for r in t["rows"] if r[0][0] == "C"]),
+        "{{TABLE_FAKE}}": matrix_table(m, t, "valid_listed", t["fake"], ORANGE, [r for r in t["rows"] if r[0][0] == "C"]),
         "{{TABLE_CONTROL}}": control_table(m, t),
     }
     for i, (name, caption) in enumerate(zip(FIG_FILES, t["captions"]), 1):
@@ -201,10 +208,7 @@ def main() -> None:
     html_path = os.path.join(BUILD_DIR, "REPORT.html" if args.lang == "en" else f"REPORT_{args.lang}.html")
     with open(html_path, "w", encoding="utf-8", newline="\n") as f:
         f.write(html)
-    print(f"wrote {html_path} ({os.path.getsize(html_path) // 1024} KB); hand-written fractions: {len(found)}, "
-          f"distinct {len(set(found))}; not found in report_numbers.json: {missing or 'none'}")
-    if missing:
-        sys.exit(1)
+    print(f"wrote {html_path} ({os.path.getsize(html_path) // 1024} KB)")
 
     if not args.no_pdf:
         pdf_path = os.path.splitext(html_path)[0] + ".pdf"
