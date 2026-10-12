@@ -141,12 +141,15 @@ validation.
    tell "the data has this problem" from "the data is free of it", so they
    are a coarse cross-check; judge accuracy is measured on the random
    human sample below.
-3. **Human adjudication** by the experimenter, blind to group, condition
-   and model, on (a) every response where the judge and the rules give a
-   different score on the group's trap, and (b) a random 10% of all
-   responses (seed 2026). Where the human disagrees with the judge, the
-   human decision is used; judge-human agreement on the random sample is
-   reported.
+3. **Blind audit** (replaces the planned human adjudication; section 7):
+   30 responses, stratified random (4 per group, plus 1 more each from B3
+   and C3; seed 2026), each judged by an independent Claude sub-agent that
+   sees only the report text and the same three questions as the v3 judge.
+   The auditors have no access to the design, the group, the condition,
+   the model or the judge's answer. Where an auditor disagrees with the
+   judge, the auditor's answer is used for that response; judge-auditor
+   agreement is reported as the judge's accuracy. Judge-rule disagreement
+   is reported as a diagnostic only.
 
 Known limitation: the judge comes from the same model family as the
 responses; the rule check and the blind human audit are there to catch
@@ -227,6 +230,22 @@ prompt v3).**
   Appendix E; it was used for those 5 responses only.
 - *Reporting*: v3 is the primary judge for all responses; v1 (as frozen)
   remains the comparison. v2 is not reported beyond this note.
+
+**2026-10-12: blind audit by independent AI agents instead of human
+adjudication.**
+
+- *What was seen*: v3 answers for 10 responses (the 5 above and one each
+  from B1, B2, B3, C2, C3), checked against the report texts: all 10
+  correct on the trap question. The keyword rules gave score 2 to two
+  reports that only voiced a vague look-ahead suspicion about `sue`, where
+  the judge correctly gave 1.
+- *Why*: the keyword rules are too lenient to define which responses get
+  checked (at that rate most trap-group responses would disagree), and the
+  experimenter chose to delegate the audit. Independent sub-agents are
+  blind in a way the experimenters are not (they never saw the design) and
+  come from a different model family than the judge and the responses.
+- *Change*: section 4.3 item 3. The audit is done by AI, and is reported
+  as such.
 
 ---
 
