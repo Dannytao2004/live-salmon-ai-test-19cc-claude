@@ -1,0 +1,6 @@
+{"timing_flags": [],
+ "timing_general": "none",
+ "selection": "specific",
+ "selection_quote": "The sample consists only of stocks that were index constituents at the end of month 120, introducing survivorship bias that may overstate the performance of signals.",
+ "strategy_weighting": "equal_weight",
+ "mentions_out_of_sample": true}

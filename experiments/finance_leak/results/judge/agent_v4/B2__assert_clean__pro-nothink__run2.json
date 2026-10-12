@@ -1,0 +1,17 @@
+{
+  "key": "B2__assert_clean__pro-nothink__run2",
+  "packet": "Q103",
+  "pass": "first",
+  "judge": "claude-subagent",
+  "instructions": "v4 (RUBRIC.md Appendix F)",
+  "status": "success",
+  "errors": [],
+  "answer": {
+    "timing_flags": [],
+    "timing_general": "raises",
+    "selection": "says_absent",
+    "selection_quote": "The universe consists of constituents of a broad equity index, with point-in-time data to avoid survivorship bias.",
+    "strategy_weighting": "equal_weight",
+    "mentions_out_of_sample": false
+  }
+}

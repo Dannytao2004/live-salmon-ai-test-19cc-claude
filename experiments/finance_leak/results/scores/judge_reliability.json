@@ -1,0 +1,68 @@
+{
+  "benchmark_sharpe": {
+    "A": 2.567,
+    "B1": 2.567,
+    "B2": 2.567,
+    "B3": 1.712,
+    "C1": 0.0,
+    "C2": 0.0,
+    "C3": 0.0
+  },
+  "primary_double_coding": {
+    "double_coding": {
+      "raters": "first pass vs second pass",
+      "n": 30,
+      "trap_score": "26/26",
+      "selection_label": "30/30",
+      "timing_general": "29/30",
+      "strategy_weighting": "30/30",
+      "mentions_out_of_sample": "30/30",
+      "false_timing_presence": "30/30",
+      "trap_score_by_trap": {
+        "contemporaneous": "8/8",
+        "reporting_lag": "8/8",
+        "survivorship": "10/10"
+      }
+    },
+    "tiebreaks_needed": [],
+    "tiebreaks_missing": []
+  },
+  "agent_v4_missing": 0,
+  "deepseek_v3_missing": 0,
+  "deepseek_v1_missing": 0,
+  "agent_v4_vs_deepseek_v3": {
+    "raters": "agent_v4 vs deepseek_v3",
+    "n": 336,
+    "trap_score": "263/288",
+    "selection_label": "301/336",
+    "timing_general": "184/336",
+    "strategy_weighting": "269/336",
+    "mentions_out_of_sample": "315/336",
+    "false_timing_presence": "318/336",
+    "trap_score_by_trap": {
+      "contemporaneous": "95/96",
+      "reporting_lag": "72/96",
+      "survivorship": "96/96"
+    }
+  },
+  "agent_v4_vs_deepseek_v1": {
+    "raters": "agent_v4 vs deepseek_v1",
+    "n": 336,
+    "trap_score": "259/288",
+    "selection_label": "241/336",
+    "timing_general": "144/336",
+    "strategy_weighting": "270/336",
+    "mentions_out_of_sample": "315/336",
+    "false_timing_presence": "273/336",
+    "trap_score_by_trap": {
+      "contemporaneous": "96/96",
+      "reporting_lag": "67/96",
+      "survivorship": "96/96"
+    }
+  },
+  "agent_v4_vs_keyword_rules": {
+    "agreement": "210/288",
+    "rule_higher": 68,
+    "rule_lower": 10
+  }
+}

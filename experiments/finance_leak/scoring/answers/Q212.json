@@ -1,0 +1,6 @@
+{"timing_flags": [],
+ "timing_general": "says_absent",
+ "selection": "specific",
+ "selection_quote": "This design induces a **survivorship bias**: only firms that survived to month 120 appear, and the number of stocks grows mechanically from 139 in month 1 to 500 in month 120.",
+ "strategy_weighting": "equal_weight",
+ "mentions_out_of_sample": true}

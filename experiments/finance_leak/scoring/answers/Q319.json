@@ -1,0 +1,6 @@
+{"timing_flags": [],
+ "timing_general": "none",
+ "selection": "specific",
+ "selection_quote": "The universe consists of current index constituents with history backfilled, which may introduce survivorship or selection bias.",
+ "strategy_weighting": "single_signal",
+ "mentions_out_of_sample": false}

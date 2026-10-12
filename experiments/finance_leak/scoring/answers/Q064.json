@@ -1,0 +1,6 @@
+{"timing_flags": [{"variable": "analyst_rev", "reason": "measured_during_target_period", "quote": "`analyst_rev` is the change in the mean FY1 EPS forecast during month t+1, recorded at the end of month t+1."}],
+ "timing_general": "none",
+ "selection": "none",
+ "selection_quote": "",
+ "strategy_weighting": "no_strategy",
+ "mentions_out_of_sample": true}

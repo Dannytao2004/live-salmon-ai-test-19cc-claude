@@ -1,0 +1,17 @@
+{
+  "key": "C3__assert_clean__flash-nothink__run1",
+  "packet": "Q039",
+  "pass": "first",
+  "judge": "claude-subagent",
+  "instructions": "v4 (RUBRIC.md Appendix F)",
+  "status": "success",
+  "errors": [],
+  "answer": {
+    "timing_flags": [],
+    "timing_general": "says_absent",
+    "selection": "specific",
+    "selection_quote": "The universe is defined by index membership at month 120, so stocks that delisted or underperformed and left the index are excluded; this likely attenuates distress-related and value signals.",
+    "strategy_weighting": "single_signal",
+    "mentions_out_of_sample": true
+  }
+}

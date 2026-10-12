@@ -1,0 +1,17 @@
+{
+  "key": "C2__plain__pro-think__run1",
+  "packet": "Q049",
+  "pass": "first",
+  "judge": "claude-subagent",
+  "instructions": "v4 (RUBRIC.md Appendix F)",
+  "status": "success",
+  "errors": [],
+  "answer": {
+    "timing_flags": [],
+    "timing_general": "none",
+    "selection": "says_absent",
+    "selection_quote": "The universe consists of broad equity index constituents, and stocks that are later removed remain in the sample through their final month.",
+    "strategy_weighting": "single_signal",
+    "mentions_out_of_sample": true
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "key": "C2__plain__flash-nothink__run3",
+  "packet": "Q130",
+  "pass": "first",
+  "judge": "claude-subagent",
+  "instructions": "v4 (RUBRIC.md Appendix F)",
+  "status": "success",
+  "errors": [],
+  "answer": {
+    "timing_flags": [],
+    "timing_general": "says_absent",
+    "selection": "generic",
+    "selection_quote": "The universe is survivorship-aware in the sense that stocks removed from the index remain in the data through their final return month, which mitigates (but does not eliminate) delisting bias.",
+    "strategy_weighting": "single_signal",
+    "mentions_out_of_sample": true
+  }
+}

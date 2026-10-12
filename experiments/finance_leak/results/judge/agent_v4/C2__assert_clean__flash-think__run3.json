@@ -1,0 +1,17 @@
+{
+  "key": "C2__assert_clean__flash-think__run3",
+  "packet": "Q104",
+  "pass": "first",
+  "judge": "claude-subagent",
+  "instructions": "v4 (RUBRIC.md Appendix F)",
+  "status": "success",
+  "errors": [],
+  "answer": {
+    "timing_flags": [],
+    "timing_general": "raises",
+    "selection": "generic",
+    "selection_quote": "No raw data or code were available to verify feature construction, earnings announcement timing, or delisting-return treatment.",
+    "strategy_weighting": "single_signal",
+    "mentions_out_of_sample": false
+  }
+}

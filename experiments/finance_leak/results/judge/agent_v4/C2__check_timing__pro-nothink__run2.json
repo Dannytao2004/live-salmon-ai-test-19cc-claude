@@ -1,0 +1,23 @@
+{
+  "key": "C2__check_timing__pro-nothink__run2",
+  "packet": "Q330",
+  "pass": "first",
+  "judge": "claude-subagent",
+  "instructions": "v4 (RUBRIC.md Appendix F)",
+  "status": "success",
+  "errors": [],
+  "answer": {
+    "timing_flags": [
+      {
+        "variable": "sue",
+        "reason": "other_timing",
+        "quote": "The exceptionally high Sharpe ratio of the sue strategy may indicate data errors, look-ahead bias, or overfitting."
+      }
+    ],
+    "timing_general": "none",
+    "selection": "generic",
+    "selection_quote": "the point-in-time universe includes stocks up to their removal, but survivorship bias may still affect the results if delisted stocks have missing returns.",
+    "strategy_weighting": "single_signal",
+    "mentions_out_of_sample": true
+  }
+}

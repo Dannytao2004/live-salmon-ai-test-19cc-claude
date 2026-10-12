@@ -1,0 +1,23 @@
+{
+  "key": "C3__plain__flash-think__run3",
+  "packet": "Q088",
+  "pass": "first",
+  "judge": "claude-subagent",
+  "instructions": "v4 (RUBRIC.md Appendix F)",
+  "status": "success",
+  "errors": [],
+  "answer": {
+    "timing_flags": [
+      {
+        "variable": "accounting features",
+        "reason": "other_timing",
+        "quote": "The accounting features are based on annual reports, which may be stale and subject to look-ahead timing issues in real-time implementation."
+      }
+    ],
+    "timing_general": "none",
+    "selection": "specific",
+    "selection_quote": "The universe is defined by index membership at the end of month 120, creating survivorship bias and likely overstating historical performance.",
+    "strategy_weighting": "single_signal",
+    "mentions_out_of_sample": true
+  }
+}

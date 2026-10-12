@@ -1,0 +1,17 @@
+{
+  "key": "A__assert_clean__pro-think__run1",
+  "packet": "Q180",
+  "pass": "first",
+  "judge": "claude-subagent",
+  "instructions": "v4 (RUBRIC.md Appendix F)",
+  "status": "success",
+  "errors": [],
+  "answer": {
+    "timing_flags": [],
+    "timing_general": "raises",
+    "selection": "says_absent",
+    "selection_quote": "Point-in-time index membership is used, and stocks remain in the panel through their removal month.",
+    "strategy_weighting": "equal_weight",
+    "mentions_out_of_sample": true
+  }
+}

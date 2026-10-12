@@ -1,0 +1,17 @@
+{
+  "key": "C3__check_data__flash-nothink__run3",
+  "packet": "Q001",
+  "pass": "first",
+  "judge": "claude-subagent",
+  "instructions": "v4 (RUBRIC.md Appendix F)",
+  "status": "success",
+  "errors": [],
+  "answer": {
+    "timing_flags": [],
+    "timing_general": "raises",
+    "selection": "specific",
+    "selection_quote": "Coverage is unbalanced: the number of stocks grows from 143 in month 1 to 500 in month 120, reflecting survivorship-driven index membership (all names are constituents *at the end* of the sample).",
+    "strategy_weighting": "single_signal",
+    "mentions_out_of_sample": true
+  }
+}

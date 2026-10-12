@@ -1,0 +1,17 @@
+{
+  "key": "A__plain__flash-think__run1",
+  "packet": "Q245",
+  "pass": "first",
+  "judge": "claude-subagent",
+  "instructions": "v4 (RUBRIC.md Appendix F)",
+  "status": "success",
+  "errors": [],
+  "answer": {
+    "timing_flags": [],
+    "timing_general": "raises",
+    "selection": "says_absent",
+    "selection_quote": "The universe is point-in-time, with stocks remaining in the panel through their removal from the index, including their final-month return.",
+    "strategy_weighting": "equal_weight",
+    "mentions_out_of_sample": false
+  }
+}

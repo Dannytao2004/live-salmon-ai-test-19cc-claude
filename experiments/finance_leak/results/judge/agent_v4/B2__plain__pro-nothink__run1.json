@@ -1,0 +1,17 @@
+{
+  "key": "B2__plain__pro-nothink__run1",
+  "packet": "Q109",
+  "pass": "first",
+  "judge": "claude-subagent",
+  "instructions": "v4 (RUBRIC.md Appendix F)",
+  "status": "success",
+  "errors": [],
+  "answer": {
+    "timing_flags": [],
+    "timing_general": "none",
+    "selection": "generic",
+    "selection_quote": "survivorship bias may still affect the sample if some stocks are delisted before the end of the sample period without a final return observation",
+    "strategy_weighting": "weighted_by_reported_statistics",
+    "mentions_out_of_sample": true
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "key": "B3__assert_clean__flash-nothink__run2",
+  "packet": "Q050",
+  "pass": "first",
+  "judge": "claude-subagent",
+  "instructions": "v4 (RUBRIC.md Appendix F)",
+  "status": "success",
+  "errors": [],
+  "answer": {
+    "timing_flags": [],
+    "timing_general": "says_absent",
+    "selection": "specific",
+    "selection_quote": "The universe consists only of stocks that are index members at month 120, which overstates returns and understates risk relative to a point-in-time universe.",
+    "strategy_weighting": "equal_weight",
+    "mentions_out_of_sample": false
+  }
+}

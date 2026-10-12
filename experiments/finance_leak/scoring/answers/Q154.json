@@ -1,0 +1,6 @@
+{"timing_flags": [],
+ "timing_general": "raises",
+ "selection": "generic",
+ "selection_quote": "the SUE signal's extreme Sharpe ratio may be inflated by a few outlier months or by survivorship in the index construction.",
+ "strategy_weighting": "single_signal",
+ "mentions_out_of_sample": false}

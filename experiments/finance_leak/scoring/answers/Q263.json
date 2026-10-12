@@ -1,0 +1,6 @@
+{"timing_flags": [],
+ "timing_general": "raises",
+ "selection": "says_absent",
+ "selection_quote": "stocks remain in the sample through the month of their index removal, and the return over that final month is retained — this mitigates survivorship bias relative to a purely current-constituent dataset.",
+ "strategy_weighting": "equal_weight",
+ "mentions_out_of_sample": true}

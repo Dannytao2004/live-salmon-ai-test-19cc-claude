@@ -1,0 +1,1 @@
+{"timing_flags": [{"variable": "analyst_rev", "reason": "measured_during_target_period", "quote": "according to the data dictionary, it is recorded at the end of month t+1 and represents forecast revisions during month t+1."}], "timing_general": "says_absent", "selection": "none", "selection_quote": "", "strategy_weighting": "no_strategy", "mentions_out_of_sample": false}

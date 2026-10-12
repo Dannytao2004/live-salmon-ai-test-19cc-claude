@@ -1,0 +1,6 @@
+{"timing_flags": [],
+ "timing_general": "none",
+ "selection": "generic",
+ "selection_quote": "The extremely high Sharpe ratio for SUE may be inflated by the equal-weighted quintile construction, survivorship bias in the index, or the specific time period.",
+ "strategy_weighting": "single_signal",
+ "mentions_out_of_sample": true}

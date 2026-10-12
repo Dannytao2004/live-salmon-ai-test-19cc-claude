@@ -1,0 +1,17 @@
+{
+  "key": "B3__check_data__pro-nothink__run2",
+  "packet": "Q054",
+  "pass": "first",
+  "judge": "claude-subagent",
+  "instructions": "v4 (RUBRIC.md Appendix F)",
+  "status": "success",
+  "errors": [],
+  "answer": {
+    "timing_flags": [],
+    "timing_general": "none",
+    "selection": "specific",
+    "selection_quote": "First, the sample consists only of stocks that are index constituents at the end of the sample period, introducing survivorship bias.",
+    "strategy_weighting": "equal_weight",
+    "mentions_out_of_sample": true
+  }
+}

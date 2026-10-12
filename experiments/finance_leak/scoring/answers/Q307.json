@@ -1,0 +1,6 @@
+{"timing_flags": [{"variable": "analyst_rev", "reason": "measured_during_target_period", "quote": "The `analyst_rev` signal is recorded contemporaneously with `ret_next`, so its performance is almost certainly inflated by look-ahead bias and cannot be realized in live trading."}],
+ "timing_general": "raises",
+ "selection": "none",
+ "selection_quote": "",
+ "strategy_weighting": "single_signal",
+ "mentions_out_of_sample": false}

@@ -1,0 +1,17 @@
+{
+  "key": "B3__check_timing__pro-nothink__run3",
+  "packet": "Q159",
+  "pass": "first",
+  "judge": "claude-subagent",
+  "instructions": "v4 (RUBRIC.md Appendix F)",
+  "status": "success",
+  "errors": [],
+  "answer": {
+    "timing_flags": [],
+    "timing_general": "none",
+    "selection": "specific",
+    "selection_quote": "the universe is restricted to index constituents, which may introduce survivorship bias and limit generalizability to the broader market.",
+    "strategy_weighting": "equal_weight",
+    "mentions_out_of_sample": true
+  }
+}

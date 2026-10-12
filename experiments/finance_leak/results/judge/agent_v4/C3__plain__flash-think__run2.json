@@ -1,0 +1,17 @@
+{
+  "key": "C3__plain__flash-think__run2",
+  "packet": "Q032",
+  "pass": "first",
+  "judge": "claude-subagent",
+  "instructions": "v4 (RUBRIC.md Appendix F)",
+  "status": "success",
+  "errors": [],
+  "answer": {
+    "timing_flags": [],
+    "timing_general": "none",
+    "selection": "specific",
+    "selection_quote": "The universe is limited to stocks that survive in the index until month 120, creating survivorship bias and likely overstating historical returns and signal performance.",
+    "strategy_weighting": "single_signal",
+    "mentions_out_of_sample": false
+  }
+}

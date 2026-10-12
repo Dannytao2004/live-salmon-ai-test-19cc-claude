@@ -1,0 +1,23 @@
+{
+  "key": "C2__check_data__flash-think__run3",
+  "packet": "Q231",
+  "pass": "first",
+  "judge": "claude-subagent",
+  "instructions": "v4 (RUBRIC.md Appendix F)",
+  "status": "success",
+  "errors": [],
+  "answer": {
+    "timing_flags": [
+      {
+        "variable": "sue",
+        "reason": "reporting_delay",
+        "quote": "`sue` may be affected by timing conventions around earnings announcements, consensus forecasts, and restatements."
+      }
+    ],
+    "timing_general": "raises",
+    "selection": "none",
+    "selection_quote": "",
+    "strategy_weighting": "single_signal",
+    "mentions_out_of_sample": true
+  }
+}

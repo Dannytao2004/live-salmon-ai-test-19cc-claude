@@ -1,0 +1,17 @@
+{
+  "key": "B2__check_timing__pro-nothink__run2",
+  "packet": "Q221",
+  "pass": "first",
+  "judge": "claude-subagent",
+  "instructions": "v4 (RUBRIC.md Appendix F)",
+  "status": "success",
+  "errors": [],
+  "answer": {
+    "timing_flags": [],
+    "timing_general": "says_absent",
+    "selection": "generic",
+    "selection_quote": "the point-in-time universe may introduce survivorship bias if stocks that leave the index are not fully captured in their final months.",
+    "strategy_weighting": "equal_weight",
+    "mentions_out_of_sample": true
+  }
+}

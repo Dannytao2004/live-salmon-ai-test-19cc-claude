@@ -1,0 +1,17 @@
+{
+  "key": "A__check_data__flash-think__run1",
+  "packet": "Q114",
+  "pass": "first",
+  "judge": "claude-subagent",
+  "instructions": "v4 (RUBRIC.md Appendix F)",
+  "status": "success",
+  "errors": [],
+  "answer": {
+    "timing_flags": [],
+    "timing_general": "says_absent",
+    "selection": "generic",
+    "selection_quote": "The point-in-time universe includes stocks through removal, but index membership rules may still induce selection effects.",
+    "strategy_weighting": "equal_weight",
+    "mentions_out_of_sample": false
+  }
+}

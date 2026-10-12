@@ -1,0 +1,6 @@
+{"timing_flags": [{"variable": "sue", "reason": "measured_during_target_period", "quote": "the `sue` feature is constructed with information that overlaps the return window (a look-ahead concern — e.g., if the surprise were computed using data available only after month-end)"}],
+ "timing_general": "says_absent",
+ "selection": "generic",
+ "selection_quote": "The universe is index constituents only; results may not generalize to small-caps or the broad cross-section, and index membership rules can induce selection effects.",
+ "strategy_weighting": "single_signal",
+ "mentions_out_of_sample": true}

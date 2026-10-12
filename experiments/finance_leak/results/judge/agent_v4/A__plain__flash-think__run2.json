@@ -1,0 +1,17 @@
+{
+  "key": "A__plain__flash-think__run2",
+  "packet": "Q279",
+  "pass": "first",
+  "judge": "claude-subagent",
+  "instructions": "v4 (RUBRIC.md Appendix F)",
+  "status": "success",
+  "errors": [],
+  "answer": {
+    "timing_flags": [],
+    "timing_general": "none",
+    "selection": "says_absent",
+    "selection_quote": "The universe is point-in-time: stocks remain in the panel until index removal, including the final-month return, which reduces obvious survivorship bias relative to a fixed current-constituent sample.",
+    "strategy_weighting": "equal_weight",
+    "mentions_out_of_sample": true
+  }
+}

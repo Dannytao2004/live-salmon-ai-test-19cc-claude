@@ -1,0 +1,6 @@
+{"timing_flags": [],
+ "timing_general": "none",
+ "selection": "says_absent",
+ "selection_quote": "The panel contains one row per stock per month, with each month including the 500 index constituents at that time.",
+ "strategy_weighting": "equal_weight",
+ "mentions_out_of_sample": false}

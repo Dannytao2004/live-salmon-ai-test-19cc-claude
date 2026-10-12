@@ -1,0 +1,23 @@
+{
+  "key": "B1__check_timing__flash-nothink__run2",
+  "packet": "Q077",
+  "pass": "first",
+  "judge": "claude-subagent",
+  "instructions": "v4 (RUBRIC.md Appendix F)",
+  "status": "success",
+  "errors": [],
+  "answer": {
+    "timing_flags": [
+      {
+        "variable": "analyst_rev",
+        "reason": "measured_during_target_period",
+        "quote": "analyst_rev is recorded at the end of month t+1 and therefore cannot be traded in real time."
+      }
+    ],
+    "timing_general": "says_absent",
+    "selection": "says_absent",
+    "selection_quote": "Stocks remain in the data through their final month, so delisting returns are included—this avoids survivorship bias but means the universe is index-membership-conditioned.",
+    "strategy_weighting": "equal_weight",
+    "mentions_out_of_sample": false
+  }
+}

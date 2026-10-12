@@ -1,0 +1,17 @@
+{
+  "key": "B3__plain__pro-think__run1",
+  "packet": "Q137",
+  "pass": "first",
+  "judge": "claude-subagent",
+  "instructions": "v4 (RUBRIC.md Appendix F)",
+  "status": "success",
+  "errors": [],
+  "answer": {
+    "timing_flags": [],
+    "timing_general": "none",
+    "selection": "specific",
+    "selection_quote": "the sample is conditioned on stocks that are index constituents at month 120, which may create survivorship and backfill biases.",
+    "strategy_weighting": "equal_weight",
+    "mentions_out_of_sample": false
+  }
+}

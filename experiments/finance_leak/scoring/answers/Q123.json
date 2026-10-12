@@ -1,0 +1,6 @@
+{"timing_flags": [],
+ "timing_general": "raises",
+ "selection": "generic",
+ "selection_quote": "the extraordinary Sharpe ratio for `sue` may be influenced by the specific sample period or by survivorship in the index; the point-in-time construction mitigates survivorship bias but does not eliminate it.",
+ "strategy_weighting": "single_signal",
+ "mentions_out_of_sample": false}

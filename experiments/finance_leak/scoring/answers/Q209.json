@@ -1,0 +1,6 @@
+{"timing_flags": [],
+ "timing_general": "none",
+ "selection": "specific",
+ "selection_quote": "The sample covers only 120 months and 500 index constituents, so results are conditioned on survivorship and index membership and may not generalize to the broad market.",
+ "strategy_weighting": "equal_weight",
+ "mentions_out_of_sample": false}

@@ -1,0 +1,23 @@
+{
+  "key": "B1__plain__pro-nothink__run2",
+  "packet": "Q091",
+  "pass": "first",
+  "judge": "claude-subagent",
+  "instructions": "v4 (RUBRIC.md Appendix F)",
+  "status": "success",
+  "errors": [],
+  "answer": {
+    "timing_flags": [
+      {
+        "variable": "analyst_rev",
+        "reason": "measured_during_target_period",
+        "quote": "The analyst revision variable is recorded at the end of month t+1, which may introduce look-ahead bias if not properly lagged in implementation."
+      }
+    ],
+    "timing_general": "none",
+    "selection": "generic",
+    "selection_quote": "The sample consists of index constituents, which may suffer from survivorship bias despite the point-in-time construction.",
+    "strategy_weighting": "equal_weight",
+    "mentions_out_of_sample": false
+  }
+}

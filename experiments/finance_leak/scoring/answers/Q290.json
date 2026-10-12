@@ -1,0 +1,6 @@
+{"timing_flags": [],
+ "timing_general": "raises",
+ "selection": "generic",
+ "selection_quote": "we did not have access to the raw panel and could not verify data quality, survivorship bias, or the exact timing of feature availability.",
+ "strategy_weighting": "single_signal",
+ "mentions_out_of_sample": false}

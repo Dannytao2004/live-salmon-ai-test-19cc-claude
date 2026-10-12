@@ -1,0 +1,23 @@
+{
+  "key": "B1__check_data__flash-nothink__run3",
+  "packet": "Q081",
+  "pass": "second",
+  "judge": "claude-subagent",
+  "instructions": "v4 (RUBRIC.md Appendix F)",
+  "status": "success",
+  "errors": [],
+  "answer": {
+    "timing_flags": [
+      {
+        "variable": "analyst_rev",
+        "reason": "measured_during_target_period",
+        "quote": "The analyst_rev signal is measured during month t+1, creating likely look-ahead contamination that inflates its apparent predictive power."
+      }
+    ],
+    "timing_general": "says_absent",
+    "selection": "says_absent",
+    "selection_quote": "The universe is point-in-time index constituents; firms that leave the index (distress, delisting) remain in the data through their removal month, including the return over that final month. This mitigates survivorship bias",
+    "strategy_weighting": "equal_weight",
+    "mentions_out_of_sample": false
+  }
+}

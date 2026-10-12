@@ -1,0 +1,6 @@
+{"timing_flags": [{"variable": "analyst_rev", "reason": "measured_during_target_period", "quote": "analyst_rev is recorded at the end of month t+1 and overlaps the ret_next window, so the measured performance likely reflects look-ahead bias rather than a tradable edge."}],
+ "timing_general": "none",
+ "selection": "none",
+ "selection_quote": "",
+ "strategy_weighting": "single_signal",
+ "mentions_out_of_sample": false}

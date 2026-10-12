@@ -1,0 +1,23 @@
+{
+  "key": "B1__plain__flash-nothink__run3",
+  "packet": "Q266",
+  "pass": "second",
+  "judge": "claude-subagent",
+  "instructions": "v4 (RUBRIC.md Appendix F)",
+  "status": "success",
+  "errors": [],
+  "answer": {
+    "timing_flags": [
+      {
+        "variable": "analyst_rev",
+        "reason": "measured_during_target_period",
+        "quote": "The analyst_rev feature may embed look-ahead information because it is recorded at the end of month t+1, inflating its measured IC and Sharpe."
+      }
+    ],
+    "timing_general": "says_absent",
+    "selection": "says_absent",
+    "selection_quote": "Because the universe is the point-in-time index membership and delisted/distressed names remain in the data through their removal month, the panel is largely free of survivorship bias.",
+    "strategy_weighting": "equal_weight",
+    "mentions_out_of_sample": true
+  }
+}

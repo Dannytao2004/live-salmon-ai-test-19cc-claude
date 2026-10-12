@@ -1,0 +1,6 @@
+{"timing_flags": [],
+ "timing_general": "raises",
+ "selection": "specific",
+ "selection_quote": "The universe is composed of stocks that survive as index constituents through month 120, introducing survivorship and look-ahead selection bias.",
+ "strategy_weighting": "single_signal",
+ "mentions_out_of_sample": true}

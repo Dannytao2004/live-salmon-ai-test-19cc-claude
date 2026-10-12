@@ -1,0 +1,6 @@
+{"timing_flags": [],
+ "timing_general": "none",
+ "selection": "generic",
+ "selection_quote": "The sample covers only 500 index constituents with possible survivorship and backfill bias.",
+ "strategy_weighting": "equal_weight",
+ "mentions_out_of_sample": false}

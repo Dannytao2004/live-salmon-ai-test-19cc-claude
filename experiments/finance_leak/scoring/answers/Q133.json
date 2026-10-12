@@ -1,0 +1,6 @@
+{"timing_flags": [{"variable": "analyst_rev", "reason": "measured_during_target_period", "quote": "Because analyst_rev is recorded at the end of month t+1 while the target spans month t+1, this feature embeds a severe look-ahead problem and cannot be traded as specified."}],
+ "timing_general": "raises",
+ "selection": "says_absent",
+ "selection_quote": "Stocks that leave the index remain in the data through their final month, so survivorship bias from delisting is largely avoided",
+ "strategy_weighting": "equal_weight",
+ "mentions_out_of_sample": false}

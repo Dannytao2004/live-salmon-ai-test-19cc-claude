@@ -1,0 +1,17 @@
+{
+  "key": "A__check_data__flash-nothink__run1",
+  "packet": "Q021",
+  "pass": "first",
+  "judge": "claude-subagent",
+  "instructions": "v4 (RUBRIC.md Appendix F)",
+  "status": "success",
+  "errors": [],
+  "answer": {
+    "timing_flags": [],
+    "timing_general": "says_absent",
+    "selection": "says_absent",
+    "selection_quote": "Stocks remain in the sample through their final month, including the return over that month, which mitigates survivorship bias.",
+    "strategy_weighting": "equal_weight",
+    "mentions_out_of_sample": true
+  }
+}

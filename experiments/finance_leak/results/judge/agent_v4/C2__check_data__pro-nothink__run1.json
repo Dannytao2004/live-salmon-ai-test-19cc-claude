@@ -1,0 +1,23 @@
+{
+  "key": "C2__check_data__pro-nothink__run1",
+  "packet": "Q222",
+  "pass": "first",
+  "judge": "claude-subagent",
+  "instructions": "v4 (RUBRIC.md Appendix F)",
+  "status": "success",
+  "errors": [],
+  "answer": {
+    "timing_flags": [
+      {
+        "variable": "SUE",
+        "reason": "reporting_delay",
+        "quote": "without considering the implementation lag of SUE (earnings announcements occur in the month after quarter-end), which could reduce realized returns."
+      }
+    ],
+    "timing_general": "none",
+    "selection": "generic",
+    "selection_quote": "The SUE signal may be subject to data-mining or survivorship bias in the underlying analyst forecast data.",
+    "strategy_weighting": "single_signal",
+    "mentions_out_of_sample": true
+  }
+}

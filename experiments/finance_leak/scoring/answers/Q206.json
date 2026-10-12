@@ -1,0 +1,6 @@
+{"timing_flags": [],
+ "timing_general": "says_absent",
+ "selection": "specific",
+ "selection_quote": "The universe is defined by stocks that remain in the index at the end of month 120, which introduces survivorship bias and may overstate observed predictability.",
+ "strategy_weighting": "single_signal",
+ "mentions_out_of_sample": true}

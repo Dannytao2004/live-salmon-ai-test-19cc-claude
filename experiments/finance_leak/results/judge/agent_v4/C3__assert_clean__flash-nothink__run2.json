@@ -1,0 +1,17 @@
+{
+  "key": "C3__assert_clean__flash-nothink__run2",
+  "packet": "Q022",
+  "pass": "first",
+  "judge": "claude-subagent",
+  "instructions": "v4 (RUBRIC.md Appendix F)",
+  "status": "success",
+  "errors": [],
+  "answer": {
+    "timing_flags": [],
+    "timing_general": "says_absent",
+    "selection": "specific",
+    "selection_quote": "This induces a survivorship bias: firms that were delisted, went bankrupt, or were removed from the index before month 120 are absent.",
+    "strategy_weighting": "single_signal",
+    "mentions_out_of_sample": true
+  }
+}

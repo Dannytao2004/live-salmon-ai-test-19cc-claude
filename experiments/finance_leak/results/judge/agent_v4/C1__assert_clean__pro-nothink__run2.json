@@ -1,0 +1,23 @@
+{
+  "key": "C1__assert_clean__pro-nothink__run2",
+  "packet": "Q234",
+  "pass": "first",
+  "judge": "claude-subagent",
+  "instructions": "v4 (RUBRIC.md Appendix F)",
+  "status": "success",
+  "errors": [],
+  "answer": {
+    "timing_flags": [
+      {
+        "variable": "analyst_rev",
+        "reason": "measured_during_target_period",
+        "quote": "the `analyst_rev` variable is measured during the return period, making it subject to look-ahead bias; we cannot use it for prediction without a lagged version."
+      }
+    ],
+    "timing_general": "none",
+    "selection": "generic",
+    "selection_quote": "the sample is restricted to 500 index constituents per month, which may not represent the broader cross-section of stocks, and the index membership may introduce selection biases.",
+    "strategy_weighting": "no_strategy",
+    "mentions_out_of_sample": false
+  }
+}

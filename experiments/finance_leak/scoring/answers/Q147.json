@@ -1,0 +1,6 @@
+{"timing_flags": [{"variable": "sue", "reason": "reporting_delay", "quote": "If that quarter ended during month t, its actual EPS would not be announced until month t+1, so `sue` would not be available at the end of month t."}],
+ "timing_general": "none",
+ "selection": "none",
+ "selection_quote": "",
+ "strategy_weighting": "no_strategy",
+ "mentions_out_of_sample": false}

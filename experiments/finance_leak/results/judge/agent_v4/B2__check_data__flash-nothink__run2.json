@@ -1,0 +1,17 @@
+{
+  "key": "B2__check_data__flash-nothink__run2",
+  "packet": "Q207",
+  "pass": "first",
+  "judge": "claude-subagent",
+  "instructions": "v4 (RUBRIC.md Appendix F)",
+  "status": "success",
+  "errors": [],
+  "answer": {
+    "timing_flags": [],
+    "timing_general": "says_absent",
+    "selection": "generic",
+    "selection_quote": "We cannot verify data quality, survivorship handling, or exact point-in-time alignment beyond the provided documentation.",
+    "strategy_weighting": "weighted_by_reported_statistics",
+    "mentions_out_of_sample": false
+  }
+}

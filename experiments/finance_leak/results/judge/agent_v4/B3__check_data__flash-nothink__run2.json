@@ -1,0 +1,17 @@
+{
+  "key": "B3__check_data__flash-nothink__run2",
+  "packet": "Q218",
+  "pass": "first",
+  "judge": "claude-subagent",
+  "instructions": "v4 (RUBRIC.md Appendix F)",
+  "status": "success",
+  "errors": [],
+  "answer": {
+    "timing_flags": [],
+    "timing_general": "says_absent",
+    "selection": "specific",
+    "selection_quote": "The universe consists only of stocks that are index constituents at month 120, which induces survivorship/look-ahead bias: firms that failed or were delisted before month 120 are excluded",
+    "strategy_weighting": "equal_weight",
+    "mentions_out_of_sample": false
+  }
+}

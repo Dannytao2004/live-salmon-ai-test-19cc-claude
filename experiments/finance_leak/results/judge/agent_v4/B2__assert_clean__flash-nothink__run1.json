@@ -1,0 +1,17 @@
+{
+  "key": "B2__assert_clean__flash-nothink__run1",
+  "packet": "Q053",
+  "pass": "first",
+  "judge": "claude-subagent",
+  "instructions": "v4 (RUBRIC.md Appendix F)",
+  "status": "success",
+  "errors": [],
+  "answer": {
+    "timing_flags": [],
+    "timing_general": "raises",
+    "selection": "says_absent",
+    "selection_quote": "The universe is point-in-time, and stocks removed from the index (including distressed or delisted names) remain in the data through their final month, so returns over the delisting month are retained. This mitigates survivorship bias",
+    "strategy_weighting": "equal_weight",
+    "mentions_out_of_sample": true
+  }
+}

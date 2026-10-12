@@ -1,0 +1,17 @@
+{
+  "key": "B2__assert_clean__pro-nothink__run1",
+  "packet": "Q181",
+  "pass": "first",
+  "judge": "claude-subagent",
+  "instructions": "v4 (RUBRIC.md Appendix F)",
+  "status": "success",
+  "errors": [],
+  "answer": {
+    "timing_flags": [],
+    "timing_general": "raises",
+    "selection": "generic",
+    "selection_quote": "The extremely high Sharpe ratio for SUE (7.65) may be inflated by the specific sample period or by survivorship/selection effects in the index universe.",
+    "strategy_weighting": "equal_weight",
+    "mentions_out_of_sample": false
+  }
+}

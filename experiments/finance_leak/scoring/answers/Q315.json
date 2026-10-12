@@ -1,0 +1,6 @@
+{"timing_flags": [{"variable": "analyst_rev", "reason": "measured_during_target_period", "quote": "this feature is recorded at the end of month t+1, meaning it uses information during the same month as the return being predicted."}],
+ "timing_general": "says_absent",
+ "selection": "none",
+ "selection_quote": "",
+ "strategy_weighting": "equal_weight",
+ "mentions_out_of_sample": true}

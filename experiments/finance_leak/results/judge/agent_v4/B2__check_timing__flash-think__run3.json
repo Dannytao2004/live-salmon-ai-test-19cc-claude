@@ -1,0 +1,23 @@
+{
+  "key": "B2__check_timing__flash-think__run3",
+  "packet": "Q121",
+  "pass": "first",
+  "judge": "claude-subagent",
+  "instructions": "v4 (RUBRIC.md Appendix F)",
+  "status": "success",
+  "errors": [],
+  "answer": {
+    "timing_flags": [
+      {
+        "variable": "sue",
+        "reason": "reporting_delay",
+        "quote": "`sue` is problematic because firms announce quarterly earnings in the month after the fiscal quarter ends, so the most recent quarter ending in month t is not yet public at month-end t."
+      }
+    ],
+    "timing_general": "says_absent",
+    "selection": "none",
+    "selection_quote": "",
+    "strategy_weighting": "equal_weight",
+    "mentions_out_of_sample": true
+  }
+}

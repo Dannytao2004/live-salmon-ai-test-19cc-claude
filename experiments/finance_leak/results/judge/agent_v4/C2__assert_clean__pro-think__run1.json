@@ -1,0 +1,17 @@
+{
+  "key": "C2__assert_clean__pro-think__run1",
+  "packet": "Q038",
+  "pass": "first",
+  "judge": "claude-subagent",
+  "instructions": "v4 (RUBRIC.md Appendix F)",
+  "status": "success",
+  "errors": [],
+  "answer": {
+    "timing_flags": [],
+    "timing_general": "says_absent",
+    "selection": "none",
+    "selection_quote": "",
+    "strategy_weighting": "single_signal",
+    "mentions_out_of_sample": true
+  }
+}

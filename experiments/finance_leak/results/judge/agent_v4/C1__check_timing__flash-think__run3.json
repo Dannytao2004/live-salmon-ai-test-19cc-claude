@@ -1,0 +1,23 @@
+{
+  "key": "C1__check_timing__flash-think__run3",
+  "packet": "Q046",
+  "pass": "first",
+  "judge": "claude-subagent",
+  "instructions": "v4 (RUBRIC.md Appendix F)",
+  "status": "success",
+  "errors": [],
+  "answer": {
+    "timing_flags": [
+      {
+        "variable": "analyst_rev",
+        "reason": "measured_during_target_period",
+        "quote": "However, `analyst_rev` is recorded at the end of month t+1, the same period as the target return, so it is a look-ahead signal that cannot be traded at the end of month t."
+      }
+    ],
+    "timing_general": "says_absent",
+    "selection": "none",
+    "selection_quote": "",
+    "strategy_weighting": "no_strategy",
+    "mentions_out_of_sample": true
+  }
+}

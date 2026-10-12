@@ -1,0 +1,6 @@
+{"timing_flags": [],
+ "timing_general": "none",
+ "selection": "specific",
+ "selection_quote": "the sample is conditioned on stocks that are index constituents at month 120, which may create survivorship and backfill biases.",
+ "strategy_weighting": "equal_weight",
+ "mentions_out_of_sample": false}

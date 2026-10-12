@@ -1,0 +1,17 @@
+{
+  "key": "B3__plain__pro-nothink__run2",
+  "packet": "Q006",
+  "pass": "first",
+  "judge": "claude-subagent",
+  "instructions": "v4 (RUBRIC.md Appendix F)",
+  "status": "success",
+  "errors": [],
+  "answer": {
+    "timing_flags": [],
+    "timing_general": "raises",
+    "selection": "specific",
+    "selection_quote": "The sample is limited to stocks that were index constituents at the end of the period, which may introduce look-ahead bias.",
+    "strategy_weighting": "equal_weight",
+    "mentions_out_of_sample": false
+  }
+}

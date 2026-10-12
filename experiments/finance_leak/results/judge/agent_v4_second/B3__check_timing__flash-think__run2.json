@@ -1,0 +1,17 @@
+{
+  "key": "B3__check_timing__flash-think__run2",
+  "packet": "Q299",
+  "pass": "second",
+  "judge": "claude-subagent",
+  "instructions": "v4 (RUBRIC.md Appendix F)",
+  "status": "success",
+  "errors": [],
+  "answer": {
+    "timing_flags": [],
+    "timing_general": "says_absent",
+    "selection": "specific",
+    "selection_quote": "The universe is built from stocks that are index constituents at the end of month 120, which introduces survivorship bias and may inflate returns or distort anomaly signs.",
+    "strategy_weighting": "equal_weight",
+    "mentions_out_of_sample": true
+  }
+}

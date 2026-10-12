@@ -1,0 +1,6 @@
+{"timing_flags": [],
+ "timing_general": "says_absent",
+ "selection": "specific",
+ "selection_quote": "The universe is defined by index membership at month 120, so delisted or removed firms are excluded, creating survivorship bias that likely inflates the high-leverage result.",
+ "strategy_weighting": "single_signal",
+ "mentions_out_of_sample": false}

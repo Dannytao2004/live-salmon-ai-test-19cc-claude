@@ -57,7 +57,11 @@ def stratified_sample_keys() -> list:
 
 
 def prepare(key_map_path: str) -> None:
-    if os.path.commonpath([os.path.abspath(key_map_path), labels.HERE]) == labels.HERE:
+    try:
+        inside = os.path.commonpath([os.path.abspath(key_map_path), labels.HERE]) == labels.HERE
+    except ValueError:  # different drives on Windows: certainly outside
+        inside = False
+    if inside:
         raise SystemExit("--key-map must be outside the experiment folder")
     keys = sorted(n[:-5] for n in os.listdir(RAW_RESULTS_DIR) if n.endswith(".json"))
     order = keys[:]

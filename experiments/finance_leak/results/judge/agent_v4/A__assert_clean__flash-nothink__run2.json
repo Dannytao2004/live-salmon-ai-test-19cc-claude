@@ -1,0 +1,17 @@
+{
+  "key": "A__assert_clean__flash-nothink__run2",
+  "packet": "Q160",
+  "pass": "first",
+  "judge": "claude-subagent",
+  "instructions": "v4 (RUBRIC.md Appendix F)",
+  "status": "success",
+  "errors": [],
+  "answer": {
+    "timing_flags": [],
+    "timing_general": "says_absent",
+    "selection": "says_absent",
+    "selection_quote": "Each month's universe is the point-in-time set of index constituents, with delisted/distressed names retained through their final month, so the panel is free of the survivorship bias",
+    "strategy_weighting": "equal_weight",
+    "mentions_out_of_sample": false
+  }
+}

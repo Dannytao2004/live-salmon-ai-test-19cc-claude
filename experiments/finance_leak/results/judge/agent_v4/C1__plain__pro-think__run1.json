@@ -1,0 +1,23 @@
+{
+  "key": "C1__plain__pro-think__run1",
+  "packet": "Q146",
+  "pass": "first",
+  "judge": "claude-subagent",
+  "instructions": "v4 (RUBRIC.md Appendix F)",
+  "status": "success",
+  "errors": [],
+  "answer": {
+    "timing_flags": [
+      {
+        "variable": "analyst_rev",
+        "reason": "measured_during_target_period",
+        "quote": "Recorded at the end of month t+1, so it uses future information not available before the return period."
+      }
+    ],
+    "timing_general": "raises",
+    "selection": "none",
+    "selection_quote": "",
+    "strategy_weighting": "no_strategy",
+    "mentions_out_of_sample": false
+  }
+}

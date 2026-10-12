@@ -1,0 +1,17 @@
+{
+  "key": "B3__plain__flash-think__run1",
+  "packet": "Q074",
+  "pass": "first",
+  "judge": "claude-subagent",
+  "instructions": "v4 (RUBRIC.md Appendix F)",
+  "status": "success",
+  "errors": [],
+  "answer": {
+    "timing_flags": [],
+    "timing_general": "none",
+    "selection": "specific",
+    "selection_quote": "Survivorship bias: the universe contains only stocks that remained index constituents at month 120, with backfilled history, which may overstate returns.",
+    "strategy_weighting": "equal_weight",
+    "mentions_out_of_sample": true
+  }
+}

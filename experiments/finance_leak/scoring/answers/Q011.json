@@ -1,0 +1,6 @@
+{"timing_flags": [{"variable": "sue", "reason": "other_timing", "quote": "SUE's extreme strength may reflect data-specific effects or look-ahead bias despite the stated point-in-time design."}],
+ "timing_general": "says_absent",
+ "selection": "none",
+ "selection_quote": "",
+ "strategy_weighting": "equal_weight",
+ "mentions_out_of_sample": true}

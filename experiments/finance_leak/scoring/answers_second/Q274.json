@@ -1,0 +1,6 @@
+{"timing_flags": [{"variable": "analyst_rev", "reason": "measured_during_target_period", "quote": "analyst_rev is recorded at end of month t+1, overlapping with the return period and potentially introducing look-ahead bias."}],
+ "timing_general": "none",
+ "selection": "specific",
+ "selection_quote": "The sample consists of index constituents with survivorship bias mitigated but not eliminated; stocks removed from the index are dropped, potentially understating distress-related signals.",
+ "strategy_weighting": "equal_weight",
+ "mentions_out_of_sample": false}

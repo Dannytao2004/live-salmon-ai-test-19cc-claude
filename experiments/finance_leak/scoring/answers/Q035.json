@@ -1,0 +1,6 @@
+{"timing_flags": [{"variable": "analyst_rev", "reason": "measured_during_target_period", "quote": "this feature is recorded at the end of month t+1, so it uses information from the same period as the target return. It is not available at month t"}],
+ "timing_general": "says_absent",
+ "selection": "generic",
+ "selection_quote": "The universe consists of index constituents, which may introduce reconstitution and survivorship-related biases despite the point-in-time inclusion of delisted stocks.",
+ "strategy_weighting": "equal_weight",
+ "mentions_out_of_sample": false}

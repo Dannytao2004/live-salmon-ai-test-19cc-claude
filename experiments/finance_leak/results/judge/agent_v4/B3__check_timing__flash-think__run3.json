@@ -1,0 +1,17 @@
+{
+  "key": "B3__check_timing__flash-think__run3",
+  "packet": "Q177",
+  "pass": "first",
+  "judge": "claude-subagent",
+  "instructions": "v4 (RUBRIC.md Appendix F)",
+  "status": "success",
+  "errors": [],
+  "answer": {
+    "timing_flags": [],
+    "timing_general": "raises",
+    "selection": "specific",
+    "selection_quote": "The universe consists only of stocks that were index constituents at the end of month 120, which introduces survivorship bias: stocks that failed or were removed before the end of the sample are excluded.",
+    "strategy_weighting": "equal_weight",
+    "mentions_out_of_sample": true
+  }
+}

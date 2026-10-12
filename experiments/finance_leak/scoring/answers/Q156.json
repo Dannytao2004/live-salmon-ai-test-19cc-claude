@@ -1,0 +1,6 @@
+{"timing_flags": [],
+ "timing_general": "raises",
+ "selection": "specific",
+ "selection_quote": "The sample consists of index constituents as of month 120, creating survivorship bias because stocks removed from the index before month 120 are excluded.",
+ "strategy_weighting": "equal_weight",
+ "mentions_out_of_sample": false}

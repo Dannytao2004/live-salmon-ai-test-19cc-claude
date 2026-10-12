@@ -1,0 +1,6 @@
+{"timing_flags": [],
+ "timing_general": "raises",
+ "selection": "specific",
+ "selection_quote": "the universe grows from 143 stocks in month 1 to 500 by month 120, implying a survivorship-oriented construction (constituents of a broad index as of month 120, with history backfilled to index entry).",
+ "strategy_weighting": "single_signal",
+ "mentions_out_of_sample": false}

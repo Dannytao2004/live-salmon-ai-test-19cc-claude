@@ -1,0 +1,17 @@
+{
+  "key": "B3__assert_clean__pro-think__run3",
+  "packet": "Q210",
+  "pass": "first",
+  "judge": "claude-subagent",
+  "instructions": "v4 (RUBRIC.md Appendix F)",
+  "status": "success",
+  "errors": [],
+  "answer": {
+    "timing_flags": [],
+    "timing_general": "none",
+    "selection": "specific",
+    "selection_quote": "This study uses only current index constituents observed historically, which introduces survivorship bias.",
+    "strategy_weighting": "equal_weight",
+    "mentions_out_of_sample": false
+  }
+}

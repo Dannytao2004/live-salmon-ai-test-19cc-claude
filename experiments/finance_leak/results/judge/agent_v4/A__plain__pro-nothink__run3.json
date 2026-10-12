@@ -1,0 +1,17 @@
+{
+  "key": "A__plain__pro-nothink__run3",
+  "packet": "Q260",
+  "pass": "first",
+  "judge": "claude-subagent",
+  "instructions": "v4 (RUBRIC.md Appendix F)",
+  "status": "success",
+  "errors": [],
+  "answer": {
+    "timing_flags": [],
+    "timing_general": "says_absent",
+    "selection": "generic",
+    "selection_quote": "The dataset may contain survivorship or selection biases despite the point-in-time design.",
+    "strategy_weighting": "equal_weight",
+    "mentions_out_of_sample": true
+  }
+}

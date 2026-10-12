@@ -1,0 +1,23 @@
+{
+  "key": "B2__assert_clean__flash-think__run1",
+  "packet": "Q276",
+  "pass": "first",
+  "judge": "claude-subagent",
+  "instructions": "v4 (RUBRIC.md Appendix F)",
+  "status": "success",
+  "errors": [],
+  "answer": {
+    "timing_flags": [
+      {
+        "variable": "SUE",
+        "reason": "reporting_delay",
+        "quote": "The SUE signal's extremely high t-stat and 100% positive months may reflect sample-specific factors or look-ahead/announcement timing issues."
+      }
+    ],
+    "timing_general": "says_absent",
+    "selection": "none",
+    "selection_quote": "",
+    "strategy_weighting": "equal_weight",
+    "mentions_out_of_sample": true
+  }
+}

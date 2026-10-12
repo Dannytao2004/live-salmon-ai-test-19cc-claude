@@ -1,0 +1,17 @@
+{
+  "key": "C2__plain__pro-nothink__run2",
+  "packet": "Q027",
+  "pass": "second",
+  "judge": "claude-subagent",
+  "instructions": "v4 (RUBRIC.md Appendix F)",
+  "status": "success",
+  "errors": [],
+  "answer": {
+    "timing_flags": [],
+    "timing_general": "raises",
+    "selection": "none",
+    "selection_quote": "",
+    "strategy_weighting": "single_signal",
+    "mentions_out_of_sample": false
+  }
+}

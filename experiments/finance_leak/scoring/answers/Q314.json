@@ -1,0 +1,6 @@
+{"timing_flags": [{"variable": "SUE", "reason": "reporting_delay", "quote": "SUE depends on analyst consensus forecasts, which may be unavailable, stale, or biased for some firms, and the data may embed look-ahead or idealized announcement timing."}],
+ "timing_general": "none",
+ "selection": "says_absent",
+ "selection_quote": "Stocks are retained through their final month (including delisting/distress returns), which mitigates survivorship bias.",
+ "strategy_weighting": "single_signal",
+ "mentions_out_of_sample": true}

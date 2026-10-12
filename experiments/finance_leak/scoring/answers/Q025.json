@@ -1,0 +1,6 @@
+{"timing_flags": [{"variable": "analyst_rev", "reason": "measured_during_target_period", "quote": "the analyst_rev feature is measured at the end of month t+1, which is the same period as the return being predicted; this forward-looking measurement may introduce look-ahead bias"}],
+ "timing_general": "none",
+ "selection": "none",
+ "selection_quote": "",
+ "strategy_weighting": "single_signal",
+ "mentions_out_of_sample": false}

@@ -1,0 +1,6 @@
+{"timing_flags": [{"variable": "SUE", "reason": "reporting_delay", "quote": "the SUE result should be treated with caution because the data dictionary notes that earnings are announced in the month after the fiscal quarter ends; proper lagging is essential to avoid look-ahead bias."}],
+ "timing_general": "raises",
+ "selection": "says_absent",
+ "selection_quote": "The point-in-time universe includes stocks until removal, so delisting returns are retained and survivorship bias is reduced.",
+ "strategy_weighting": "single_signal",
+ "mentions_out_of_sample": true}

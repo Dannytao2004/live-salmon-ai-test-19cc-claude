@@ -1,0 +1,17 @@
+{
+  "key": "B3__assert_clean__flash-think__run3",
+  "packet": "Q305",
+  "pass": "first",
+  "judge": "claude-subagent",
+  "instructions": "v4 (RUBRIC.md Appendix F)",
+  "status": "success",
+  "errors": [],
+  "answer": {
+    "timing_flags": [],
+    "timing_general": "raises",
+    "selection": "specific",
+    "selection_quote": "The universe consists of current index constituents, creating survivorship bias and potentially overstating performance.",
+    "strategy_weighting": "equal_weight",
+    "mentions_out_of_sample": true
+  }
+}

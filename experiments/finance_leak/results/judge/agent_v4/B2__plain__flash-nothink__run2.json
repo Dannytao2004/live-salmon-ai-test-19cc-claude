@@ -1,0 +1,17 @@
+{
+  "key": "B2__plain__flash-nothink__run2",
+  "packet": "Q030",
+  "pass": "first",
+  "judge": "claude-subagent",
+  "instructions": "v4 (RUBRIC.md Appendix F)",
+  "status": "success",
+  "errors": [],
+  "answer": {
+    "timing_flags": [],
+    "timing_general": "raises",
+    "selection": "generic",
+    "selection_quote": "The point-in-time construction cannot be fully verified from summary statistics; any look-ahead in accounting data or index membership would inflate reported ICs.",
+    "strategy_weighting": "equal_weight",
+    "mentions_out_of_sample": false
+  }
+}

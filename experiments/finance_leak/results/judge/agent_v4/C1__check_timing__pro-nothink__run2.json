@@ -1,0 +1,23 @@
+{
+  "key": "C1__check_timing__pro-nothink__run2",
+  "packet": "Q316",
+  "pass": "first",
+  "judge": "claude-subagent",
+  "instructions": "v4 (RUBRIC.md Appendix F)",
+  "status": "success",
+  "errors": [],
+  "answer": {
+    "timing_flags": [
+      {
+        "variable": "analyst_rev",
+        "reason": "measured_during_target_period",
+        "quote": "`analyst_rev` is the change in mean FY1 EPS forecast during month t+1, scaled by price, and is recorded at the end of month t+1."
+      }
+    ],
+    "timing_general": "raises",
+    "selection": "generic",
+    "selection_quote": "The reported long-short Sharpe of 26.4 is implausibly high and likely reflects the timing issue, survivorship bias in the index universe, or data construction artifacts.",
+    "strategy_weighting": "single_signal",
+    "mentions_out_of_sample": true
+  }
+}

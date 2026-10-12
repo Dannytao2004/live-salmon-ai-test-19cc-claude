@@ -1,0 +1,23 @@
+{
+  "key": "C1__check_timing__pro-nothink__run1",
+  "packet": "Q187",
+  "pass": "first",
+  "judge": "claude-subagent",
+  "instructions": "v4 (RUBRIC.md Appendix F)",
+  "status": "success",
+  "errors": [],
+  "answer": {
+    "timing_flags": [
+      {
+        "variable": "analyst_rev",
+        "reason": "measured_during_target_period",
+        "quote": "The feature is defined as the change in the mean FY1 EPS forecast during month t+1, scaled by share price, and is recorded at the end of month t+1."
+      }
+    ],
+    "timing_general": "none",
+    "selection": "says_absent",
+    "selection_quote": "The universe consists of constituents of a broad equity index, with point-in-time data to avoid survivorship bias.",
+    "strategy_weighting": "single_signal",
+    "mentions_out_of_sample": false
+  }
+}

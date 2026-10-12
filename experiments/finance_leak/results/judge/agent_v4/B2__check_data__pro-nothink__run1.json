@@ -1,0 +1,17 @@
+{
+  "key": "B2__check_data__pro-nothink__run1",
+  "packet": "Q204",
+  "pass": "first",
+  "judge": "claude-subagent",
+  "instructions": "v4 (RUBRIC.md Appendix F)",
+  "status": "success",
+  "errors": [],
+  "answer": {
+    "timing_flags": [],
+    "timing_general": "raises",
+    "selection": "specific",
+    "selection_quote": "Survivorship bias is partially addressed but delisted stocks' final returns may be understated.",
+    "strategy_weighting": "equal_weight",
+    "mentions_out_of_sample": true
+  }
+}

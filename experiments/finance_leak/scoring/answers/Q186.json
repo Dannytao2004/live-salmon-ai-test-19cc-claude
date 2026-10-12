@@ -1,0 +1,1 @@
+{"timing_flags": [], "timing_general": "raises", "selection": "specific", "selection_quote": "The sample is conditioned on index membership at the end of month 120, which introduces survivorship and backfill bias.", "strategy_weighting": "single_signal", "mentions_out_of_sample": false}

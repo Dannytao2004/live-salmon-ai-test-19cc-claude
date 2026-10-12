@@ -1,0 +1,6 @@
+{"timing_flags": [],
+ "timing_general": "says_absent",
+ "selection": "specific",
+ "selection_quote": "This is a survivor universe: stocks that were delisted, acquired, or removed from the index before month 120 are absent.",
+ "strategy_weighting": "single_signal",
+ "mentions_out_of_sample": true}

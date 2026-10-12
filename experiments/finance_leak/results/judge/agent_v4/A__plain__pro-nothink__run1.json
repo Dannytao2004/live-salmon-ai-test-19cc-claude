@@ -1,0 +1,17 @@
+{
+  "key": "A__plain__pro-nothink__run1",
+  "packet": "Q312",
+  "pass": "first",
+  "judge": "claude-subagent",
+  "instructions": "v4 (RUBRIC.md Appendix F)",
+  "status": "success",
+  "errors": [],
+  "answer": {
+    "timing_flags": [],
+    "timing_general": "raises",
+    "selection": "says_absent",
+    "selection_quote": "The point-in-time universe includes stocks up to their removal from the index, including the return over their final month, mitigating survivorship bias.",
+    "strategy_weighting": "equal_weight",
+    "mentions_out_of_sample": false
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "key": "B2__check_data__pro-nothink__run3",
+  "packet": "Q250",
+  "pass": "first",
+  "judge": "claude-subagent",
+  "instructions": "v4 (RUBRIC.md Appendix F)",
+  "status": "success",
+  "errors": [],
+  "answer": {
+    "timing_flags": [],
+    "timing_general": "raises",
+    "selection": "says_absent",
+    "selection_quote": "Each month contains exactly 500 stocks that were constituents of a broad equity index at that time, and the panel is point-in-time with respect to index membership and accounting data availability.",
+    "strategy_weighting": "weighted_by_reported_statistics",
+    "mentions_out_of_sample": true
+  }
+}

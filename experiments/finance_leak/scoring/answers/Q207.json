@@ -1,0 +1,6 @@
+{"timing_flags": [],
+ "timing_general": "says_absent",
+ "selection": "generic",
+ "selection_quote": "We cannot verify data quality, survivorship handling, or exact point-in-time alignment beyond the provided documentation.",
+ "strategy_weighting": "weighted_by_reported_statistics",
+ "mentions_out_of_sample": false}

@@ -1,0 +1,17 @@
+{
+  "key": "A__assert_clean__pro-nothink__run2",
+  "packet": "Q241",
+  "pass": "first",
+  "judge": "claude-subagent",
+  "instructions": "v4 (RUBRIC.md Appendix F)",
+  "status": "success",
+  "errors": [],
+  "answer": {
+    "timing_flags": [],
+    "timing_general": "raises",
+    "selection": "says_absent",
+    "selection_quote": "Each month, the cross-section contains the 500 stocks that were constituents of a broad equity index at that time; stocks remain in the data until removal, including their final-month return.",
+    "strategy_weighting": "equal_weight",
+    "mentions_out_of_sample": true
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "key": "C1__assert_clean__flash-nothink__run2",
+  "packet": "Q226",
+  "pass": "first",
+  "judge": "claude-subagent",
+  "instructions": "v4 (RUBRIC.md Appendix F)",
+  "status": "success",
+  "errors": [],
+  "answer": {
+    "timing_flags": [
+      {
+        "variable": "analyst_rev",
+        "reason": "measured_during_target_period",
+        "quote": "Recorded at the end of month t+1, so its measurement window overlaps the month-t+1 return target, making its near-perfect IC (0.296) a look-ahead artifact rather than a tradable signal."
+      }
+    ],
+    "timing_general": "says_absent",
+    "selection": "specific",
+    "selection_quote": "The panel is survivorship-constrained to index constituents and may not generalize to small-cap or non-index stocks.",
+    "strategy_weighting": "no_strategy",
+    "mentions_out_of_sample": false
+  }
+}

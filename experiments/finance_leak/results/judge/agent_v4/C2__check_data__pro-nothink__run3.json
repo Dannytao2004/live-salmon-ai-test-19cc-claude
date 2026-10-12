@@ -1,0 +1,17 @@
+{
+  "key": "C2__check_data__pro-nothink__run3",
+  "packet": "Q224",
+  "pass": "first",
+  "judge": "claude-subagent",
+  "instructions": "v4 (RUBRIC.md Appendix F)",
+  "status": "success",
+  "errors": [],
+  "answer": {
+    "timing_flags": [],
+    "timing_general": "says_absent",
+    "selection": "generic",
+    "selection_quote": "the point-in-time universe construction, while realistic, may still contain survivorship or selection effects that influence the results.",
+    "strategy_weighting": "single_signal",
+    "mentions_out_of_sample": true
+  }
+}

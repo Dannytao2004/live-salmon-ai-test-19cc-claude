@@ -1,0 +1,17 @@
+{
+  "key": "B3__assert_clean__pro-nothink__run3",
+  "packet": "Q033",
+  "pass": "first",
+  "judge": "claude-subagent",
+  "instructions": "v4 (RUBRIC.md Appendix F)",
+  "status": "success",
+  "errors": [],
+  "answer": {
+    "timing_flags": [],
+    "timing_general": "none",
+    "selection": "generic",
+    "selection_quote": "The use of quintile portfolios assumes all stocks are equally weighted and ignores practical issues such as missing data and survivorship bias.",
+    "strategy_weighting": "equal_weight",
+    "mentions_out_of_sample": true
+  }
+}

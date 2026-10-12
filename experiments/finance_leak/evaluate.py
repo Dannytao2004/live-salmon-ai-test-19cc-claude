@@ -3,15 +3,15 @@ Score every response and build the result tables, following RUBRIC.md.
 
 Inputs (all already on disk; no API calls):
   results/raw/*.json             model responses
-  results/judge/<version>/*.json judge answers (v3 primary, v1 comparison)
-  adjudication/audit/*.json      blind audit answers, with adjudication/key_map.json
+  results/judge/agent_v4*/       primary judge: Claude sub-agents (first pass, second pass, tie-break)
+  results/judge/v3, v1/          comparison raters: DeepSeek judge with prompts v3 and v1
   data/ground_truth.json, sanity/sanity_table.csv, data/panel_<group>.csv
 
 Outputs (results/scores/):
-  responses_<version>.csv        one row per response, every metric
-  table_<version>_group_condition.csv / _model.csv / _thinking.csv
-  judge_reliability.json         judge vs audit, judge vs keyword rules
-  summary_<version>.md           the main tables in readable form
+  responses_<rater>.csv          one row per response, every metric
+  table_<rater>_group_condition.csv / _model.csv / _thinking.csv
+  judge_reliability.json         double coding; primary vs comparison raters and keyword rules
+  summary_<rater>.md             the main tables in readable form
 
 Usage: python evaluate.py
 """
@@ -27,13 +27,12 @@ import pandas as pd
 
 import labels
 from labels import (
-    ADJUDICATION_DIR, FIELD_LIMITATIONS, FIELD_REJECTED, FIELD_STRATEGY, FIELD_VALID, GROUPS,
+    AGENT_JUDGE, FIELD_LIMITATIONS, FIELD_REJECTED, FIELD_STRATEGY, FIELD_VALID, GROUPS,
     MODELS, RAW_RESULTS_DIR, SANITY_DIR, SCORES_DIR, TRAPS, ground_truth_path, judge_path, panel_path,
 )
 from build_prompts import markdown_table
 from sanity_check import long_short_by_month
 
-PRIMARY, COMPARISON = "v3", "v1"
 TIMING_TRAP_GROUPS = [g for g, s in GROUPS.items() if s["trap"] in ("contemporaneous", "reporting_lag")]
 SELECTION_TRAP_GROUPS = [g for g, s in GROUPS.items() if s["trap"] == "survivorship"]
 POINT_IN_TIME_GROUPS = [g for g, s in GROUPS.items() if s["universe"] == "point_in_time"]
@@ -235,48 +234,64 @@ def load_json_dir(path: str) -> dict:
     return out
 
 
-def apply_audit(df: pd.DataFrame) -> tuple:
-    """Final trap score = auditor's where audited (RUBRIC 4.3), else judge's. Returns (df, reliability)."""
-    map_path = os.path.join(ADJUDICATION_DIR, "key_map.json")
-    df["audited"] = False
-    df["final_trap_score"] = df.get("judge_trap_score")
-    if not os.path.exists(map_path):
-        return df, {"audit": "not available yet"}
-    with open(map_path, encoding="utf-8") as f:
-        key_map = json.load(f)
-    audits = load_json_dir(os.path.join(ADJUDICATION_DIR, "audit"))
-    rows, compared = [], []
-    for pid, key in key_map.items():
-        if pid not in audits or key not in set(df.key):
+COMPARED_FIELDS = ("trap_score", "selection_label", "timing_general", "strategy_weighting", "mentions_out_of_sample")
+
+
+def agreement(a: pd.DataFrame, b: pd.DataFrame, label_a: str, label_b: str) -> dict:
+    """Agreement between two raters' judged fields on the responses both scored."""
+    m = a.merge(b, on=["key", "group"], suffixes=("_a", "_b"))
+    out = {"raters": f"{label_a} vs {label_b}", "n": len(m)}
+    for field in COMPARED_FIELDS:
+        x, y = m[f"judge_{field}_a"], m[f"judge_{field}_b"]
+        both = x.notna() & y.notna()
+        out[field] = f"{int((x[both] == y[both]).sum())}/{int(both.sum())}"
+    fa, fb = m["judge_false_timing_flags_a"] > 0, m["judge_false_timing_flags_b"] > 0
+    out["false_timing_presence"] = f"{int((fa == fb).sum())}/{len(m)}"
+    by_trap = {}
+    for trap in ("contemporaneous", "reporting_lag", "survivorship"):
+        groups = [g for g, spec in GROUPS.items() if spec["trap"] == trap]
+        t = m[m.group.isin(groups)].dropna(subset=["judge_trap_score_a", "judge_trap_score_b"])
+        by_trap[trap] = f"{int((t.judge_trap_score_a == t.judge_trap_score_b).sum())}/{len(t)}"
+    out["trap_score_by_trap"] = by_trap
+    return out
+
+
+def judged_frame(judges: dict, version: str) -> pd.DataFrame:
+    """One row per judged response with the judged fields (judge_* columns)."""
+    rows = []
+    for key, rec in judges.items():
+        if rec.get("status") != "success":
             continue
-        i = df.index[df.key == key][0]
-        group = df.at[i, "group"]
-        a = judged_scores(group, audits[pid], "v3")
-        j = {k[len("judge_"):]: df.at[i, k] for k in df.columns if k.startswith("judge_")}
-        df.at[i, "audited"] = True
-        if a["trap_score"] is not None:
-            df.at[i, "final_trap_score"] = a["trap_score"]
-        compared.append({
-            "packet": pid, "key": key, "group": group,
-            "trap_score_judge": j.get("trap_score"), "trap_score_audit": a["trap_score"],
-            "selection_judge": j.get("selection_label"), "selection_audit": a["selection_label"],
-            "timing_general_judge": j.get("timing_general"), "timing_general_audit": a["timing_general"],
-            "false_timing_judge": j.get("false_timing_flags"), "false_timing_audit": a["false_timing_flags"],
-            "weighting_judge": j.get("strategy_weighting"), "weighting_audit": a["strategy_weighting"],
-            "oos_judge": j.get("mentions_out_of_sample"), "oos_audit": a["mentions_out_of_sample"],
-        })
-    comp = pd.DataFrame(compared)
-    rel = {"audited": len(comp)}
-    if len(comp):
-        trap = comp.dropna(subset=["trap_score_audit"])
-        rel["trap_score_agreement"] = f"{(trap.trap_score_judge == trap.trap_score_audit).sum()}/{len(trap)}"
-        for field in ("selection", "timing_general", "weighting", "oos"):
-            rel[f"{field}_agreement"] = f"{(comp[f'{field}_judge'] == comp[f'{field}_audit']).sum()}/{len(comp)}"
-        rel["false_timing_presence_agreement"] = (
-            f"{((comp.false_timing_judge > 0) == (comp.false_timing_audit > 0)).sum()}/{len(comp)}")
-        rel["disagreements"] = comp[comp.trap_score_judge != comp.trap_score_audit].dropna(
-            subset=["trap_score_audit"])[["packet", "group", "trap_score_judge", "trap_score_audit"]].to_dict("records")
-        comp.to_csv(os.path.join(SCORES_DIR, "audit_comparison.csv"), index=False, lineterminator="\n")
+        group = key.split("__")[0]
+        rows.append({"key": key, "group": group,
+                     **{f"judge_{k}": v for k, v in judged_scores(group, rec["answer"], version).items()}})
+    return pd.DataFrame(rows)
+
+
+def resolve_double_coding(df: pd.DataFrame) -> tuple:
+    """final_trap_score: first pass; for double-coded responses the second pass if it agrees,
+    otherwise the tie-break agent (RUBRIC 4.3 item 2)."""
+    second = judged_frame(load_json_dir(os.path.join(labels.JUDGE_DIR, f"{AGENT_JUDGE}_second")), "v4")
+    tiebreak = judged_frame(load_json_dir(os.path.join(labels.JUDGE_DIR, f"{AGENT_JUDGE}_tiebreak")), "v4")
+    df["final_trap_score"] = df.get("judge_trap_score")
+    df["double_coded"] = df.key.isin(set(second.key)) if len(second) else False
+    df["needs_tiebreak"] = False
+    if len(second):
+        s = second.set_index("key")["judge_trap_score"]
+        t = tiebreak.set_index("key")["judge_trap_score"] if len(tiebreak) else pd.Series(dtype=float)
+        for i in df.index[df.double_coded]:
+            key, first = df.at[i, "key"], df.at[i, "judge_trap_score"]
+            if pd.isna(first) and pd.isna(s[key]):
+                continue
+            if first != s[key]:
+                df.at[i, "needs_tiebreak"] = True
+                if key in t.index:
+                    df.at[i, "final_trap_score"] = t[key]
+    first = df[["key", "group"] + [c for c in df.columns if c.startswith("judge_")]]
+    rel = {"double_coding": agreement(first[first.key.isin(set(second.key))], second, "first pass", "second pass")
+           if len(second) else "not available yet",
+           "tiebreaks_needed": sorted(df.loc[df.needs_tiebreak, "key"]),
+           "tiebreaks_missing": sorted(set(df.loc[df.needs_tiebreak, "key"]) - set(tiebreak.key if len(tiebreak) else []))}
     return df, rel
 
 
@@ -332,6 +347,14 @@ def summarize(df: pd.DataFrame, by: list) -> pd.DataFrame:
     return pd.DataFrame(out)
 
 
+RATERS = {  # name -> (results/judge sub-folder, answer format)
+    "agent_v4": (AGENT_JUDGE, "v4"),
+    "deepseek_v3": ("v3", "v3"),
+    "deepseek_v1": ("v1", "v1"),
+}
+PRIMARY = "agent_v4"
+
+
 def main() -> None:
     os.makedirs(SCORES_DIR, exist_ok=True)
     with open(ground_truth_path(), encoding="utf-8") as f:
@@ -341,27 +364,23 @@ def main() -> None:
     responses = load_json_dir(RAW_RESULTS_DIR)
 
     reliability = {"benchmark_sharpe": {g: round(v, 3) for g, v in bench.items()}}
-    for version in (PRIMARY, COMPARISON):
-        judges = load_json_dir(os.path.join(labels.JUDGE_DIR, version))
+    frames = {}
+    for rater, (folder, version) in RATERS.items():
+        judges = load_json_dir(os.path.join(labels.JUDGE_DIR, folder))
         rows = [score_response(rec, gt, sanity, bench, judges.get(key, {}), version)
                 for key, rec in sorted(responses.items())]
         df = pd.DataFrame(rows)
         df["judge_missing"] = ~df.key.isin([k for k, j in judges.items() if j.get("status") == "success"])
-        if version == PRIMARY:
-            df, audit_rel = apply_audit(df)
-            reliability["audit_vs_judge_v3"] = audit_rel
-            trap = df.dropna(subset=["rule_score", "judge_trap_score"])
-            reliability["judge_v3_vs_keyword_rules"] = {
-                "agreement": f"{int((trap.rule_score == trap.judge_trap_score).sum())}/{len(trap)}",
-                "rule_higher": int((trap.rule_score > trap.judge_trap_score).sum()),
-                "rule_lower": int((trap.rule_score < trap.judge_trap_score).sum()),
-            }
+        if rater == PRIMARY:
+            df, rel = resolve_double_coding(df)
+            reliability["primary_double_coding"] = rel
         else:
-            df["audited"] = False
             df["final_trap_score"] = df.get("judge_trap_score")
-        reliability[f"judge_{version}_missing"] = int(df.judge_missing.sum())
-        df.to_csv(os.path.join(SCORES_DIR, f"responses_{version}.csv"), index=False, lineterminator="\n")
+        reliability[f"{rater}_missing"] = int(df.judge_missing.sum())
+        frames[rater] = df
+        df.to_csv(os.path.join(SCORES_DIR, f"responses_{rater}.csv"), index=False, lineterminator="\n")
 
+        df = df.copy()
         df["group"] = pd.Categorical(df.group, categories=list(GROUPS), ordered=True)
         df["condition"] = pd.Categorical(df.condition, categories=list(labels.CONDITIONS), ordered=True)
         tables = {
@@ -369,19 +388,31 @@ def main() -> None:
             "model": summarize(df.sort_values(["group", "model"]), ["group", "model"]),
             "thinking": summarize(df.sort_values(["group", "thinking"]), ["group", "thinking"]),
         }
-        lines = [f"# Results (judge prompt {version})", ""]
+        lines = [f"# Results ({rater})", ""]
         for name, t in tables.items():
-            t.to_csv(os.path.join(SCORES_DIR, f"table_{version}_{name}.csv"), index=False, lineterminator="\n")
+            t.to_csv(os.path.join(SCORES_DIR, f"table_{rater}_{name}.csv"), index=False, lineterminator="\n")
             cells = [["" if pd.isna(v) else str(v) for v in r] for r in t.itertuples(index=False)]
             lines += [f"## By {name.replace('_', ' x ')}", "", markdown_table(list(t.columns), cells), ""]
-        with open(os.path.join(SCORES_DIR, f"summary_{version}.md"), "w", encoding="utf-8", newline="\n") as f:
+        with open(os.path.join(SCORES_DIR, f"summary_{rater}.md"), "w", encoding="utf-8", newline="\n") as f:
             f.write("\n".join(lines))
-        print(f"{version}: {len(df)} responses, parse failed {int((df.parse_method == 'failed').sum())}, "
-              f"judge missing {int(df.judge_missing.sum())}, audited {int(df.audited.sum())}")
+        print(f"{rater}: {len(df)} responses, parse failed {int((df.parse_method == 'failed').sum())}, "
+              f"judge missing {int(df.judge_missing.sum())}")
 
+    cols = lambda d: d[["key", "group"] + [c for c in d.columns if c.startswith("judge_")]]
+    primary = cols(frames[PRIMARY])
+    for rater in RATERS:
+        if rater != PRIMARY:
+            reliability[f"{PRIMARY}_vs_{rater}"] = agreement(primary, cols(frames[rater]), PRIMARY, rater)
+    trap = frames[PRIMARY].dropna(subset=["rule_score", "judge_trap_score"])
+    reliability[f"{PRIMARY}_vs_keyword_rules"] = {
+        "agreement": f"{int((trap.rule_score == trap.judge_trap_score).sum())}/{len(trap)}",
+        "rule_higher": int((trap.rule_score > trap.judge_trap_score).sum()),
+        "rule_lower": int((trap.rule_score < trap.judge_trap_score).sum()),
+    }
     with open(os.path.join(SCORES_DIR, "judge_reliability.json"), "w", encoding="utf-8", newline="\n") as f:
         json.dump(reliability, f, indent=2, ensure_ascii=False, default=str)
-    print(json.dumps(reliability, indent=2, ensure_ascii=False, default=str))
+    print(json.dumps({k: v for k, v in reliability.items() if k != "benchmark_sharpe"},
+                     indent=1, ensure_ascii=False, default=str))
 
 
 if __name__ == "__main__":

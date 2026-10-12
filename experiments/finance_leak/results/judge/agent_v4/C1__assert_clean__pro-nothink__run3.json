@@ -1,0 +1,23 @@
+{
+  "key": "C1__assert_clean__pro-nothink__run3",
+  "packet": "Q302",
+  "pass": "first",
+  "judge": "claude-subagent",
+  "instructions": "v4 (RUBRIC.md Appendix F)",
+  "status": "success",
+  "errors": [],
+  "answer": {
+    "timing_flags": [
+      {
+        "variable": "analyst_rev",
+        "reason": "measured_during_target_period",
+        "quote": "the extraordinary performance of analyst_rev may be partly driven by the feature's definition, which uses information from month t+1 itself"
+      }
+    ],
+    "timing_general": "none",
+    "selection": "generic",
+    "selection_quote": "Fifth, the index universe imposes survivorship and selection biases that may not reflect the broader equity market.",
+    "strategy_weighting": "single_signal",
+    "mentions_out_of_sample": true
+  }
+}

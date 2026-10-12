@@ -1,0 +1,23 @@
+{
+  "key": "C1__check_data__flash-think__run2",
+  "packet": "Q336",
+  "pass": "first",
+  "judge": "claude-subagent",
+  "instructions": "v4 (RUBRIC.md Appendix F)",
+  "status": "success",
+  "errors": [],
+  "answer": {
+    "timing_flags": [
+      {
+        "variable": "analyst_rev",
+        "reason": "measured_during_target_period",
+        "quote": "Its data dictionary states it is the change in mean FY1 EPS forecast during month t+1, recorded at the end of month t+1."
+      }
+    ],
+    "timing_general": "none",
+    "selection": "generic",
+    "selection_quote": "Finally, the universe consists of index constituents, which may introduce survivorship or constituent-selection biases.",
+    "strategy_weighting": "no_strategy",
+    "mentions_out_of_sample": false
+  }
+}

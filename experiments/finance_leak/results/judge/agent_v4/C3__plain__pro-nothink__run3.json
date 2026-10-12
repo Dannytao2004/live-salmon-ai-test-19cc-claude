@@ -1,0 +1,17 @@
+{
+  "key": "C3__plain__pro-nothink__run3",
+  "packet": "Q200",
+  "pass": "first",
+  "judge": "claude-subagent",
+  "instructions": "v4 (RUBRIC.md Appendix F)",
+  "status": "success",
+  "errors": [],
+  "answer": {
+    "timing_flags": [],
+    "timing_general": "none",
+    "selection": "specific",
+    "selection_quote": "The dataset covers only 500 stocks that are constituents of a broad index at the end of the sample, introducing survivorship bias.",
+    "strategy_weighting": "single_signal",
+    "mentions_out_of_sample": true
+  }
+}

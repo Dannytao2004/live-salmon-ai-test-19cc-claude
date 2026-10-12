@@ -1,0 +1,6 @@
+{"timing_flags": [{"variable": "analyst_rev", "reason": "other_timing", "quote": "the extreme Sharpe ratio of the analyst revision strategy (26.38) raises concerns about data quality, look-ahead bias, or survivorship bias in the construction of `analyst_rev`, despite the stated point-in-time design."}],
+ "timing_general": "says_absent",
+ "selection": "generic",
+ "selection_quote": "raises concerns about data quality, look-ahead bias, or survivorship bias in the construction of `analyst_rev`, despite the stated point-in-time design.",
+ "strategy_weighting": "single_signal",
+ "mentions_out_of_sample": false}

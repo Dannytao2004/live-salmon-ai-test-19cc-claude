@@ -1,0 +1,23 @@
+{
+  "key": "B1__check_data__pro-nothink__run2",
+  "packet": "Q252",
+  "pass": "first",
+  "judge": "claude-subagent",
+  "instructions": "v4 (RUBRIC.md Appendix F)",
+  "status": "success",
+  "errors": [],
+  "answer": {
+    "timing_flags": [
+      {
+        "variable": "analyst_rev",
+        "reason": "measured_during_target_period",
+        "quote": "the data dictionary states it is recorded at the end of month t+1, which is contemporaneous with the return period, suggesting a timing mismatch that could inflate predictive power."
+      }
+    ],
+    "timing_general": "none",
+    "selection": "generic",
+    "selection_quote": "the extremely high Sharpe ratio of analyst_rev is implausible in live trading and likely reflects data artifacts or survivorship bias in analyst coverage.",
+    "strategy_weighting": "other",
+    "mentions_out_of_sample": false
+  }
+}

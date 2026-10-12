@@ -1,0 +1,6 @@
+{"timing_flags": [],
+ "timing_general": "raises",
+ "selection": "generic",
+ "selection_quote": "The results are strong but likely optimistic given in-sample estimation, no trading costs, and index-constituent biases.",
+ "strategy_weighting": "single_signal",
+ "mentions_out_of_sample": true}

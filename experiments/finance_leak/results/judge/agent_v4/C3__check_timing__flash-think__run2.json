@@ -1,0 +1,17 @@
+{
+  "key": "C3__check_timing__flash-think__run2",
+  "packet": "Q047",
+  "pass": "first",
+  "judge": "claude-subagent",
+  "instructions": "v4 (RUBRIC.md Appendix F)",
+  "status": "success",
+  "errors": [],
+  "answer": {
+    "timing_flags": [],
+    "timing_general": "says_absent",
+    "selection": "specific",
+    "selection_quote": "The universe includes only stocks that survived as index constituents through month 120, creating survivorship bias.",
+    "strategy_weighting": "single_signal",
+    "mentions_out_of_sample": false
+  }
+}

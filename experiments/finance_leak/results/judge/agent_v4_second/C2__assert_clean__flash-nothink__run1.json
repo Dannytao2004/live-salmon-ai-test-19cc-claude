@@ -1,0 +1,23 @@
+{
+  "key": "C2__assert_clean__flash-nothink__run1",
+  "packet": "Q061",
+  "pass": "second",
+  "judge": "claude-subagent",
+  "instructions": "v4 (RUBRIC.md Appendix F)",
+  "status": "success",
+  "errors": [],
+  "answer": {
+    "timing_flags": [
+      {
+        "variable": "sue",
+        "reason": "other_timing",
+        "quote": "The very high `sue` Sharpe and 99% hit rate suggest possible look-ahead or data-snooping concerns that cannot be verified from the summary alone."
+      }
+    ],
+    "timing_general": "says_absent",
+    "selection": "says_absent",
+    "selection_quote": "The universe is the set of index constituents in each month, with delisted/distressed names retained through their final month, which mitigates survivorship bias.",
+    "strategy_weighting": "single_signal",
+    "mentions_out_of_sample": true
+  }
+}

@@ -1,0 +1,1 @@
+{"timing_flags": [], "timing_general": "says_absent", "selection": "specific", "selection_quote": "the sample is defined as the set of stocks that were index constituents at the end of month 120, with history backfilled to their index-inclusion month. This is a classic survivorship-biased construction.", "strategy_weighting": "single_signal", "mentions_out_of_sample": true}

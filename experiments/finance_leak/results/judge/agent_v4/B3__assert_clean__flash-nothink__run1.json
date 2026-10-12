@@ -1,0 +1,17 @@
+{
+  "key": "B3__assert_clean__flash-nothink__run1",
+  "packet": "Q149",
+  "pass": "first",
+  "judge": "claude-subagent",
+  "instructions": "v4 (RUBRIC.md Appendix F)",
+  "status": "success",
+  "errors": [],
+  "answer": {
+    "timing_flags": [],
+    "timing_general": "none",
+    "selection": "specific",
+    "selection_quote": "the universe consists only of stocks that survive to be index constituents at month 120, inducing survivorship bias that likely inflates measured returns and understates risk.",
+    "strategy_weighting": "equal_weight",
+    "mentions_out_of_sample": false
+  }
+}

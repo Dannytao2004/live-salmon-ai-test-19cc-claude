@@ -1,0 +1,6 @@
+{"timing_flags": [],
+ "timing_general": "none",
+ "selection": "specific",
+ "selection_quote": "the universe consists of stocks that are constituents of a broad equity index at the end of month 120, with their history back to index inclusion. This introduces survivorship and selection biases",
+ "strategy_weighting": "single_signal",
+ "mentions_out_of_sample": false}

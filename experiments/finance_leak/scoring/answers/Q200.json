@@ -1,0 +1,1 @@
+{"timing_flags": [], "timing_general": "none", "selection": "specific", "selection_quote": "The dataset covers only 500 stocks that are constituents of a broad index at the end of the sample, introducing survivorship bias.", "strategy_weighting": "single_signal", "mentions_out_of_sample": true}

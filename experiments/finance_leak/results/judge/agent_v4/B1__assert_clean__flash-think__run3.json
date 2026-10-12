@@ -1,0 +1,23 @@
+{
+  "key": "B1__assert_clean__flash-think__run3",
+  "packet": "Q195",
+  "pass": "first",
+  "judge": "claude-subagent",
+  "instructions": "v4 (RUBRIC.md Appendix F)",
+  "status": "success",
+  "errors": [],
+  "answer": {
+    "timing_flags": [
+      {
+        "variable": "analyst_rev",
+        "reason": "measured_during_target_period",
+        "quote": "We reject `analyst_rev` on timing grounds: the data dictionary states it is recorded at the end of month t+1, so it cannot be known when forming portfolios at the end of month t."
+      }
+    ],
+    "timing_general": "none",
+    "selection": "none",
+    "selection_quote": "",
+    "strategy_weighting": "equal_weight",
+    "mentions_out_of_sample": true
+  }
+}

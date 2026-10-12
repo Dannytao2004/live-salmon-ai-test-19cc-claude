@@ -1,0 +1,23 @@
+{
+  "key": "C1__plain__pro-think__run3",
+  "packet": "Q287",
+  "pass": "first",
+  "judge": "claude-subagent",
+  "instructions": "v4 (RUBRIC.md Appendix F)",
+  "status": "success",
+  "errors": [],
+  "answer": {
+    "timing_flags": [
+      {
+        "variable": "analyst_rev",
+        "reason": "measured_during_target_period",
+        "quote": "`analyst_rev` is the change in the mean FY1 EPS forecast during month t+1, recorded at the end of month t+1. This means it uses information from the same month as the return being predicted"
+      }
+    ],
+    "timing_general": "raises",
+    "selection": "none",
+    "selection_quote": "",
+    "strategy_weighting": "no_strategy",
+    "mentions_out_of_sample": false
+  }
+}

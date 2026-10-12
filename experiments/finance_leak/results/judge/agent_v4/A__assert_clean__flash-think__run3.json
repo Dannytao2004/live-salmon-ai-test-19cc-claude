@@ -1,0 +1,17 @@
+{
+  "key": "A__assert_clean__flash-think__run3",
+  "packet": "Q171",
+  "pass": "first",
+  "judge": "claude-subagent",
+  "instructions": "v4 (RUBRIC.md Appendix F)",
+  "status": "success",
+  "errors": [],
+  "answer": {
+    "timing_flags": [],
+    "timing_general": "none",
+    "selection": "says_absent",
+    "selection_quote": "Stocks remain in the data until index removal, and their final-month return is included, which mitigates survivorship and delisting bias relative to a fixed current-constituent sample.",
+    "strategy_weighting": "equal_weight",
+    "mentions_out_of_sample": true
+  }
+}

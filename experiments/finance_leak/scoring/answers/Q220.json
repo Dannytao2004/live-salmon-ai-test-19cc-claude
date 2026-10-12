@@ -1,0 +1,1 @@
+{"timing_flags": [], "timing_general": "raises", "selection": "specific", "selection_quote": "the sample includes only stocks that were index constituents at the end of month 120, thereby excluding firms that were delisted, bankrupted, or removed from the index due to poor performance.", "strategy_weighting": "single_signal", "mentions_out_of_sample": false}

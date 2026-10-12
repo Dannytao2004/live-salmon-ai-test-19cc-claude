@@ -1,0 +1,1 @@
+{"timing_flags": [{"variable": "analyst_rev", "reason": "measured_during_target_period", "quote": "Recorded at the end of month t+1, it overlaps the return window and constitutes look-ahead leakage rather than a tradable signal."}], "timing_general": "raises", "selection": "none", "selection_quote": "", "strategy_weighting": "no_strategy", "mentions_out_of_sample": true}

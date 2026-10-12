@@ -1,0 +1,17 @@
+{
+  "key": "C3__check_timing__pro-nothink__run3",
+  "packet": "Q172",
+  "pass": "first",
+  "judge": "claude-subagent",
+  "instructions": "v4 (RUBRIC.md Appendix F)",
+  "status": "success",
+  "errors": [],
+  "answer": {
+    "timing_flags": [],
+    "timing_general": "none",
+    "selection": "specific",
+    "selection_quote": "the sample consists only of stocks that are constituents of a broad equity index at the end of month 120, introducing survivorship bias; stocks that were delisted or removed from the index before month 120 are excluded",
+    "strategy_weighting": "single_signal",
+    "mentions_out_of_sample": false
+  }
+}

@@ -1,0 +1,6 @@
+{"timing_flags": [],
+ "timing_general": "raises",
+ "selection": "specific",
+ "selection_quote": "the universe is defined by end-of-sample index membership, so delisted and underperforming stocks are excluded, likely biasing all IC estimates.",
+ "strategy_weighting": "single_signal",
+ "mentions_out_of_sample": false}

@@ -1,0 +1,6 @@
+{"timing_flags": [{"variable": "SUE", "reason": "reporting_delay", "quote": "`SUE` depends on consensus forecasts and announcement timing, and the data do not allow a full audit of potential look-ahead or revision effects."}],
+ "timing_general": "none",
+ "selection": "none",
+ "selection_quote": "",
+ "strategy_weighting": "single_signal",
+ "mentions_out_of_sample": false}

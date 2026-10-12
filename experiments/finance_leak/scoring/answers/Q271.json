@@ -1,0 +1,6 @@
+{"timing_flags": [{"variable": "SUE", "reason": "other_timing", "quote": "SUE signal may have look-ahead bias if consensus forecasts are not truly point-in-time."}],
+ "timing_general": "says_absent",
+ "selection": "generic",
+ "selection_quote": "The 500-stock universe is a point-in-time index that may introduce survivorship or selection biases.",
+ "strategy_weighting": "single_signal",
+ "mentions_out_of_sample": true}

@@ -1,0 +1,6 @@
+{"timing_flags": [{"variable": "SUE", "reason": "other_timing", "quote": "the rank IC and Sharpe ratio for SUE are unusually high, raising the possibility of look-ahead bias or data snooping in the construction of the SUE variable, despite the stated point-in-time methodology."}],
+ "timing_general": "says_absent",
+ "selection": "none",
+ "selection_quote": "",
+ "strategy_weighting": "single_signal",
+ "mentions_out_of_sample": false}

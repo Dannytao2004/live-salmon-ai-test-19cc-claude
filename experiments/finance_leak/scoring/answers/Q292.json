@@ -1,0 +1,6 @@
+{"timing_flags": [{"variable": "analyst_rev", "reason": "measured_during_target_period", "quote": "analyst revisions during month t+1 are mechanically correlated with contemporaneous returns, but an investor at the end of month t cannot observe them."}],
+ "timing_general": "says_absent",
+ "selection": "none",
+ "selection_quote": "",
+ "strategy_weighting": "no_strategy",
+ "mentions_out_of_sample": false}

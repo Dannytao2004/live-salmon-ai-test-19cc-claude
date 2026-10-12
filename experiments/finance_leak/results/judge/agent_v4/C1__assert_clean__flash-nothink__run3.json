@@ -1,0 +1,23 @@
+{
+  "key": "C1__assert_clean__flash-nothink__run3",
+  "packet": "Q076",
+  "pass": "first",
+  "judge": "claude-subagent",
+  "instructions": "v4 (RUBRIC.md Appendix F)",
+  "status": "success",
+  "errors": [],
+  "answer": {
+    "timing_flags": [
+      {
+        "variable": "analyst_rev",
+        "reason": "measured_during_target_period",
+        "quote": "analyst_rev is recorded over month t+1, the same window as ret_next, so its predictive power may be contemporaneous rather than tradable."
+      }
+    ],
+    "timing_general": "says_absent",
+    "selection": "says_absent",
+    "selection_quote": "The universe is point-in-time and survivorship-aware: stocks removed from the index (distress/delisting) remain in the data through their final month, including that month's return.",
+    "strategy_weighting": "single_signal",
+    "mentions_out_of_sample": false
+  }
+}

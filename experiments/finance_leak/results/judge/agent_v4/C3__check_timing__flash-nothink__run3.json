@@ -1,0 +1,17 @@
+{
+  "key": "C3__check_timing__flash-nothink__run3",
+  "packet": "Q211",
+  "pass": "first",
+  "judge": "claude-subagent",
+  "instructions": "v4 (RUBRIC.md Appendix F)",
+  "status": "success",
+  "errors": [],
+  "answer": {
+    "timing_flags": [],
+    "timing_general": "says_absent",
+    "selection": "specific",
+    "selection_quote": "This is a survivor universe: stocks that were delisted, acquired, or removed from the index before month 120 are absent.",
+    "strategy_weighting": "single_signal",
+    "mentions_out_of_sample": true
+  }
+}

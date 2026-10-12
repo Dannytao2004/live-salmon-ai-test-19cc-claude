@@ -1,0 +1,17 @@
+{
+  "key": "C2__assert_clean__flash-nothink__run3",
+  "packet": "Q157",
+  "pass": "first",
+  "judge": "claude-subagent",
+  "instructions": "v4 (RUBRIC.md Appendix F)",
+  "status": "success",
+  "errors": [],
+  "answer": {
+    "timing_flags": [],
+    "timing_general": "says_absent",
+    "selection": "says_absent",
+    "selection_quote": "Returns include the final month before index removal, so the sample embeds delisting/distress returns and is free of survivorship selection after removal.",
+    "strategy_weighting": "single_signal",
+    "mentions_out_of_sample": false
+  }
+}

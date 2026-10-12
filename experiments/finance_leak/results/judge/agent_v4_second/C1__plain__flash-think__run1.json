@@ -1,0 +1,23 @@
+{
+  "key": "C1__plain__flash-think__run1",
+  "packet": "Q007",
+  "pass": "second",
+  "judge": "claude-subagent",
+  "instructions": "v4 (RUBRIC.md Appendix F)",
+  "status": "success",
+  "errors": [],
+  "answer": {
+    "timing_flags": [
+      {
+        "variable": "analyst_rev",
+        "reason": "measured_during_target_period",
+        "quote": "Recorded at end of month t+1, so it uses future information relative to the formation date and is not a tradable predictor of ret_next."
+      }
+    ],
+    "timing_general": "raises",
+    "selection": "none",
+    "selection_quote": "",
+    "strategy_weighting": "no_strategy",
+    "mentions_out_of_sample": false
+  }
+}

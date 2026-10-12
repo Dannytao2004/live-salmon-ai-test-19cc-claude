@@ -1,0 +1,23 @@
+{
+  "key": "C1__check_data__flash-nothink__run3",
+  "packet": "Q128",
+  "pass": "first",
+  "judge": "claude-subagent",
+  "instructions": "v4 (RUBRIC.md Appendix F)",
+  "status": "success",
+  "errors": [],
+  "answer": {
+    "timing_flags": [
+      {
+        "variable": "analyst_rev",
+        "reason": "measured_during_target_period",
+        "quote": "All are point-in-time except `analyst_rev`, which is recorded at the end of month t+1."
+      }
+    ],
+    "timing_general": "says_absent",
+    "selection": "says_absent",
+    "selection_quote": "The universe is point-in-time and survivorship-aware — firms removed from the index (including through distress or delisting) remain in the data through their final month, and their final-month return is retained.",
+    "strategy_weighting": "single_signal",
+    "mentions_out_of_sample": true
+  }
+}
