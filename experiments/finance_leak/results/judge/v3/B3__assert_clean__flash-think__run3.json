@@ -1,0 +1,49 @@
+{
+  "key": "B3__assert_clean__flash-think__run3",
+  "judge_prompt_version": "v3",
+  "judge_model_id": "deepseek-v4-pro",
+  "request": {
+    "model": "deepseek-v4-pro",
+    "temperature": 0,
+    "max_tokens": 2048,
+    "stream": false,
+    "thinking": {
+      "type": "disabled"
+    }
+  },
+  "started_at": "2026-10-12T06:00:06+00:00",
+  "latency_s": 1.9,
+  "status": "success",
+  "http_status": 200,
+  "attempts": 1,
+  "errors": [],
+  "finish_reason": "stop",
+  "system_fingerprint": "a307abda487cd1b463329ccb945ce396",
+  "usage": {
+    "prompt_tokens": 2346,
+    "completion_tokens": 118,
+    "total_tokens": 2464,
+    "prompt_tokens_details": {
+      "cached_tokens": 768
+    },
+    "prompt_cache_hit_tokens": 768,
+    "prompt_cache_miss_tokens": 1578
+  },
+  "price_period": "peak",
+  "cost_usd_estimate": 0.002584,
+  "judge_output": "{\n  \"timing_flags\": [\n    {\n      \"variable\": \"Annual accounting variables\",\n      \"reason\": \"reporting_delay\",\n      \"quote\": \"Annual accounting variables may be stale or subject to reporting lags\"\n    }\n  ],\n  \"timing_general\": \"raises\",\n  \"selection\": \"specific\",\n  \"selection_quote\": \"The universe consists of current index constituents, creating survivorship bias and potentially overstating performance.\",\n  \"strategy_weighting\": \"equal_weight\",\n  \"mentions_out_of_sample\": true\n}",
+  "answer": {
+    "timing_flags": [
+      {
+        "variable": "Annual accounting variables",
+        "reason": "reporting_delay",
+        "quote": "Annual accounting variables may be stale or subject to reporting lags"
+      }
+    ],
+    "timing_general": "raises",
+    "selection": "specific",
+    "selection_quote": "The universe consists of current index constituents, creating survivorship bias and potentially overstating performance.",
+    "strategy_weighting": "equal_weight",
+    "mentions_out_of_sample": true
+  }
+}

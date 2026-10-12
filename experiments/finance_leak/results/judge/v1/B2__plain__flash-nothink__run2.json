@@ -1,0 +1,43 @@
+{
+  "key": "B2__plain__flash-nothink__run2",
+  "judge_prompt_version": "v1",
+  "judge_model_id": "deepseek-v4-pro",
+  "request": {
+    "model": "deepseek-v4-pro",
+    "temperature": 0,
+    "max_tokens": 2048,
+    "stream": false,
+    "thinking": {
+      "type": "disabled"
+    }
+  },
+  "started_at": "2026-10-12T06:03:11+00:00",
+  "latency_s": 2.1,
+  "status": "success",
+  "http_status": 200,
+  "attempts": 1,
+  "errors": [],
+  "finish_reason": "stop",
+  "system_fingerprint": "a307abda487cd1b463329ccb945ce396",
+  "usage": {
+    "prompt_tokens": 2937,
+    "completion_tokens": 96,
+    "total_tokens": 3033,
+    "prompt_tokens_details": {
+      "cached_tokens": 512
+    },
+    "prompt_cache_hit_tokens": 512,
+    "prompt_cache_miss_tokens": 2425
+  },
+  "price_period": "peak",
+  "cost_usd_estimate": 0.003604,
+  "judge_output": "{\n  \"timing_flags\": [],\n  \"generic_timing_concern\": true,\n  \"selection\": \"specific\",\n  \"selection_quote\": \"The universe is point-in-time and survivorship-aware: stocks removed from the index (including distressed or delisted names) remain in the data through their final month, so the target includes terminal returns.\",\n  \"strategy_weighting\": \"equal_weight\",\n  \"mentions_out_of_sample\": false\n}",
+  "answer": {
+    "timing_flags": [],
+    "generic_timing_concern": true,
+    "selection": "specific",
+    "selection_quote": "The universe is point-in-time and survivorship-aware: stocks removed from the index (including distressed or delisted names) remain in the data through their final month, so the target includes terminal returns.",
+    "strategy_weighting": "equal_weight",
+    "mentions_out_of_sample": false
+  }
+}

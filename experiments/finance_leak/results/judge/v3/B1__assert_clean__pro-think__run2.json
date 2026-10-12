@@ -1,0 +1,49 @@
+{
+  "key": "B1__assert_clean__pro-think__run2",
+  "judge_prompt_version": "v3",
+  "judge_model_id": "deepseek-v4-pro",
+  "request": {
+    "model": "deepseek-v4-pro",
+    "temperature": 0,
+    "max_tokens": 2048,
+    "stream": false,
+    "thinking": {
+      "type": "disabled"
+    }
+  },
+  "started_at": "2026-10-12T05:59:20+00:00",
+  "latency_s": 2.0,
+  "status": "success",
+  "http_status": 200,
+  "attempts": 1,
+  "errors": [],
+  "finish_reason": "stop",
+  "system_fingerprint": "a307abda487cd1b463329ccb945ce396",
+  "usage": {
+    "prompt_tokens": 2402,
+    "completion_tokens": 115,
+    "total_tokens": 2517,
+    "prompt_tokens_details": {
+      "cached_tokens": 768
+    },
+    "prompt_cache_hit_tokens": 768,
+    "prompt_cache_miss_tokens": 1634
+  },
+  "price_period": "offpeak",
+  "cost_usd_estimate": 0.001323,
+  "judge_output": "{\n  \"timing_flags\": [\n    {\n      \"variable\": \"analyst_rev\",\n      \"reason\": \"measured_during_target_period\",\n      \"quote\": \"this feature is recorded at the end of month t+1, meaning it uses information during the same month as the return being predicted\"\n    }\n  ],\n  \"timing_general\": \"raises\",\n  \"selection\": \"none\",\n  \"selection_quote\": \"\",\n  \"strategy_weighting\": \"other\",\n  \"mentions_out_of_sample\": true\n}",
+  "answer": {
+    "timing_flags": [
+      {
+        "variable": "analyst_rev",
+        "reason": "measured_during_target_period",
+        "quote": "this feature is recorded at the end of month t+1, meaning it uses information during the same month as the return being predicted"
+      }
+    ],
+    "timing_general": "raises",
+    "selection": "none",
+    "selection_quote": "",
+    "strategy_weighting": "other",
+    "mentions_out_of_sample": true
+  }
+}

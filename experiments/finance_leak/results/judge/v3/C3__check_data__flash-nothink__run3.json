@@ -1,0 +1,43 @@
+{
+  "key": "C3__check_data__flash-nothink__run3",
+  "judge_prompt_version": "v3",
+  "judge_model_id": "deepseek-v4-pro",
+  "request": {
+    "model": "deepseek-v4-pro",
+    "temperature": 0,
+    "max_tokens": 2048,
+    "stream": false,
+    "thinking": {
+      "type": "disabled"
+    }
+  },
+  "started_at": "2026-10-12T06:01:34+00:00",
+  "latency_s": 2.1,
+  "status": "success",
+  "http_status": 200,
+  "attempts": 1,
+  "errors": [],
+  "finish_reason": "stop",
+  "system_fingerprint": "a307abda487cd1b463329ccb945ce396",
+  "usage": {
+    "prompt_tokens": 3104,
+    "completion_tokens": 103,
+    "total_tokens": 3207,
+    "prompt_tokens_details": {
+      "cached_tokens": 768
+    },
+    "prompt_cache_hit_tokens": 768,
+    "prompt_cache_miss_tokens": 2336
+  },
+  "price_period": "peak",
+  "cost_usd_estimate": 0.003525,
+  "judge_output": "{\n  \"timing_flags\": [],\n  \"timing_general\": \"says_absent\",\n  \"selection\": \"specific\",\n  \"selection_quote\": \"Coverage is unbalanced: the number of stocks grows from 143 in month 1 to 500 in month 120, reflecting survivorship-driven index membership (all names are constituents at the end of the sample).\",\n  \"strategy_weighting\": \"single_signal\",\n  \"mentions_out_of_sample\": true\n}",
+  "answer": {
+    "timing_flags": [],
+    "timing_general": "says_absent",
+    "selection": "specific",
+    "selection_quote": "Coverage is unbalanced: the number of stocks grows from 143 in month 1 to 500 in month 120, reflecting survivorship-driven index membership (all names are constituents at the end of the sample).",
+    "strategy_weighting": "single_signal",
+    "mentions_out_of_sample": true
+  }
+}

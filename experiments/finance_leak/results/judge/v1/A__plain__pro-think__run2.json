@@ -1,0 +1,49 @@
+{
+  "key": "A__plain__pro-think__run2",
+  "judge_prompt_version": "v1",
+  "judge_model_id": "deepseek-v4-pro",
+  "request": {
+    "model": "deepseek-v4-pro",
+    "temperature": 0,
+    "max_tokens": 2048,
+    "stream": false,
+    "thinking": {
+      "type": "disabled"
+    }
+  },
+  "started_at": "2026-10-12T06:02:22+00:00",
+  "latency_s": 2.0,
+  "status": "success",
+  "http_status": 200,
+  "attempts": 1,
+  "errors": [],
+  "finish_reason": "stop",
+  "system_fingerprint": "a307abda487cd1b463329ccb945ce396",
+  "usage": {
+    "prompt_tokens": 1943,
+    "completion_tokens": 98,
+    "total_tokens": 2041,
+    "prompt_tokens_details": {
+      "cached_tokens": 512
+    },
+    "prompt_cache_hit_tokens": 512,
+    "prompt_cache_miss_tokens": 1431
+  },
+  "price_period": "peak",
+  "cost_usd_estimate": 0.0023,
+  "judge_output": "{\n  \"timing_flags\": [\n    {\n      \"variable\": \"accounting-based signals\",\n      \"reason\": \"other_timing\",\n      \"quote\": \"Accounting-based signals rely on annual report data and may be stale.\"\n    }\n  ],\n  \"generic_timing_concern\": true,\n  \"selection\": \"none\",\n  \"selection_quote\": \"\",\n  \"strategy_weighting\": \"other\",\n  \"mentions_out_of_sample\": false\n}",
+  "answer": {
+    "timing_flags": [
+      {
+        "variable": "accounting-based signals",
+        "reason": "other_timing",
+        "quote": "Accounting-based signals rely on annual report data and may be stale."
+      }
+    ],
+    "generic_timing_concern": true,
+    "selection": "none",
+    "selection_quote": "",
+    "strategy_weighting": "other",
+    "mentions_out_of_sample": false
+  }
+}

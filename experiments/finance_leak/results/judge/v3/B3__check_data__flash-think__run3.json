@@ -1,0 +1,49 @@
+{
+  "key": "B3__check_data__flash-think__run3",
+  "judge_prompt_version": "v3",
+  "judge_model_id": "deepseek-v4-pro",
+  "request": {
+    "model": "deepseek-v4-pro",
+    "temperature": 0,
+    "max_tokens": 2048,
+    "stream": false,
+    "thinking": {
+      "type": "disabled"
+    }
+  },
+  "started_at": "2026-10-12T06:00:12+00:00",
+  "latency_s": 2.4,
+  "status": "success",
+  "http_status": 200,
+  "attempts": 1,
+  "errors": [],
+  "finish_reason": "stop",
+  "system_fingerprint": "a307abda487cd1b463329ccb945ce396",
+  "usage": {
+    "prompt_tokens": 2311,
+    "completion_tokens": 133,
+    "total_tokens": 2444,
+    "prompt_tokens_details": {
+      "cached_tokens": 768
+    },
+    "prompt_cache_hit_tokens": 768,
+    "prompt_cache_miss_tokens": 1543
+  },
+  "price_period": "peak",
+  "cost_usd_estimate": 0.002597,
+  "judge_output": "{\n  \"timing_flags\": [\n    {\n      \"variable\": \"Annual accounting variables\",\n      \"reason\": \"other_timing\",\n      \"quote\": \"Annual accounting variables may be stale or subject to look-ahead timing assumptions despite using the latest available report.\"\n    }\n  ],\n  \"timing_general\": \"raises\",\n  \"selection\": \"specific\",\n  \"selection_quote\": \"The universe consists of stocks that are index constituents at the end of month 120, introducing survivorship and index-membership bias.\",\n  \"strategy_weighting\": \"equal_weight\",\n  \"mentions_out_of_sample\": true\n}",
+  "answer": {
+    "timing_flags": [
+      {
+        "variable": "Annual accounting variables",
+        "reason": "other_timing",
+        "quote": "Annual accounting variables may be stale or subject to look-ahead timing assumptions despite using the latest available report."
+      }
+    ],
+    "timing_general": "raises",
+    "selection": "specific",
+    "selection_quote": "The universe consists of stocks that are index constituents at the end of month 120, introducing survivorship and index-membership bias.",
+    "strategy_weighting": "equal_weight",
+    "mentions_out_of_sample": true
+  }
+}

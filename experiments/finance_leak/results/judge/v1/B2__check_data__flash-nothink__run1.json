@@ -1,0 +1,49 @@
+{
+  "key": "B2__check_data__flash-nothink__run1",
+  "judge_prompt_version": "v1",
+  "judge_model_id": "deepseek-v4-pro",
+  "request": {
+    "model": "deepseek-v4-pro",
+    "temperature": 0,
+    "max_tokens": 2048,
+    "stream": false,
+    "thinking": {
+      "type": "disabled"
+    }
+  },
+  "started_at": "2026-10-12T06:02:57+00:00",
+  "latency_s": 2.8,
+  "status": "success",
+  "http_status": 200,
+  "attempts": 1,
+  "errors": [],
+  "finish_reason": "stop",
+  "system_fingerprint": "a307abda487cd1b463329ccb945ce396",
+  "usage": {
+    "prompt_tokens": 3363,
+    "completion_tokens": 161,
+    "total_tokens": 3524,
+    "prompt_tokens_details": {
+      "cached_tokens": 512
+    },
+    "prompt_cache_hit_tokens": 512,
+    "prompt_cache_miss_tokens": 2851
+  },
+  "price_period": "peak",
+  "cost_usd_estimate": 0.004423,
+  "judge_output": "{\n  \"timing_flags\": [\n    {\n      \"variable\": \"sue\",\n      \"reason\": \"reporting_delay\",\n      \"quote\": \"SUE is constructed from the most recent quarter's surprise, with announcements occurring in the month after quarter-end — so at month t the signal is genuinely public and tradable.\"\n    }\n  ],\n  \"generic_timing_concern\": true,\n  \"selection\": \"specific\",\n  \"selection_quote\": \"The universe is point-in-time and survivorship-bias-aware: firms removed from the index (e.g., distress or delisting) remain in the data through their final month, including the terminal return.\",\n  \"strategy_weighting\": \"equal_weight\",\n  \"mentions_out_of_sample\": true\n}",
+  "answer": {
+    "timing_flags": [
+      {
+        "variable": "sue",
+        "reason": "reporting_delay",
+        "quote": "SUE is constructed from the most recent quarter's surprise, with announcements occurring in the month after quarter-end — so at month t the signal is genuinely public and tradable."
+      }
+    ],
+    "generic_timing_concern": true,
+    "selection": "specific",
+    "selection_quote": "The universe is point-in-time and survivorship-bias-aware: firms removed from the index (e.g., distress or delisting) remain in the data through their final month, including the terminal return.",
+    "strategy_weighting": "equal_weight",
+    "mentions_out_of_sample": true
+  }
+}

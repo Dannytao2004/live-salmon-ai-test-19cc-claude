@@ -1,0 +1,43 @@
+{
+  "key": "C3__check_timing__flash-nothink__run2",
+  "judge_prompt_version": "v3",
+  "judge_model_id": "deepseek-v4-pro",
+  "request": {
+    "model": "deepseek-v4-pro",
+    "temperature": 0,
+    "max_tokens": 2048,
+    "stream": false,
+    "thinking": {
+      "type": "disabled"
+    }
+  },
+  "started_at": "2026-10-12T06:01:40+00:00",
+  "latency_s": 2.0,
+  "status": "success",
+  "http_status": 200,
+  "attempts": 1,
+  "errors": [],
+  "finish_reason": "stop",
+  "system_fingerprint": "a307abda487cd1b463329ccb945ce396",
+  "usage": {
+    "prompt_tokens": 3443,
+    "completion_tokens": 76,
+    "total_tokens": 3519,
+    "prompt_tokens_details": {
+      "cached_tokens": 768
+    },
+    "prompt_cache_hit_tokens": 768,
+    "prompt_cache_miss_tokens": 2675
+  },
+  "price_period": "peak",
+  "cost_usd_estimate": 0.003866,
+  "judge_output": "{\n  \"timing_flags\": [],\n  \"timing_general\": \"says_absent\",\n  \"selection\": \"specific\",\n  \"selection_quote\": \"This is a survivor universe: every stock in the sample survived to month 120.\",\n  \"strategy_weighting\": \"single_signal\",\n  \"mentions_out_of_sample\": true\n}",
+  "answer": {
+    "timing_flags": [],
+    "timing_general": "says_absent",
+    "selection": "specific",
+    "selection_quote": "This is a survivor universe: every stock in the sample survived to month 120.",
+    "strategy_weighting": "single_signal",
+    "mentions_out_of_sample": true
+  }
+}

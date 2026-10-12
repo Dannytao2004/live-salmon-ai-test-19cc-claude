@@ -1,0 +1,49 @@
+{
+  "key": "B2__check_timing__pro-think__run2",
+  "judge_prompt_version": "v1",
+  "judge_model_id": "deepseek-v4-pro",
+  "request": {
+    "model": "deepseek-v4-pro",
+    "temperature": 0,
+    "max_tokens": 2048,
+    "stream": false,
+    "thinking": {
+      "type": "disabled"
+    }
+  },
+  "started_at": "2026-10-12T06:03:11+00:00",
+  "latency_s": 2.0,
+  "status": "success",
+  "http_status": 200,
+  "attempts": 1,
+  "errors": [],
+  "finish_reason": "stop",
+  "system_fingerprint": "a307abda487cd1b463329ccb945ce396",
+  "usage": {
+    "prompt_tokens": 2201,
+    "completion_tokens": 121,
+    "total_tokens": 2322,
+    "prompt_tokens_details": {
+      "cached_tokens": 512
+    },
+    "prompt_cache_hit_tokens": 512,
+    "prompt_cache_miss_tokens": 1689
+  },
+  "price_period": "peak",
+  "cost_usd_estimate": 0.002731,
+  "judge_output": "{\n  \"timing_flags\": [\n    {\n      \"variable\": \"sue\",\n      \"reason\": \"reporting_delay\",\n      \"quote\": \"firms announce quarterly earnings in the month after the fiscal quarter ends, so for fiscal quarters ending in month t the earnings surprise may not be publicly known at the end of month t.\"\n    }\n  ],\n  \"generic_timing_concern\": true,\n  \"selection\": \"none\",\n  \"selection_quote\": \"\",\n  \"strategy_weighting\": \"other\",\n  \"mentions_out_of_sample\": false\n}",
+  "answer": {
+    "timing_flags": [
+      {
+        "variable": "sue",
+        "reason": "reporting_delay",
+        "quote": "firms announce quarterly earnings in the month after the fiscal quarter ends, so for fiscal quarters ending in month t the earnings surprise may not be publicly known at the end of month t."
+      }
+    ],
+    "generic_timing_concern": true,
+    "selection": "none",
+    "selection_quote": "",
+    "strategy_weighting": "other",
+    "mentions_out_of_sample": false
+  }
+}

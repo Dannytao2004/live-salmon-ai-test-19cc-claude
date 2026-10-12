@@ -1,0 +1,43 @@
+{
+  "key": "B2__assert_clean__pro-nothink__run1",
+  "judge_prompt_version": "v3",
+  "judge_model_id": "deepseek-v4-pro",
+  "request": {
+    "model": "deepseek-v4-pro",
+    "temperature": 0,
+    "max_tokens": 2048,
+    "stream": false,
+    "thinking": {
+      "type": "disabled"
+    }
+  },
+  "started_at": "2026-10-12T05:59:44+00:00",
+  "latency_s": 1.8,
+  "status": "success",
+  "http_status": 200,
+  "attempts": 1,
+  "errors": [],
+  "finish_reason": "stop",
+  "system_fingerprint": "a307abda487cd1b463329ccb945ce396",
+  "usage": {
+    "prompt_tokens": 2898,
+    "completion_tokens": 88,
+    "total_tokens": 2986,
+    "prompt_tokens_details": {
+      "cached_tokens": 768
+    },
+    "prompt_cache_hit_tokens": 768,
+    "prompt_cache_miss_tokens": 2130
+  },
+  "price_period": "offpeak",
+  "cost_usd_estimate": 0.001597,
+  "judge_output": "{\n  \"timing_flags\": [],\n  \"timing_general\": \"raises\",\n  \"selection\": \"generic\",\n  \"selection_quote\": \"The extremely high Sharpe ratio for SUE (7.65) may be inflated by the specific sample period or by survivorship/selection effects in the index universe.\",\n  \"strategy_weighting\": \"other\",\n  \"mentions_out_of_sample\": false\n}",
+  "answer": {
+    "timing_flags": [],
+    "timing_general": "raises",
+    "selection": "generic",
+    "selection_quote": "The extremely high Sharpe ratio for SUE (7.65) may be inflated by the specific sample period or by survivorship/selection effects in the index universe.",
+    "strategy_weighting": "other",
+    "mentions_out_of_sample": false
+  }
+}

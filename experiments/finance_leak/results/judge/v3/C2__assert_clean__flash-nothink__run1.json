@@ -1,0 +1,43 @@
+{
+  "key": "C2__assert_clean__flash-nothink__run1",
+  "judge_prompt_version": "v3",
+  "judge_model_id": "deepseek-v4-pro",
+  "request": {
+    "model": "deepseek-v4-pro",
+    "temperature": 0,
+    "max_tokens": 2048,
+    "stream": false,
+    "thinking": {
+      "type": "disabled"
+    }
+  },
+  "started_at": "2026-10-12T06:01:01+00:00",
+  "latency_s": 2.0,
+  "status": "success",
+  "http_status": 200,
+  "attempts": 1,
+  "errors": [],
+  "finish_reason": "stop",
+  "system_fingerprint": "a307abda487cd1b463329ccb945ce396",
+  "usage": {
+    "prompt_tokens": 3114,
+    "completion_tokens": 91,
+    "total_tokens": 3205,
+    "prompt_tokens_details": {
+      "cached_tokens": 768
+    },
+    "prompt_cache_hit_tokens": 768,
+    "prompt_cache_miss_tokens": 2346
+  },
+  "price_period": "peak",
+  "cost_usd_estimate": 0.003491,
+  "judge_output": "{\n  \"timing_flags\": [],\n  \"timing_general\": \"raises\",\n  \"selection\": \"says_absent\",\n  \"selection_quote\": \"The universe is the set of index constituents in each month, with delisted/distressed names retained through their final month, which mitigates survivorship bias.\",\n  \"strategy_weighting\": \"single_signal\",\n  \"mentions_out_of_sample\": true\n}",
+  "answer": {
+    "timing_flags": [],
+    "timing_general": "raises",
+    "selection": "says_absent",
+    "selection_quote": "The universe is the set of index constituents in each month, with delisted/distressed names retained through their final month, which mitigates survivorship bias.",
+    "strategy_weighting": "single_signal",
+    "mentions_out_of_sample": true
+  }
+}

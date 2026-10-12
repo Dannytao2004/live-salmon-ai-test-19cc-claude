@@ -1,0 +1,43 @@
+{
+  "key": "C2__assert_clean__pro-nothink__run3",
+  "judge_prompt_version": "v3",
+  "judge_model_id": "deepseek-v4-pro",
+  "request": {
+    "model": "deepseek-v4-pro",
+    "temperature": 0,
+    "max_tokens": 2048,
+    "stream": false,
+    "thinking": {
+      "type": "disabled"
+    }
+  },
+  "started_at": "2026-10-12T06:01:05+00:00",
+  "latency_s": 2.1,
+  "status": "success",
+  "http_status": 200,
+  "attempts": 1,
+  "errors": [],
+  "finish_reason": "stop",
+  "system_fingerprint": "a307abda487cd1b463329ccb945ce396",
+  "usage": {
+    "prompt_tokens": 2921,
+    "completion_tokens": 97,
+    "total_tokens": 3018,
+    "prompt_tokens_details": {
+      "cached_tokens": 768
+    },
+    "prompt_cache_hit_tokens": 768,
+    "prompt_cache_miss_tokens": 2153
+  },
+  "price_period": "peak",
+  "cost_usd_estimate": 0.00326,
+  "judge_output": "{\n  \"timing_flags\": [],\n  \"timing_general\": \"raises\",\n  \"selection\": \"generic\",\n  \"selection_quote\": \"the extraordinary Sharpe ratio for `sue` may be influenced by the specific sample period or by survivorship in the index; the point-in-time construction mitigates survivorship bias but does not eliminate it.\",\n  \"strategy_weighting\": \"equal_weight\",\n  \"mentions_out_of_sample\": false\n}",
+  "answer": {
+    "timing_flags": [],
+    "timing_general": "raises",
+    "selection": "generic",
+    "selection_quote": "the extraordinary Sharpe ratio for `sue` may be influenced by the specific sample period or by survivorship in the index; the point-in-time construction mitigates survivorship bias but does not eliminate it.",
+    "strategy_weighting": "equal_weight",
+    "mentions_out_of_sample": false
+  }
+}

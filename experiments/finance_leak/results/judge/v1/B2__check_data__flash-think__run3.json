@@ -1,0 +1,49 @@
+{
+  "key": "B2__check_data__flash-think__run3",
+  "judge_prompt_version": "v1",
+  "judge_model_id": "deepseek-v4-pro",
+  "request": {
+    "model": "deepseek-v4-pro",
+    "temperature": 0,
+    "max_tokens": 2048,
+    "stream": false,
+    "thinking": {
+      "type": "disabled"
+    }
+  },
+  "started_at": "2026-10-12T06:03:00+00:00",
+  "latency_s": 2.0,
+  "status": "success",
+  "http_status": 200,
+  "attempts": 1,
+  "errors": [],
+  "finish_reason": "stop",
+  "system_fingerprint": "a307abda487cd1b463329ccb945ce396",
+  "usage": {
+    "prompt_tokens": 2348,
+    "completion_tokens": 116,
+    "total_tokens": 2464,
+    "prompt_tokens_details": {
+      "cached_tokens": 512
+    },
+    "prompt_cache_hit_tokens": 512,
+    "prompt_cache_miss_tokens": 1836
+  },
+  "price_period": "peak",
+  "cost_usd_estimate": 0.002905,
+  "judge_output": "{\n  \"timing_flags\": [\n    {\n      \"variable\": \"SUE\",\n      \"reason\": \"other_timing\",\n      \"quote\": \"SUE’s extreme strength may reflect look-ahead or earnings-announcement timing issues that should be verified point-in-time.\"\n    }\n  ],\n  \"generic_timing_concern\": true,\n  \"selection\": \"none\",\n  \"selection_quote\": \"\",\n  \"strategy_weighting\": \"weighted_by_reported_statistics\",\n  \"mentions_out_of_sample\": false\n}",
+  "answer": {
+    "timing_flags": [
+      {
+        "variable": "SUE",
+        "reason": "other_timing",
+        "quote": "SUE’s extreme strength may reflect look-ahead or earnings-announcement timing issues that should be verified point-in-time."
+      }
+    ],
+    "generic_timing_concern": true,
+    "selection": "none",
+    "selection_quote": "",
+    "strategy_weighting": "weighted_by_reported_statistics",
+    "mentions_out_of_sample": false
+  }
+}

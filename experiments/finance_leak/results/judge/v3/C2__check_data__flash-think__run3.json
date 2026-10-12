@@ -1,0 +1,49 @@
+{
+  "key": "C2__check_data__flash-think__run3",
+  "judge_prompt_version": "v3",
+  "judge_model_id": "deepseek-v4-pro",
+  "request": {
+    "model": "deepseek-v4-pro",
+    "temperature": 0,
+    "max_tokens": 2048,
+    "stream": false,
+    "thinking": {
+      "type": "disabled"
+    }
+  },
+  "started_at": "2026-10-12T06:01:11+00:00",
+  "latency_s": 2.1,
+  "status": "success",
+  "http_status": 200,
+  "attempts": 1,
+  "errors": [],
+  "finish_reason": "stop",
+  "system_fingerprint": "a307abda487cd1b463329ccb945ce396",
+  "usage": {
+    "prompt_tokens": 2534,
+    "completion_tokens": 107,
+    "total_tokens": 2641,
+    "prompt_tokens_details": {
+      "cached_tokens": 768
+    },
+    "prompt_cache_hit_tokens": 768,
+    "prompt_cache_miss_tokens": 1766
+  },
+  "price_period": "peak",
+  "cost_usd_estimate": 0.002789,
+  "judge_output": "{\n  \"timing_flags\": [\n    {\n      \"variable\": \"sue\",\n      \"reason\": \"other_timing\",\n      \"quote\": \"`sue` may be affected by timing conventions around earnings announcements, consensus forecasts, and restatements.\"\n    }\n  ],\n  \"timing_general\": \"raises\",\n  \"selection\": \"none\",\n  \"selection_quote\": \"\",\n  \"strategy_weighting\": \"single_signal\",\n  \"mentions_out_of_sample\": false\n}",
+  "answer": {
+    "timing_flags": [
+      {
+        "variable": "sue",
+        "reason": "other_timing",
+        "quote": "`sue` may be affected by timing conventions around earnings announcements, consensus forecasts, and restatements."
+      }
+    ],
+    "timing_general": "raises",
+    "selection": "none",
+    "selection_quote": "",
+    "strategy_weighting": "single_signal",
+    "mentions_out_of_sample": false
+  }
+}

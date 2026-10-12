@@ -1,0 +1,49 @@
+{
+  "key": "C2__plain__pro-think__run1",
+  "judge_prompt_version": "v1",
+  "judge_model_id": "deepseek-v4-pro",
+  "request": {
+    "model": "deepseek-v4-pro",
+    "temperature": 0,
+    "max_tokens": 2048,
+    "stream": false,
+    "thinking": {
+      "type": "disabled"
+    }
+  },
+  "started_at": "2026-10-12T06:04:30+00:00",
+  "latency_s": 1.8,
+  "status": "success",
+  "http_status": 200,
+  "attempts": 1,
+  "errors": [],
+  "finish_reason": "stop",
+  "system_fingerprint": "a307abda487cd1b463329ccb945ce396",
+  "usage": {
+    "prompt_tokens": 1850,
+    "completion_tokens": 127,
+    "total_tokens": 1977,
+    "prompt_tokens_details": {
+      "cached_tokens": 512
+    },
+    "prompt_cache_hit_tokens": 512,
+    "prompt_cache_miss_tokens": 1338
+  },
+  "price_period": "peak",
+  "cost_usd_estimate": 0.002292,
+  "judge_output": "{\n  \"timing_flags\": [\n    {\n      \"variable\": \"sue\",\n      \"reason\": \"reporting_delay\",\n      \"quote\": \"Standardized unexpected earnings (`sue`) is the only feature that passes the statistical threshold.\"\n    }\n  ],\n  \"generic_timing_concern\": false,\n  \"selection\": \"specific\",\n  \"selection_quote\": \"The universe consists of broad equity index constituents, and stocks that are later removed remain in the sample through their final month.\",\n  \"strategy_weighting\": \"equal_weight\",\n  \"mentions_out_of_sample\": true\n}",
+  "answer": {
+    "timing_flags": [
+      {
+        "variable": "sue",
+        "reason": "reporting_delay",
+        "quote": "Standardized unexpected earnings (`sue`) is the only feature that passes the statistical threshold."
+      }
+    ],
+    "generic_timing_concern": false,
+    "selection": "specific",
+    "selection_quote": "The universe consists of broad equity index constituents, and stocks that are later removed remain in the sample through their final month.",
+    "strategy_weighting": "equal_weight",
+    "mentions_out_of_sample": true
+  }
+}

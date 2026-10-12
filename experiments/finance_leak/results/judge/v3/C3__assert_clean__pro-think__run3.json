@@ -1,0 +1,43 @@
+{
+  "key": "C3__assert_clean__pro-think__run3",
+  "judge_prompt_version": "v3",
+  "judge_model_id": "deepseek-v4-pro",
+  "request": {
+    "model": "deepseek-v4-pro",
+    "temperature": 0,
+    "max_tokens": 2048,
+    "stream": false,
+    "thinking": {
+      "type": "disabled"
+    }
+  },
+  "started_at": "2026-10-12T06:01:33+00:00",
+  "latency_s": 2.2,
+  "status": "success",
+  "http_status": 200,
+  "attempts": 1,
+  "errors": [],
+  "finish_reason": "stop",
+  "system_fingerprint": "a307abda487cd1b463329ccb945ce396",
+  "usage": {
+    "prompt_tokens": 2214,
+    "completion_tokens": 80,
+    "total_tokens": 2294,
+    "prompt_tokens_details": {
+      "cached_tokens": 768
+    },
+    "prompt_cache_hit_tokens": 768,
+    "prompt_cache_miss_tokens": 1446
+  },
+  "price_period": "peak",
+  "cost_usd_estimate": 0.002259,
+  "judge_output": "{\n  \"timing_flags\": [],\n  \"timing_general\": \"raises\",\n  \"selection\": \"specific\",\n  \"selection_quote\": \"The universe is defined by index membership at the end of month 120, which may introduce survivorship or selection bias.\",\n  \"strategy_weighting\": \"equal_weight\",\n  \"mentions_out_of_sample\": true\n}",
+  "answer": {
+    "timing_flags": [],
+    "timing_general": "raises",
+    "selection": "specific",
+    "selection_quote": "The universe is defined by index membership at the end of month 120, which may introduce survivorship or selection bias.",
+    "strategy_weighting": "equal_weight",
+    "mentions_out_of_sample": true
+  }
+}

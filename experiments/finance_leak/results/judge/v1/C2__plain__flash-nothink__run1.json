@@ -1,0 +1,49 @@
+{
+  "key": "C2__plain__flash-nothink__run1",
+  "judge_prompt_version": "v1",
+  "judge_model_id": "deepseek-v4-pro",
+  "request": {
+    "model": "deepseek-v4-pro",
+    "temperature": 0,
+    "max_tokens": 2048,
+    "stream": false,
+    "thinking": {
+      "type": "disabled"
+    }
+  },
+  "started_at": "2026-10-12T06:04:26+00:00",
+  "latency_s": 2.2,
+  "status": "success",
+  "http_status": 200,
+  "attempts": 1,
+  "errors": [],
+  "finish_reason": "stop",
+  "system_fingerprint": "a307abda487cd1b463329ccb945ce396",
+  "usage": {
+    "prompt_tokens": 2789,
+    "completion_tokens": 141,
+    "total_tokens": 2930,
+    "prompt_tokens_details": {
+      "cached_tokens": 512
+    },
+    "prompt_cache_hit_tokens": 512,
+    "prompt_cache_miss_tokens": 2277
+  },
+  "price_period": "peak",
+  "cost_usd_estimate": 0.003587,
+  "judge_output": "{\n  \"timing_flags\": [\n    {\n      \"variable\": \"SUE\",\n      \"reason\": \"other_timing\",\n      \"quote\": \"SUE depends on analyst consensus forecasts, which may be unavailable, stale, or biased for some firms, and the data may embed look-ahead or idealized announcement timing.\"\n    }\n  ],\n  \"generic_timing_concern\": true,\n  \"selection\": \"specific\",\n  \"selection_quote\": \"Stocks are retained through their final month (including delisting/distress returns), which mitigates survivorship bias.\",\n  \"strategy_weighting\": \"equal_weight\",\n  \"mentions_out_of_sample\": true\n}",
+  "answer": {
+    "timing_flags": [
+      {
+        "variable": "SUE",
+        "reason": "other_timing",
+        "quote": "SUE depends on analyst consensus forecasts, which may be unavailable, stale, or biased for some firms, and the data may embed look-ahead or idealized announcement timing."
+      }
+    ],
+    "generic_timing_concern": true,
+    "selection": "specific",
+    "selection_quote": "Stocks are retained through their final month (including delisting/distress returns), which mitigates survivorship bias.",
+    "strategy_weighting": "equal_weight",
+    "mentions_out_of_sample": true
+  }
+}

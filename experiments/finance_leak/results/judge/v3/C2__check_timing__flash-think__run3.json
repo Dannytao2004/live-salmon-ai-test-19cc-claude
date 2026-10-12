@@ -1,0 +1,49 @@
+{
+  "key": "C2__check_timing__flash-think__run3",
+  "judge_prompt_version": "v3",
+  "judge_model_id": "deepseek-v4-pro",
+  "request": {
+    "model": "deepseek-v4-pro",
+    "temperature": 0,
+    "max_tokens": 2048,
+    "stream": false,
+    "thinking": {
+      "type": "disabled"
+    }
+  },
+  "started_at": "2026-10-12T06:01:17+00:00",
+  "latency_s": 2.4,
+  "status": "success",
+  "http_status": 200,
+  "attempts": 1,
+  "errors": [],
+  "finish_reason": "stop",
+  "system_fingerprint": "a307abda487cd1b463329ccb945ce396",
+  "usage": {
+    "prompt_tokens": 2868,
+    "completion_tokens": 113,
+    "total_tokens": 2981,
+    "prompt_tokens_details": {
+      "cached_tokens": 768
+    },
+    "prompt_cache_hit_tokens": 768,
+    "prompt_cache_miss_tokens": 2100
+  },
+  "price_period": "peak",
+  "cost_usd_estimate": 0.003253,
+  "judge_output": "{\n  \"timing_flags\": [\n    {\n      \"variable\": \"sue\",\n      \"reason\": \"other_timing\",\n      \"quote\": \"If `sue` instead uses a quarter ending in month t before announcement, the reported SUE results would contain look-ahead bias.\"\n    }\n  ],\n  \"timing_general\": \"raises\",\n  \"selection\": \"none\",\n  \"selection_quote\": \"\",\n  \"strategy_weighting\": \"single_signal\",\n  \"mentions_out_of_sample\": false\n}",
+  "answer": {
+    "timing_flags": [
+      {
+        "variable": "sue",
+        "reason": "other_timing",
+        "quote": "If `sue` instead uses a quarter ending in month t before announcement, the reported SUE results would contain look-ahead bias."
+      }
+    ],
+    "timing_general": "raises",
+    "selection": "none",
+    "selection_quote": "",
+    "strategy_weighting": "single_signal",
+    "mentions_out_of_sample": false
+  }
+}

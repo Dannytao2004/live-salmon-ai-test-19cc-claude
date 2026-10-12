@@ -1,0 +1,49 @@
+{
+  "key": "B2__plain__flash-nothink__run1",
+  "judge_prompt_version": "v3",
+  "judge_model_id": "deepseek-v4-pro",
+  "request": {
+    "model": "deepseek-v4-pro",
+    "temperature": 0,
+    "max_tokens": 2048,
+    "stream": false,
+    "thinking": {
+      "type": "disabled"
+    }
+  },
+  "started_at": "2026-10-12T05:59:58+00:00",
+  "latency_s": 2.1,
+  "status": "success",
+  "http_status": 200,
+  "attempts": 1,
+  "errors": [],
+  "finish_reason": "stop",
+  "system_fingerprint": "a307abda487cd1b463329ccb945ce396",
+  "usage": {
+    "prompt_tokens": 3208,
+    "completion_tokens": 129,
+    "total_tokens": 3337,
+    "prompt_tokens_details": {
+      "cached_tokens": 768
+    },
+    "prompt_cache_hit_tokens": 768,
+    "prompt_cache_miss_tokens": 2440
+  },
+  "price_period": "offpeak",
+  "cost_usd_estimate": 0.001883,
+  "judge_output": "{\n  \"timing_flags\": [\n    {\n      \"variable\": \"SUE\",\n      \"reason\": \"reporting_delay\",\n      \"quote\": \"SUE uses the most recent fiscal quarter with a one-month reporting lag\"\n    }\n  ],\n  \"timing_general\": \"none\",\n  \"selection\": \"says_absent\",\n  \"selection_quote\": \"The universe is point-in-time, so delisted/distressed firms remain in the data through their final month, mitigating survivorship bias.\",\n  \"strategy_weighting\": \"equal_weight\",\n  \"mentions_out_of_sample\": true\n}",
+  "answer": {
+    "timing_flags": [
+      {
+        "variable": "SUE",
+        "reason": "reporting_delay",
+        "quote": "SUE uses the most recent fiscal quarter with a one-month reporting lag"
+      }
+    ],
+    "timing_general": "none",
+    "selection": "says_absent",
+    "selection_quote": "The universe is point-in-time, so delisted/distressed firms remain in the data through their final month, mitigating survivorship bias.",
+    "strategy_weighting": "equal_weight",
+    "mentions_out_of_sample": true
+  }
+}

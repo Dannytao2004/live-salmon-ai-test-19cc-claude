@@ -1,0 +1,49 @@
+{
+  "key": "B2__check_timing__pro-think__run1",
+  "judge_prompt_version": "v1",
+  "judge_model_id": "deepseek-v4-pro",
+  "request": {
+    "model": "deepseek-v4-pro",
+    "temperature": 0,
+    "max_tokens": 2048,
+    "stream": false,
+    "thinking": {
+      "type": "disabled"
+    }
+  },
+  "started_at": "2026-10-12T06:03:08+00:00",
+  "latency_s": 2.4,
+  "status": "success",
+  "http_status": 200,
+  "attempts": 1,
+  "errors": [],
+  "finish_reason": "stop",
+  "system_fingerprint": "a307abda487cd1b463329ccb945ce396",
+  "usage": {
+    "prompt_tokens": 2481,
+    "completion_tokens": 154,
+    "total_tokens": 2635,
+    "prompt_tokens_details": {
+      "cached_tokens": 512
+    },
+    "prompt_cache_hit_tokens": 512,
+    "prompt_cache_miss_tokens": 1969
+  },
+  "price_period": "peak",
+  "cost_usd_estimate": 0.003231,
+  "judge_output": "{\n  \"timing_flags\": [\n    {\n      \"variable\": \"sue\",\n      \"reason\": \"reporting_delay\",\n      \"quote\": \"For fiscal quarters ending in month t, actual EPS is not publicly available until month t+1. Therefore the SUE feature likely embeds future information and is not point-in-time valid.\"\n    }\n  ],\n  \"generic_timing_concern\": true,\n  \"selection\": \"generic\",\n  \"selection_quote\": \"The long-short returns assume equal-weighted quintile portfolios and do not account for delisting or survivorship beyond the stated index-constituent rules.\",\n  \"strategy_weighting\": \"equal_weight\",\n  \"mentions_out_of_sample\": false\n}",
+  "answer": {
+    "timing_flags": [
+      {
+        "variable": "sue",
+        "reason": "reporting_delay",
+        "quote": "For fiscal quarters ending in month t, actual EPS is not publicly available until month t+1. Therefore the SUE feature likely embeds future information and is not point-in-time valid."
+      }
+    ],
+    "generic_timing_concern": true,
+    "selection": "generic",
+    "selection_quote": "The long-short returns assume equal-weighted quintile portfolios and do not account for delisting or survivorship beyond the stated index-constituent rules.",
+    "strategy_weighting": "equal_weight",
+    "mentions_out_of_sample": false
+  }
+}

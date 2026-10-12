@@ -1,0 +1,43 @@
+{
+  "key": "A__assert_clean__flash-nothink__run2",
+  "judge_prompt_version": "v1",
+  "judge_model_id": "deepseek-v4-pro",
+  "request": {
+    "model": "deepseek-v4-pro",
+    "temperature": 0,
+    "max_tokens": 2048,
+    "stream": false,
+    "thinking": {
+      "type": "disabled"
+    }
+  },
+  "started_at": "2026-10-12T06:01:59+00:00",
+  "latency_s": 4.4,
+  "status": "success",
+  "http_status": 200,
+  "attempts": 1,
+  "errors": [],
+  "finish_reason": "stop",
+  "system_fingerprint": "a307abda487cd1b463329ccb945ce396",
+  "usage": {
+    "prompt_tokens": 2749,
+    "completion_tokens": 93,
+    "total_tokens": 2842,
+    "prompt_tokens_details": {
+      "cached_tokens": 0
+    },
+    "prompt_cache_hit_tokens": 0,
+    "prompt_cache_miss_tokens": 2749
+  },
+  "price_period": "peak",
+  "cost_usd_estimate": 0.003997,
+  "judge_output": "{\n  \"timing_flags\": [],\n  \"generic_timing_concern\": false,\n  \"selection\": \"specific\",\n  \"selection_quote\": \"Each month's universe is the point-in-time set of index constituents, with delisted/distressed names retained through their final month, so the panel is free of the survivorship bias\",\n  \"strategy_weighting\": \"equal_weight\",\n  \"mentions_out_of_sample\": false\n}",
+  "answer": {
+    "timing_flags": [],
+    "generic_timing_concern": false,
+    "selection": "specific",
+    "selection_quote": "Each month's universe is the point-in-time set of index constituents, with delisted/distressed names retained through their final month, so the panel is free of the survivorship bias",
+    "strategy_weighting": "equal_weight",
+    "mentions_out_of_sample": false
+  }
+}

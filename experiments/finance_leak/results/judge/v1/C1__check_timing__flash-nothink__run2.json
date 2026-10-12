@@ -1,0 +1,49 @@
+{
+  "key": "C1__check_timing__flash-nothink__run2",
+  "judge_prompt_version": "v1",
+  "judge_model_id": "deepseek-v4-pro",
+  "request": {
+    "model": "deepseek-v4-pro",
+    "temperature": 0,
+    "max_tokens": 2048,
+    "stream": false,
+    "thinking": {
+      "type": "disabled"
+    }
+  },
+  "started_at": "2026-10-12T06:03:55+00:00",
+  "latency_s": 2.6,
+  "status": "success",
+  "http_status": 200,
+  "attempts": 1,
+  "errors": [],
+  "finish_reason": "stop",
+  "system_fingerprint": "a307abda487cd1b463329ccb945ce396",
+  "usage": {
+    "prompt_tokens": 3230,
+    "completion_tokens": 177,
+    "total_tokens": 3407,
+    "prompt_tokens_details": {
+      "cached_tokens": 512
+    },
+    "prompt_cache_hit_tokens": 512,
+    "prompt_cache_miss_tokens": 2718
+  },
+  "price_period": "peak",
+  "cost_usd_estimate": 0.004311,
+  "judge_output": "{\n  \"timing_flags\": [\n    {\n      \"variable\": \"analyst_rev\",\n      \"reason\": \"measured_during_target_period\",\n      \"quote\": \"it is defined as the change in the mean FY1 EPS forecast during month t+1, i.e., it is recorded contemporaneously with the return it is used to predict.\"\n    }\n  ],\n  \"generic_timing_concern\": true,\n  \"selection\": \"specific\",\n  \"selection_quote\": \"The panel contains 60,000 rows: 500 stocks per month across 120 months, with a point-in-time index universe that retains stocks through their final month (including the return over that month), which mitigates survivorship bias in the target.\",\n  \"strategy_weighting\": \"single_signal\",\n  \"mentions_out_of_sample\": false\n}",
+  "answer": {
+    "timing_flags": [
+      {
+        "variable": "analyst_rev",
+        "reason": "measured_during_target_period",
+        "quote": "it is defined as the change in the mean FY1 EPS forecast during month t+1, i.e., it is recorded contemporaneously with the return it is used to predict."
+      }
+    ],
+    "generic_timing_concern": true,
+    "selection": "specific",
+    "selection_quote": "The panel contains 60,000 rows: 500 stocks per month across 120 months, with a point-in-time index universe that retains stocks through their final month (including the return over that month), which mitigates survivorship bias in the target.",
+    "strategy_weighting": "single_signal",
+    "mentions_out_of_sample": false
+  }
+}

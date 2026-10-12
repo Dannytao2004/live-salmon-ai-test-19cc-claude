@@ -1,0 +1,1 @@
+{"timing_flags": [{"variable": "analyst_rev", "reason": "measured_during_target_period", "quote": "`analyst_rev` is recorded at the end of month t+1, making it contemporaneous with the target return and unusable at portfolio formation."}], "timing_general": "raises", "selection": "none", "selection_quote": "", "strategy_weighting": "no_strategy", "mentions_out_of_sample": false}

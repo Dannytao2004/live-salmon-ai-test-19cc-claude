@@ -1,0 +1,49 @@
+{
+  "key": "B2__plain__flash-think__run2",
+  "judge_prompt_version": "v3",
+  "judge_model_id": "deepseek-v4-pro",
+  "request": {
+    "model": "deepseek-v4-pro",
+    "temperature": 0,
+    "max_tokens": 2048,
+    "stream": false,
+    "thinking": {
+      "type": "disabled"
+    }
+  },
+  "started_at": "2026-10-12T06:00:01+00:00",
+  "latency_s": 2.2,
+  "status": "success",
+  "http_status": 200,
+  "attempts": 1,
+  "errors": [],
+  "finish_reason": "stop",
+  "system_fingerprint": "a307abda487cd1b463329ccb945ce396",
+  "usage": {
+    "prompt_tokens": 2533,
+    "completion_tokens": 121,
+    "total_tokens": 2654,
+    "prompt_tokens_details": {
+      "cached_tokens": 768
+    },
+    "prompt_cache_hit_tokens": 768,
+    "prompt_cache_miss_tokens": 1765
+  },
+  "price_period": "peak",
+  "cost_usd_estimate": 0.002843,
+  "judge_output": "{\n  \"timing_flags\": [\n    {\n      \"variable\": \"sue\",\n      \"reason\": \"reporting_delay\",\n      \"quote\": \"firms announce quarterly earnings in the month after the fiscal quarter ends, so using the most recent quarter ending on or before month t may include information not yet available at month t\"\n    }\n  ],\n  \"timing_general\": \"raises\",\n  \"selection\": \"none\",\n  \"selection_quote\": \"\",\n  \"strategy_weighting\": \"equal_weight\",\n  \"mentions_out_of_sample\": true\n}",
+  "answer": {
+    "timing_flags": [
+      {
+        "variable": "sue",
+        "reason": "reporting_delay",
+        "quote": "firms announce quarterly earnings in the month after the fiscal quarter ends, so using the most recent quarter ending on or before month t may include information not yet available at month t"
+      }
+    ],
+    "timing_general": "raises",
+    "selection": "none",
+    "selection_quote": "",
+    "strategy_weighting": "equal_weight",
+    "mentions_out_of_sample": true
+  }
+}

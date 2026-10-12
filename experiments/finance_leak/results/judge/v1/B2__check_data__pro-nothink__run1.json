@@ -1,0 +1,59 @@
+{
+  "key": "B2__check_data__pro-nothink__run1",
+  "judge_prompt_version": "v1",
+  "judge_model_id": "deepseek-v4-pro",
+  "request": {
+    "model": "deepseek-v4-pro",
+    "temperature": 0,
+    "max_tokens": 2048,
+    "stream": false,
+    "thinking": {
+      "type": "disabled"
+    }
+  },
+  "started_at": "2026-10-12T06:03:00+00:00",
+  "latency_s": 3.6,
+  "status": "success",
+  "http_status": 200,
+  "attempts": 1,
+  "errors": [],
+  "finish_reason": "stop",
+  "system_fingerprint": "a307abda487cd1b463329ccb945ce396",
+  "usage": {
+    "prompt_tokens": 2951,
+    "completion_tokens": 285,
+    "total_tokens": 3236,
+    "prompt_tokens_details": {
+      "cached_tokens": 512
+    },
+    "prompt_cache_hit_tokens": 512,
+    "prompt_cache_miss_tokens": 2439
+  },
+  "price_period": "peak",
+  "cost_usd_estimate": 0.004371,
+  "judge_output": "{\n  \"timing_flags\": [\n    {\n      \"variable\": \"book_to_market\",\n      \"reason\": \"other_timing\",\n      \"quote\": \"Some annual-report-based features (`book_to_market`, `gross_prof`, etc.) use data from reports available at end of month t. If the data vendor has backfilled or restated financials, the signals may use information not actually available at the time.\"\n    },\n    {\n      \"variable\": \"gross_prof\",\n      \"reason\": \"other_timing\",\n      \"quote\": \"Some annual-report-based features (`book_to_market`, `gross_prof`, etc.) use data from reports available at end of month t. If the data vendor has backfilled or restated financials, the signals may use information not actually available at the time.\"\n    },\n    {\n      \"variable\": \"sue\",\n      \"reason\": \"other_timing\",\n      \"quote\": \"Errors in forecast data or timing of earnings announcements could inflate the measured IC.\"\n    }\n  ],\n  \"generic_timing_concern\": true,\n  \"selection\": \"generic\",\n  \"selection_quote\": \"Survivorship bias is partially addressed but delisted stocks' final returns may be understated.\",\n  \"strategy_weighting\": \"equal_weight\",\n  \"mentions_out_of_sample\": true\n}",
+  "answer": {
+    "timing_flags": [
+      {
+        "variable": "book_to_market",
+        "reason": "other_timing",
+        "quote": "Some annual-report-based features (`book_to_market`, `gross_prof`, etc.) use data from reports available at end of month t. If the data vendor has backfilled or restated financials, the signals may use information not actually available at the time."
+      },
+      {
+        "variable": "gross_prof",
+        "reason": "other_timing",
+        "quote": "Some annual-report-based features (`book_to_market`, `gross_prof`, etc.) use data from reports available at end of month t. If the data vendor has backfilled or restated financials, the signals may use information not actually available at the time."
+      },
+      {
+        "variable": "sue",
+        "reason": "other_timing",
+        "quote": "Errors in forecast data or timing of earnings announcements could inflate the measured IC."
+      }
+    ],
+    "generic_timing_concern": true,
+    "selection": "generic",
+    "selection_quote": "Survivorship bias is partially addressed but delisted stocks' final returns may be understated.",
+    "strategy_weighting": "equal_weight",
+    "mentions_out_of_sample": true
+  }
+}

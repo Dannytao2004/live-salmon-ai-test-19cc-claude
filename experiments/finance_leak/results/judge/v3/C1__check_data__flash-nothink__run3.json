@@ -1,0 +1,49 @@
+{
+  "key": "C1__check_data__flash-nothink__run3",
+  "judge_prompt_version": "v3",
+  "judge_model_id": "deepseek-v4-pro",
+  "request": {
+    "model": "deepseek-v4-pro",
+    "temperature": 0,
+    "max_tokens": 2048,
+    "stream": false,
+    "thinking": {
+      "type": "disabled"
+    }
+  },
+  "started_at": "2026-10-12T06:00:40+00:00",
+  "latency_s": 3.7,
+  "status": "success",
+  "http_status": 200,
+  "attempts": 1,
+  "errors": [],
+  "finish_reason": "stop",
+  "system_fingerprint": "a307abda487cd1b463329ccb945ce396",
+  "usage": {
+    "prompt_tokens": 3768,
+    "completion_tokens": 184,
+    "total_tokens": 3952,
+    "prompt_tokens_details": {
+      "cached_tokens": 768
+    },
+    "prompt_cache_hit_tokens": 768,
+    "prompt_cache_miss_tokens": 3000
+  },
+  "price_period": "peak",
+  "cost_usd_estimate": 0.004722,
+  "judge_output": "{\n  \"timing_flags\": [\n    {\n      \"variable\": \"analyst_rev\",\n      \"reason\": \"measured_during_target_period\",\n      \"quote\": \"analyst_rev is defined as the change in the mean FY1 EPS forecast during month t+1, scaled by price, and recorded at the end of month t+1. The target ret_next is the return over month t+1.\"\n    }\n  ],\n  \"timing_general\": \"raises\",\n  \"selection\": \"says_absent\",\n  \"selection_quote\": \"The universe is point-in-time and survivorship-aware — firms removed from the index (including through distress or delisting) remain in the data through their final month, and their final-month return is retained.\",\n  \"strategy_weighting\": \"single_signal\",\n  \"mentions_out_of_sample\": true\n}",
+  "answer": {
+    "timing_flags": [
+      {
+        "variable": "analyst_rev",
+        "reason": "measured_during_target_period",
+        "quote": "analyst_rev is defined as the change in the mean FY1 EPS forecast during month t+1, scaled by price, and recorded at the end of month t+1. The target ret_next is the return over month t+1."
+      }
+    ],
+    "timing_general": "raises",
+    "selection": "says_absent",
+    "selection_quote": "The universe is point-in-time and survivorship-aware — firms removed from the index (including through distress or delisting) remain in the data through their final month, and their final-month return is retained.",
+    "strategy_weighting": "single_signal",
+    "mentions_out_of_sample": true
+  }
+}

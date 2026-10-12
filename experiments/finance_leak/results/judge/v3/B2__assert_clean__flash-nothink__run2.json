@@ -1,0 +1,43 @@
+{
+  "key": "B2__assert_clean__flash-nothink__run2",
+  "judge_prompt_version": "v3",
+  "judge_model_id": "deepseek-v4-pro",
+  "request": {
+    "model": "deepseek-v4-pro",
+    "temperature": 0,
+    "max_tokens": 2048,
+    "stream": false,
+    "thinking": {
+      "type": "disabled"
+    }
+  },
+  "started_at": "2026-10-12T05:59:42+00:00",
+  "latency_s": 2.0,
+  "status": "success",
+  "http_status": 200,
+  "attempts": 1,
+  "errors": [],
+  "finish_reason": "stop",
+  "system_fingerprint": "a307abda487cd1b463329ccb945ce396",
+  "usage": {
+    "prompt_tokens": 3155,
+    "completion_tokens": 102,
+    "total_tokens": 3257,
+    "prompt_tokens_details": {
+      "cached_tokens": 768
+    },
+    "prompt_cache_hit_tokens": 768,
+    "prompt_cache_miss_tokens": 2387
+  },
+  "price_period": "offpeak",
+  "cost_usd_estimate": 0.001794,
+  "judge_output": "{\n  \"timing_flags\": [],\n  \"timing_general\": \"says_absent\",\n  \"selection\": \"says_absent\",\n  \"selection_quote\": \"stocks remain in the sample through the month of their index removal, and the return over that final month is retained — this mitigates survivorship bias relative to a purely current-constituent dataset\",\n  \"strategy_weighting\": \"equal_weight\",\n  \"mentions_out_of_sample\": true\n}",
+  "answer": {
+    "timing_flags": [],
+    "timing_general": "says_absent",
+    "selection": "says_absent",
+    "selection_quote": "stocks remain in the sample through the month of their index removal, and the return over that final month is retained — this mitigates survivorship bias relative to a purely current-constituent dataset",
+    "strategy_weighting": "equal_weight",
+    "mentions_out_of_sample": true
+  }
+}

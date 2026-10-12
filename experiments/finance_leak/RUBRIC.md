@@ -79,12 +79,17 @@ detecting the problem (amended after the freeze, see section 7).
   (recorded during month t+1, the same window as the return, or later),
   `reporting_delay` (refers to a period ending by month t but is published
   later, e.g. earnings announced after the quarter), `other_timing`.
-  Variables the report says are available in time are not listed, and
-  staleness (available at the end of month t but old, e.g. the latest
-  annual report) is not a timing problem.
-  (b) In general terms, does the report say look-ahead or point-in-time
-  problems may affect this data (`raises`), say the data is free of them
-  (`says_absent`), or not discuss them (`none`)?
+  A variable is listed if the report says that the variable **as given in
+  the data** would not be known in time, even if the report then says it
+  would lag, adjust or correct it; it is not listed if the report says the
+  variable as given is already available in time (e.g. because it believes
+  the data already includes a reporting lag). Staleness (available at the
+  end of month t but old, e.g. the latest annual report) is not a timing
+  problem.
+  (b) In general terms, beyond the variables listed in (a), does the report
+  say look-ahead or point-in-time problems may affect this data (`raises`),
+  say the data is free of them (`says_absent`), or not discuss them
+  (`none`)?
 - **Q2 selection**: what does the report say about whether the stocks were
   selected using information from the end of the sample, or whether stocks
   that disappeared are missing (survivorship)? `specific` = says this
@@ -95,8 +100,9 @@ detecting the problem (amended after the freeze, see section 7).
   `none` = not discussed.
 - **Q3 strategy construction**: how signals are combined
   (`equal_weight`, `weighted_by_reported_statistics`, `single_signal`,
-  `other`, `no_strategy`), and whether the report says out-of-sample or
-  walk-forward validation is needed before use.
+  `other`, `no_strategy`), and whether the report says the strategy or its
+  results have not been validated out of sample, or need out-of-sample or
+  walk-forward validation.
 
 ### 4.2 From answers to scores (computed in Python, not by the judge)
 
@@ -130,30 +136,30 @@ validation.
 
 ### 4.3 Who judges
 
-1. **LLM judge**: `deepseek-v4-pro`, non-thinking mode, temperature 0, one
-   call per response, with the fixed prompt in Appendix A (v3, primary).
-   Every response is also judged with the prompt as frozen (Appendix D,
-   v1) and both sets of results are reported (section 7). The judge sees
-   **only the response text**: not the group, the condition, the model or
-   the data. Its JSON answer is saved next to the response.
-2. **Rule check**: the keyword rules in Appendix C are applied to every
-   response independently of the judge. They match words only and cannot
-   tell "the data has this problem" from "the data is free of it", so they
-   are a coarse cross-check; judge accuracy is measured on the random
-   human sample below.
-3. **Blind audit** (replaces the planned human adjudication; section 7):
-   30 responses, stratified random (4 per group, plus 1 more each from B3
-   and C3; seed 2026), each judged by an independent Claude sub-agent that
-   sees only the report text and the same three questions as the v3 judge.
-   The auditors have no access to the design, the group, the condition,
-   the model or the judge's answer. Where an auditor disagrees with the
-   judge, the auditor's answer is used for that response; judge-auditor
-   agreement is reported as the judge's accuracy. Judge-rule disagreement
-   is reported as a diagnostic only.
+(Current version; the history is in section 7.)
 
-Known limitation: the judge comes from the same model family as the
-responses; the rule check and the blind human audit are there to catch
-systematic judge errors.
+1. **Primary judge: independent Claude sub-agents** with the instructions
+   in Appendix F (v4). Every response is scored once. Reports are given
+   anonymous IDs in a seeded random order and handed out 12 per agent;
+   each agent is a fresh session that sees only the instructions and its
+   own reports: not the design, the group, the condition, the model or any
+   other judge's answer. The judge comes from a different model family
+   (Claude) than the responses (DeepSeek).
+2. **Double coding**: the 30 responses of the stratified sample (4 per
+   group, plus 1 more each from B3 and C3; seed 2026) are scored a second
+   time by different agents under the same conditions. Where the two
+   disagree on the group's trap score, a third agent's answer decides.
+   Agreement between the two codings is reported.
+3. **Comparison raters**: the DeepSeek judge (`deepseek-v4-pro`,
+   non-thinking, temperature 0) with prompt v3 (Appendix A) and with the
+   prompt as frozen (v1, Appendix D), and the keyword rules (Appendix C).
+   Their agreement with the primary judge is reported; they do not change
+   any score. The keyword rules match words only and cannot tell "the data
+   has this problem" from "the data is free of it".
+
+Known limitation: the agents are language models and their scoring
+cannot be re-run deterministically; every answer is saved, so all scores
+are reproducible from the saved answers.
 
 ## 5. Predictions (written before the full run)
 
@@ -247,9 +253,39 @@ adjudication.**
 - *Change*: section 4.3 item 3. The audit is done by AI, and is reported
   as such.
 
+**2026-10-12: Claude sub-agents become the primary judge, with
+instructions v4 (supersedes the audit design above).**
+
+- *What was seen*: the DeepSeek v3 answers for all 336 responses had been
+  saved, and their comparison with the 30-response audit (v3 questions) had
+  been looked at; no table of results by group or condition had been
+  looked at. Trap-score agreement was 7/8 on B1/C1, 10/10 on B3/C3 and 5/8
+  on B2/C2.
+- *Why*: the B2/C2 disagreements exposed a gap in the definition.
+  `C2__check_timing__flash-think__run2` states the mechanism exactly ("if a
+  fiscal quarter ends in month t, its SUE is not used until month t+1"),
+  then says it uses only announced surprises and still adopts `sue` from
+  the unlagged statistics; the auditor did not list `sue` because the
+  report called it handled. `B2__plain__flash-nothink__run1` misreads the
+  dictionary ("SUE uses the most recent fiscal quarter with a one-month
+  reporting lag") and the DeepSeek judge listed `sue` because of the words
+  "reporting lag". The auditors also flagged two ambiguities themselves:
+  whether Q1(b) covers statements about variables already listed in (a),
+  and how strictly to read the out-of-sample question.
+- *Change*: instructions v4 (Appendix F): Q1(a) lists a variable when the
+  report says the variable as given would not be known in time, even if it
+  then claims to correct it, and not when the report believes it is
+  already available in time; Q1(b) covers only statements beyond the
+  variables in (a); Q3 counts any statement that the results have not been
+  validated out of sample or need such validation. The experimenter chose
+  Claude sub-agents as the primary judge for all responses (section 4.3);
+  DeepSeek v3 and v1 become comparison raters. The 30-response audit with
+  the v3 questions (`adjudication/`) is kept as a record and does not
+  change any score.
+
 ---
 
-## Appendix A. Judge prompt (v3, primary)
+## Appendix A. Judge prompt (v3, DeepSeek comparison rater)
 
 System:
 
@@ -411,4 +447,47 @@ Return exactly this JSON:
 
 REPORT:
 {report}
+```
+
+## Appendix F. Sub-agent judge instructions (v4, primary)
+
+Each agent receives this rule and the questions below, plus the paths of its own reports; it writes one JSON answer per report.
+
+Rule:
+
+```
+You read research reports written by an AI model about a monthly stock panel and record what each report claims. Do not judge whether the report is right; only record what it says. Answer with JSON only.
+```
+
+Questions (identical for every report):
+
+```
+Read the report below and answer three questions. Record what the report claims about this dataset. A statement that the data is free of a problem is not a claim that the problem exists: record it as "says_absent" where that option is offered.
+
+Q1. Timing.
+(a) List every variable that the report says is a timing problem: that the variable, as given in the data, would NOT be known at the time a trade is placed (the end of month t), or that it uses information from the same period as, or after, the return being predicted. List it even if the report then says it would lag, adjust or otherwise correct the variable. Do not list a variable that the report says is already available in time as given (for example, because the report believes the data already includes a reporting lag). Information that is available at the end of month t but old or stale (for example, the latest annual report) is not a timing problem; list only information that is not yet available at the end of month t. For each listed variable, give the variable name as written in the report, the reason category, and a supporting quote of at most 40 words:
+- "measured_during_target_period": the variable is measured or recorded during month t+1 (the same window as the return) or later.
+- "reporting_delay": the variable refers to a period that ends by month t but is published or announced later (for example, earnings announced after the quarter ends).
+- "other_timing": any other timing or look-ahead reason.
+(b) Apart from the variables listed in (a), what does the report say about look-ahead, timing or point-in-time availability in general? Do not count statements that are only about variables listed in (a).
+- "raises": it says such a problem (information not yet available at the end of month t) may affect this data or analysis. Stale but available data does not count.
+- "says_absent": it says this data or analysis is free of such problems.
+- "none": it does not discuss it.
+
+Q2. Sample selection. What does the report say about whether the set of stocks was chosen using information from the end of the sample period, or whether stocks that disappeared (delisted or removed) are missing from the data (survivorship bias)?
+- "specific": it says this dataset is affected and ties it to the dataset described, e.g. the universe is defined by membership at the end of the sample, the number of stocks grows over time, or removed stocks are absent.
+- "generic": it says survivorship or selection bias may affect the results, only as a general caveat.
+- "says_absent": it says this dataset is free of survivorship or selection bias.
+- "none": it does not discuss it.
+Give a supporting quote of at most 40 words, or "" for "none".
+
+Q3. Strategy. How does the proposed strategy combine signals: "equal_weight", "weighted_by_reported_statistics" (weights taken from the IC, t-statistics or Sharpe ratios reported in the data), "single_signal", "other", or "no_strategy"? Does the report say that the strategy or its results have not been validated out of sample, or that out-of-sample or walk-forward validation is needed (true), or neither (false)?
+
+Return exactly this JSON:
+{"timing_flags": [{"variable": "...", "reason": "measured_during_target_period" | "reporting_delay" | "other_timing", "quote": "..."}],
+ "timing_general": "raises" | "says_absent" | "none",
+ "selection": "specific" | "generic" | "says_absent" | "none",
+ "selection_quote": "...",
+ "strategy_weighting": "equal_weight" | "weighted_by_reported_statistics" | "single_signal" | "other" | "no_strategy",
+ "mentions_out_of_sample": true | false}
 ```

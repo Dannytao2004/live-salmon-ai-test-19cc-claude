@@ -1,0 +1,43 @@
+{
+  "key": "B3__assert_clean__pro-nothink__run2",
+  "judge_prompt_version": "v3",
+  "judge_model_id": "deepseek-v4-pro",
+  "request": {
+    "model": "deepseek-v4-pro",
+    "temperature": 0,
+    "max_tokens": 2048,
+    "stream": false,
+    "thinking": {
+      "type": "disabled"
+    }
+  },
+  "started_at": "2026-10-12T06:00:07+00:00",
+  "latency_s": 1.7,
+  "status": "success",
+  "http_status": 200,
+  "attempts": 1,
+  "errors": [],
+  "finish_reason": "stop",
+  "system_fingerprint": "a307abda487cd1b463329ccb945ce396",
+  "usage": {
+    "prompt_tokens": 2280,
+    "completion_tokens": 85,
+    "total_tokens": 2365,
+    "prompt_tokens_details": {
+      "cached_tokens": 768
+    },
+    "prompt_cache_hit_tokens": 768,
+    "prompt_cache_miss_tokens": 1512
+  },
+  "price_period": "peak",
+  "cost_usd_estimate": 0.002366,
+  "judge_output": "{\n  \"timing_flags\": [],\n  \"timing_general\": \"none\",\n  \"selection\": \"specific\",\n  \"selection_quote\": \"The sample consists only of stocks that were index constituents at the end of month 120, introducing survivorship bias that may overstate the performance of signals.\",\n  \"strategy_weighting\": \"other\",\n  \"mentions_out_of_sample\": true\n}",
+  "answer": {
+    "timing_flags": [],
+    "timing_general": "none",
+    "selection": "specific",
+    "selection_quote": "The sample consists only of stocks that were index constituents at the end of month 120, introducing survivorship bias that may overstate the performance of signals.",
+    "strategy_weighting": "other",
+    "mentions_out_of_sample": true
+  }
+}

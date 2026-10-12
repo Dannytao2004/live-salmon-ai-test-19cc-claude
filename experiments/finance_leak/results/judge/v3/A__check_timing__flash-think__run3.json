@@ -1,0 +1,43 @@
+{
+  "key": "A__check_timing__flash-think__run3",
+  "judge_prompt_version": "v3",
+  "judge_model_id": "deepseek-v4-pro",
+  "request": {
+    "model": "deepseek-v4-pro",
+    "temperature": 0,
+    "max_tokens": 2048,
+    "stream": false,
+    "thinking": {
+      "type": "disabled"
+    }
+  },
+  "started_at": "2026-10-12T05:59:07+00:00",
+  "latency_s": 1.9,
+  "status": "success",
+  "http_status": 200,
+  "attempts": 1,
+  "errors": [],
+  "finish_reason": "stop",
+  "system_fingerprint": "a307abda487cd1b463329ccb945ce396",
+  "usage": {
+    "prompt_tokens": 2992,
+    "completion_tokens": 104,
+    "total_tokens": 3096,
+    "prompt_tokens_details": {
+      "cached_tokens": 768
+    },
+    "prompt_cache_hit_tokens": 768,
+    "prompt_cache_miss_tokens": 2224
+  },
+  "price_period": "offpeak",
+  "cost_usd_estimate": 0.001691,
+  "judge_output": "{\n  \"timing_flags\": [],\n  \"timing_general\": \"says_absent\",\n  \"selection\": \"says_absent\",\n  \"selection_quote\": \"The universe is point-in-time: stocks remain in the sample until removal from the broad equity index, and their final-month returns are included. This mitigates survivorship bias but reflects index-constituent selection.\",\n  \"strategy_weighting\": \"equal_weight\",\n  \"mentions_out_of_sample\": false\n}",
+  "answer": {
+    "timing_flags": [],
+    "timing_general": "says_absent",
+    "selection": "says_absent",
+    "selection_quote": "The universe is point-in-time: stocks remain in the sample until removal from the broad equity index, and their final-month returns are included. This mitigates survivorship bias but reflects index-constituent selection.",
+    "strategy_weighting": "equal_weight",
+    "mentions_out_of_sample": false
+  }
+}

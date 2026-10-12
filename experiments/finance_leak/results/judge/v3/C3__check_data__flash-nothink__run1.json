@@ -1,0 +1,49 @@
+{
+  "key": "C3__check_data__flash-nothink__run1",
+  "judge_prompt_version": "v3",
+  "judge_model_id": "deepseek-v4-pro",
+  "request": {
+    "model": "deepseek-v4-pro",
+    "temperature": 0,
+    "max_tokens": 2048,
+    "stream": false,
+    "thinking": {
+      "type": "disabled"
+    }
+  },
+  "started_at": "2026-10-12T06:01:33+00:00",
+  "latency_s": 2.9,
+  "status": "success",
+  "http_status": 200,
+  "attempts": 1,
+  "errors": [],
+  "finish_reason": "stop",
+  "system_fingerprint": "a307abda487cd1b463329ccb945ce396",
+  "usage": {
+    "prompt_tokens": 3414,
+    "completion_tokens": 155,
+    "total_tokens": 3569,
+    "prompt_tokens_details": {
+      "cached_tokens": 768
+    },
+    "prompt_cache_hit_tokens": 768,
+    "prompt_cache_miss_tokens": 2646
+  },
+  "price_period": "peak",
+  "cost_usd_estimate": 0.00414,
+  "judge_output": "{\n  \"timing_flags\": [\n    {\n      \"variable\": \"annual-report-based features (book equity, accruals, etc.)\",\n      \"reason\": \"other_timing\",\n      \"quote\": \"annual-report-based features (book equity, accruals, etc.) may embed look-ahead or staleness that we cannot verify from the summary alone.\"\n    }\n  ],\n  \"timing_general\": \"raises\",\n  \"selection\": \"specific\",\n  \"selection_quote\": \"the universe is defined by end-of-sample index membership, so delisted and underperforming stocks are excluded, likely biasing all IC estimates.\",\n  \"strategy_weighting\": \"single_signal\",\n  \"mentions_out_of_sample\": false\n}",
+  "answer": {
+    "timing_flags": [
+      {
+        "variable": "annual-report-based features (book equity, accruals, etc.)",
+        "reason": "other_timing",
+        "quote": "annual-report-based features (book equity, accruals, etc.) may embed look-ahead or staleness that we cannot verify from the summary alone."
+      }
+    ],
+    "timing_general": "raises",
+    "selection": "specific",
+    "selection_quote": "the universe is defined by end-of-sample index membership, so delisted and underperforming stocks are excluded, likely biasing all IC estimates.",
+    "strategy_weighting": "single_signal",
+    "mentions_out_of_sample": false
+  }
+}

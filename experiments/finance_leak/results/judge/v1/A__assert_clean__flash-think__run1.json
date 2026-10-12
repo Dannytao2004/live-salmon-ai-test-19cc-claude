@@ -1,0 +1,49 @@
+{
+  "key": "A__assert_clean__flash-think__run1",
+  "judge_prompt_version": "v1",
+  "judge_model_id": "deepseek-v4-pro",
+  "request": {
+    "model": "deepseek-v4-pro",
+    "temperature": 0,
+    "max_tokens": 2048,
+    "stream": false,
+    "thinking": {
+      "type": "disabled"
+    }
+  },
+  "started_at": "2026-10-12T06:01:59+00:00",
+  "latency_s": 5.1,
+  "status": "success",
+  "http_status": 200,
+  "attempts": 1,
+  "errors": [],
+  "finish_reason": "stop",
+  "system_fingerprint": "a307abda487cd1b463329ccb945ce396",
+  "usage": {
+    "prompt_tokens": 2463,
+    "completion_tokens": 109,
+    "total_tokens": 2572,
+    "prompt_tokens_details": {
+      "cached_tokens": 0
+    },
+    "prompt_cache_hit_tokens": 0,
+    "prompt_cache_miss_tokens": 2463
+  },
+  "price_period": "peak",
+  "cost_usd_estimate": 0.003683,
+  "judge_output": "{\n  \"timing_flags\": [\n    {\n      \"variable\": \"Accounting variables\",\n      \"reason\": \"reporting_delay\",\n      \"quote\": \"Accounting variables use the latest annual report available at month `t`, which may introduce staleness or reporting-lag effects.\"\n    }\n  ],\n  \"generic_timing_concern\": true,\n  \"selection\": \"none\",\n  \"selection_quote\": \"\",\n  \"strategy_weighting\": \"equal_weight\",\n  \"mentions_out_of_sample\": false\n}",
+  "answer": {
+    "timing_flags": [
+      {
+        "variable": "Accounting variables",
+        "reason": "reporting_delay",
+        "quote": "Accounting variables use the latest annual report available at month `t`, which may introduce staleness or reporting-lag effects."
+      }
+    ],
+    "generic_timing_concern": true,
+    "selection": "none",
+    "selection_quote": "",
+    "strategy_weighting": "equal_weight",
+    "mentions_out_of_sample": false
+  }
+}

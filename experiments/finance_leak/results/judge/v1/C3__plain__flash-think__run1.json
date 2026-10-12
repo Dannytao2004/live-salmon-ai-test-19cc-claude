@@ -1,0 +1,49 @@
+{
+  "key": "C3__plain__flash-think__run1",
+  "judge_prompt_version": "v1",
+  "judge_model_id": "deepseek-v4-pro",
+  "request": {
+    "model": "deepseek-v4-pro",
+    "temperature": 0,
+    "max_tokens": 2048,
+    "stream": false,
+    "thinking": {
+      "type": "disabled"
+    }
+  },
+  "started_at": "2026-10-12T06:04:53+00:00",
+  "latency_s": 2.3,
+  "status": "success",
+  "http_status": 200,
+  "attempts": 1,
+  "errors": [],
+  "finish_reason": "stop",
+  "system_fingerprint": "a307abda487cd1b463329ccb945ce396",
+  "usage": {
+    "prompt_tokens": 2617,
+    "completion_tokens": 163,
+    "total_tokens": 2780,
+    "prompt_tokens_details": {
+      "cached_tokens": 512
+    },
+    "prompt_cache_hit_tokens": 512,
+    "prompt_cache_miss_tokens": 2105
+  },
+  "price_period": "peak",
+  "cost_usd_estimate": 0.003447,
+  "judge_output": "{\n  \"timing_flags\": [\n    {\n      \"variable\": \"index constituents at the end of month 120\",\n      \"reason\": \"other_timing\",\n      \"quote\": \"The universe consists of stocks that are index constituents at the end of month 120, with history backfilled to earlier months. This introduces survivorship and look-ahead membership bias.\"\n    }\n  ],\n  \"generic_timing_concern\": true,\n  \"selection\": \"specific\",\n  \"selection_quote\": \"The universe consists of stocks that are index constituents at the end of month 120, with history backfilled to earlier months. This introduces survivorship and look-ahead membership bias.\",\n  \"strategy_weighting\": \"equal_weight\",\n  \"mentions_out_of_sample\": true\n}",
+  "answer": {
+    "timing_flags": [
+      {
+        "variable": "index constituents at the end of month 120",
+        "reason": "other_timing",
+        "quote": "The universe consists of stocks that are index constituents at the end of month 120, with history backfilled to earlier months. This introduces survivorship and look-ahead membership bias."
+      }
+    ],
+    "generic_timing_concern": true,
+    "selection": "specific",
+    "selection_quote": "The universe consists of stocks that are index constituents at the end of month 120, with history backfilled to earlier months. This introduces survivorship and look-ahead membership bias.",
+    "strategy_weighting": "equal_weight",
+    "mentions_out_of_sample": true
+  }
+}

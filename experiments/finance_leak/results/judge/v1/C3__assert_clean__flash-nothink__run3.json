@@ -1,0 +1,49 @@
+{
+  "key": "C3__assert_clean__flash-nothink__run3",
+  "judge_prompt_version": "v1",
+  "judge_model_id": "deepseek-v4-pro",
+  "request": {
+    "model": "deepseek-v4-pro",
+    "temperature": 0,
+    "max_tokens": 2048,
+    "stream": false,
+    "thinking": {
+      "type": "disabled"
+    }
+  },
+  "started_at": "2026-10-12T06:04:32+00:00",
+  "latency_s": 2.6,
+  "status": "success",
+  "http_status": 200,
+  "attempts": 1,
+  "errors": [],
+  "finish_reason": "stop",
+  "system_fingerprint": "a307abda487cd1b463329ccb945ce396",
+  "usage": {
+    "prompt_tokens": 2586,
+    "completion_tokens": 154,
+    "total_tokens": 2740,
+    "prompt_tokens_details": {
+      "cached_tokens": 512
+    },
+    "prompt_cache_hit_tokens": 512,
+    "prompt_cache_miss_tokens": 2074
+  },
+  "price_period": "peak",
+  "cost_usd_estimate": 0.00337,
+  "judge_output": "{\n  \"timing_flags\": [\n    {\n      \"variable\": \"universe membership\",\n      \"reason\": \"other_timing\",\n      \"quote\": \"constituents of a broad index as of month 120, with history backfilled to index entry\"\n    }\n  ],\n  \"generic_timing_concern\": true,\n  \"selection\": \"specific\",\n  \"selection_quote\": \"the universe grows from 143 stocks in month 1 to 500 by month 120, implying a survivorship-oriented construction (constituents of a broad index as of month 120, with history backfilled to index entry)\",\n  \"strategy_weighting\": \"single_signal\",\n  \"mentions_out_of_sample\": false\n}",
+  "answer": {
+    "timing_flags": [
+      {
+        "variable": "universe membership",
+        "reason": "other_timing",
+        "quote": "constituents of a broad index as of month 120, with history backfilled to index entry"
+      }
+    ],
+    "generic_timing_concern": true,
+    "selection": "specific",
+    "selection_quote": "the universe grows from 143 stocks in month 1 to 500 by month 120, implying a survivorship-oriented construction (constituents of a broad index as of month 120, with history backfilled to index entry)",
+    "strategy_weighting": "single_signal",
+    "mentions_out_of_sample": false
+  }
+}

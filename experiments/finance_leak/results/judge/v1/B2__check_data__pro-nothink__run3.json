@@ -1,0 +1,49 @@
+{
+  "key": "B2__check_data__pro-nothink__run3",
+  "judge_prompt_version": "v1",
+  "judge_model_id": "deepseek-v4-pro",
+  "request": {
+    "model": "deepseek-v4-pro",
+    "temperature": 0,
+    "max_tokens": 2048,
+    "stream": false,
+    "thinking": {
+      "type": "disabled"
+    }
+  },
+  "started_at": "2026-10-12T06:03:02+00:00",
+  "latency_s": 2.1,
+  "status": "success",
+  "http_status": 200,
+  "attempts": 1,
+  "errors": [],
+  "finish_reason": "stop",
+  "system_fingerprint": "a307abda487cd1b463329ccb945ce396",
+  "usage": {
+    "prompt_tokens": 2700,
+    "completion_tokens": 126,
+    "total_tokens": 2826,
+    "prompt_tokens_details": {
+      "cached_tokens": 512
+    },
+    "prompt_cache_hit_tokens": 512,
+    "prompt_cache_miss_tokens": 2188
+  },
+  "price_period": "peak",
+  "cost_usd_estimate": 0.00341,
+  "judge_output": "{\n  \"timing_flags\": [\n    {\n      \"variable\": \"point-in-time accounting data availability\",\n      \"reason\": \"other_timing\",\n      \"quote\": \"the point-in-time accounting data availability may introduce look-ahead bias if the \\\"latest annual report\\\" is not accurately matched to the month in which it became available.\"\n    }\n  ],\n  \"generic_timing_concern\": true,\n  \"selection\": \"none\",\n  \"selection_quote\": \"\",\n  \"strategy_weighting\": \"weighted_by_reported_statistics\",\n  \"mentions_out_of_sample\": true\n}",
+  "answer": {
+    "timing_flags": [
+      {
+        "variable": "point-in-time accounting data availability",
+        "reason": "other_timing",
+        "quote": "the point-in-time accounting data availability may introduce look-ahead bias if the \"latest annual report\" is not accurately matched to the month in which it became available."
+      }
+    ],
+    "generic_timing_concern": true,
+    "selection": "none",
+    "selection_quote": "",
+    "strategy_weighting": "weighted_by_reported_statistics",
+    "mentions_out_of_sample": true
+  }
+}

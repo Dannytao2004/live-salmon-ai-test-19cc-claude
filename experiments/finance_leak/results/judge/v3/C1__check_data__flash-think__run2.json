@@ -1,0 +1,49 @@
+{
+  "key": "C1__check_data__flash-think__run2",
+  "judge_prompt_version": "v3",
+  "judge_model_id": "deepseek-v4-pro",
+  "request": {
+    "model": "deepseek-v4-pro",
+    "temperature": 0,
+    "max_tokens": 2048,
+    "stream": false,
+    "thinking": {
+      "type": "disabled"
+    }
+  },
+  "started_at": "2026-10-12T06:00:41+00:00",
+  "latency_s": 2.9,
+  "status": "success",
+  "http_status": 200,
+  "attempts": 1,
+  "errors": [],
+  "finish_reason": "stop",
+  "system_fingerprint": "a307abda487cd1b463329ccb945ce396",
+  "usage": {
+    "prompt_tokens": 3059,
+    "completion_tokens": 140,
+    "total_tokens": 3199,
+    "prompt_tokens_details": {
+      "cached_tokens": 768
+    },
+    "prompt_cache_hit_tokens": 768,
+    "prompt_cache_miss_tokens": 2291
+  },
+  "price_period": "peak",
+  "cost_usd_estimate": 0.003612,
+  "judge_output": "{\n  \"timing_flags\": [\n    {\n      \"variable\": \"analyst_rev\",\n      \"reason\": \"measured_during_target_period\",\n      \"quote\": \"Its data dictionary states it is the change in mean FY1 EPS forecast during month t+1, recorded at the end of month t+1.\"\n    }\n  ],\n  \"timing_general\": \"raises\",\n  \"selection\": \"generic\",\n  \"selection_quote\": \"Finally, the universe consists of index constituents, which may introduce survivorship or constituent-selection biases.\",\n  \"strategy_weighting\": \"no_strategy\",\n  \"mentions_out_of_sample\": false\n}",
+  "answer": {
+    "timing_flags": [
+      {
+        "variable": "analyst_rev",
+        "reason": "measured_during_target_period",
+        "quote": "Its data dictionary states it is the change in mean FY1 EPS forecast during month t+1, recorded at the end of month t+1."
+      }
+    ],
+    "timing_general": "raises",
+    "selection": "generic",
+    "selection_quote": "Finally, the universe consists of index constituents, which may introduce survivorship or constituent-selection biases.",
+    "strategy_weighting": "no_strategy",
+    "mentions_out_of_sample": false
+  }
+}

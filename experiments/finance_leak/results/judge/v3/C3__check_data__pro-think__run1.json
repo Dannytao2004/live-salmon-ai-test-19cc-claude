@@ -1,0 +1,49 @@
+{
+  "key": "C3__check_data__pro-think__run1",
+  "judge_prompt_version": "v3",
+  "judge_model_id": "deepseek-v4-pro",
+  "request": {
+    "model": "deepseek-v4-pro",
+    "temperature": 0,
+    "max_tokens": 2048,
+    "stream": false,
+    "thinking": {
+      "type": "disabled"
+    }
+  },
+  "started_at": "2026-10-12T06:01:37+00:00",
+  "latency_s": 2.4,
+  "status": "success",
+  "http_status": 200,
+  "attempts": 1,
+  "errors": [],
+  "finish_reason": "stop",
+  "system_fingerprint": "a307abda487cd1b463329ccb945ce396",
+  "usage": {
+    "prompt_tokens": 2176,
+    "completion_tokens": 139,
+    "total_tokens": 2315,
+    "prompt_tokens_details": {
+      "cached_tokens": 768
+    },
+    "prompt_cache_hit_tokens": 768,
+    "prompt_cache_miss_tokens": 1408
+  },
+  "price_period": "peak",
+  "cost_usd_estimate": 0.002443,
+  "judge_output": "{\n  \"timing_flags\": [\n    {\n      \"variable\": \"fundamental signals\",\n      \"reason\": \"reporting_delay\",\n      \"quote\": \"Fundamental signals rely on annual report data assumed to be available at month-end; reporting delays or restatements could affect implementability.\"\n    }\n  ],\n  \"timing_general\": \"raises\",\n  \"selection\": \"specific\",\n  \"selection_quote\": \"The sample is constructed from stocks that are index constituents at the end of month 120, which introduces survivorship and selection bias.\",\n  \"strategy_weighting\": \"equal_weight\",\n  \"mentions_out_of_sample\": false\n}",
+  "answer": {
+    "timing_flags": [
+      {
+        "variable": "fundamental signals",
+        "reason": "reporting_delay",
+        "quote": "Fundamental signals rely on annual report data assumed to be available at month-end; reporting delays or restatements could affect implementability."
+      }
+    ],
+    "timing_general": "raises",
+    "selection": "specific",
+    "selection_quote": "The sample is constructed from stocks that are index constituents at the end of month 120, which introduces survivorship and selection bias.",
+    "strategy_weighting": "equal_weight",
+    "mentions_out_of_sample": false
+  }
+}

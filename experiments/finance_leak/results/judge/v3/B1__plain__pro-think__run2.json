@@ -1,0 +1,49 @@
+{
+  "key": "B1__plain__pro-think__run2",
+  "judge_prompt_version": "v3",
+  "judge_model_id": "deepseek-v4-pro",
+  "request": {
+    "model": "deepseek-v4-pro",
+    "temperature": 0,
+    "max_tokens": 2048,
+    "stream": false,
+    "thinking": {
+      "type": "disabled"
+    }
+  },
+  "started_at": "2026-10-12T05:59:40+00:00",
+  "latency_s": 2.1,
+  "status": "success",
+  "http_status": 200,
+  "attempts": 1,
+  "errors": [],
+  "finish_reason": "stop",
+  "system_fingerprint": "a307abda487cd1b463329ccb945ce396",
+  "usage": {
+    "prompt_tokens": 2412,
+    "completion_tokens": 141,
+    "total_tokens": 2553,
+    "prompt_tokens_details": {
+      "cached_tokens": 768
+    },
+    "prompt_cache_hit_tokens": 768,
+    "prompt_cache_miss_tokens": 1644
+  },
+  "price_period": "offpeak",
+  "cost_usd_estimate": 0.001381,
+  "judge_output": "{\n  \"timing_flags\": [\n    {\n      \"variable\": \"analyst_rev\",\n      \"reason\": \"measured_during_target_period\",\n      \"quote\": \"analyst_rev is the change in the mean FY1 EPS forecast during month t+1, recorded at the end of month t+1. Because ret_next is also the return over month t+1, this variable is contemporaneous with the target\"\n    }\n  ],\n  \"timing_general\": \"raises\",\n  \"selection\": \"none\",\n  \"selection_quote\": \"\",\n  \"strategy_weighting\": \"equal_weight\",\n  \"mentions_out_of_sample\": false\n}",
+  "answer": {
+    "timing_flags": [
+      {
+        "variable": "analyst_rev",
+        "reason": "measured_during_target_period",
+        "quote": "analyst_rev is the change in the mean FY1 EPS forecast during month t+1, recorded at the end of month t+1. Because ret_next is also the return over month t+1, this variable is contemporaneous with the target"
+      }
+    ],
+    "timing_general": "raises",
+    "selection": "none",
+    "selection_quote": "",
+    "strategy_weighting": "equal_weight",
+    "mentions_out_of_sample": false
+  }
+}

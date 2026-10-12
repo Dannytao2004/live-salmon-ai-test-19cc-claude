@@ -1,0 +1,49 @@
+{
+  "key": "C1__plain__pro-nothink__run1",
+  "judge_prompt_version": "v3",
+  "judge_model_id": "deepseek-v4-pro",
+  "request": {
+    "model": "deepseek-v4-pro",
+    "temperature": 0,
+    "max_tokens": 2048,
+    "stream": false,
+    "thinking": {
+      "type": "disabled"
+    }
+  },
+  "started_at": "2026-10-12T06:00:57+00:00",
+  "latency_s": 2.7,
+  "status": "success",
+  "http_status": 200,
+  "attempts": 1,
+  "errors": [],
+  "finish_reason": "stop",
+  "system_fingerprint": "a307abda487cd1b463329ccb945ce396",
+  "usage": {
+    "prompt_tokens": 3332,
+    "completion_tokens": 146,
+    "total_tokens": 3478,
+    "prompt_tokens_details": {
+      "cached_tokens": 768
+    },
+    "prompt_cache_hit_tokens": 768,
+    "prompt_cache_miss_tokens": 2564
+  },
+  "price_period": "peak",
+  "cost_usd_estimate": 0.003996,
+  "judge_output": "{\n  \"timing_flags\": [\n    {\n      \"variable\": \"analyst_rev\",\n      \"reason\": \"measured_during_target_period\",\n      \"quote\": \"analyst_rev, which measures forecast revisions during month t+1 and is therefore not strictly investable in real time\"\n    }\n  ],\n  \"timing_general\": \"raises\",\n  \"selection\": \"says_absent\",\n  \"selection_quote\": \"Point-in-time index membership ensures that stocks later removed due to distress or delisting remain in the sample until their removal, mitigating survivorship bias.\",\n  \"strategy_weighting\": \"equal_weight\",\n  \"mentions_out_of_sample\": false\n}",
+  "answer": {
+    "timing_flags": [
+      {
+        "variable": "analyst_rev",
+        "reason": "measured_during_target_period",
+        "quote": "analyst_rev, which measures forecast revisions during month t+1 and is therefore not strictly investable in real time"
+      }
+    ],
+    "timing_general": "raises",
+    "selection": "says_absent",
+    "selection_quote": "Point-in-time index membership ensures that stocks later removed due to distress or delisting remain in the sample until their removal, mitigating survivorship bias.",
+    "strategy_weighting": "equal_weight",
+    "mentions_out_of_sample": false
+  }
+}

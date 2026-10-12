@@ -1,0 +1,49 @@
+{
+  "key": "C2__assert_clean__flash-nothink__run3",
+  "judge_prompt_version": "v1",
+  "judge_model_id": "deepseek-v4-pro",
+  "request": {
+    "model": "deepseek-v4-pro",
+    "temperature": 0,
+    "max_tokens": 2048,
+    "stream": false,
+    "thinking": {
+      "type": "disabled"
+    }
+  },
+  "started_at": "2026-10-12T06:04:09+00:00",
+  "latency_s": 2.1,
+  "status": "success",
+  "http_status": 200,
+  "attempts": 1,
+  "errors": [],
+  "finish_reason": "stop",
+  "system_fingerprint": "a307abda487cd1b463329ccb945ce396",
+  "usage": {
+    "prompt_tokens": 2541,
+    "completion_tokens": 133,
+    "total_tokens": 2674,
+    "prompt_tokens_details": {
+      "cached_tokens": 512
+    },
+    "prompt_cache_hit_tokens": 512,
+    "prompt_cache_miss_tokens": 2029
+  },
+  "price_period": "peak",
+  "cost_usd_estimate": 0.003227,
+  "judge_output": "{\n  \"timing_flags\": [\n    {\n      \"variable\": \"SUE\",\n      \"reason\": \"reporting_delay\",\n      \"quote\": \"SUE from the most recent announced quarter (announced in the month after quarter-end)\"\n    }\n  ],\n  \"generic_timing_concern\": false,\n  \"selection\": \"specific\",\n  \"selection_quote\": \"Returns include the final month before index removal, so the sample embeds delisting/distress returns and is free of survivorship selection after removal.\",\n  \"strategy_weighting\": \"single_signal\",\n  \"mentions_out_of_sample\": false\n}",
+  "answer": {
+    "timing_flags": [
+      {
+        "variable": "SUE",
+        "reason": "reporting_delay",
+        "quote": "SUE from the most recent announced quarter (announced in the month after quarter-end)"
+      }
+    ],
+    "generic_timing_concern": false,
+    "selection": "specific",
+    "selection_quote": "Returns include the final month before index removal, so the sample embeds delisting/distress returns and is free of survivorship selection after removal.",
+    "strategy_weighting": "single_signal",
+    "mentions_out_of_sample": false
+  }
+}

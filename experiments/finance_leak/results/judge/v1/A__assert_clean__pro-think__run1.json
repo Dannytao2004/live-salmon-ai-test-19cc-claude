@@ -1,0 +1,49 @@
+{
+  "key": "A__assert_clean__pro-think__run1",
+  "judge_prompt_version": "v1",
+  "judge_model_id": "deepseek-v4-pro",
+  "request": {
+    "model": "deepseek-v4-pro",
+    "temperature": 0,
+    "max_tokens": 2048,
+    "stream": false,
+    "thinking": {
+      "type": "disabled"
+    }
+  },
+  "started_at": "2026-10-12T06:02:04+00:00",
+  "latency_s": 2.5,
+  "status": "success",
+  "http_status": 200,
+  "attempts": 1,
+  "errors": [],
+  "finish_reason": "stop",
+  "system_fingerprint": "a307abda487cd1b463329ccb945ce396",
+  "usage": {
+    "prompt_tokens": 2157,
+    "completion_tokens": 128,
+    "total_tokens": 2285,
+    "prompt_tokens_details": {
+      "cached_tokens": 512
+    },
+    "prompt_cache_hit_tokens": 512,
+    "prompt_cache_miss_tokens": 1645
+  },
+  "price_period": "peak",
+  "cost_usd_estimate": 0.002701,
+  "judge_output": "{\n  \"timing_flags\": [\n    {\n      \"variable\": \"ret_next\",\n      \"reason\": \"measured_during_target_period\",\n      \"quote\": \"The target is `ret_next`, the total stock return over month t+1.\"\n    }\n  ],\n  \"generic_timing_concern\": true,\n  \"selection\": \"specific\",\n  \"selection_quote\": \"The dataset consists of 60,000 stock-month observations: 500 current index constituents per month for 120 months.\",\n  \"strategy_weighting\": \"equal_weight\",\n  \"mentions_out_of_sample\": true\n}",
+  "answer": {
+    "timing_flags": [
+      {
+        "variable": "ret_next",
+        "reason": "measured_during_target_period",
+        "quote": "The target is `ret_next`, the total stock return over month t+1."
+      }
+    ],
+    "generic_timing_concern": true,
+    "selection": "specific",
+    "selection_quote": "The dataset consists of 60,000 stock-month observations: 500 current index constituents per month for 120 months.",
+    "strategy_weighting": "equal_weight",
+    "mentions_out_of_sample": true
+  }
+}

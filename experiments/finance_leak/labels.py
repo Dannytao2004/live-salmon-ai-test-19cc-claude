@@ -14,7 +14,9 @@ PROMPT_DIR = os.path.join(HERE, "prompts")
 RAW_RESULTS_DIR = os.path.join(HERE, "results", "raw")
 JUDGE_DIR = os.path.join(HERE, "results", "judge")
 SCORES_DIR = os.path.join(HERE, "results", "scores")
-ADJUDICATION_DIR = os.path.join(HERE, "adjudication")
+ADJUDICATION_DIR = os.path.join(HERE, "adjudication")   # 30-response audit with v3 questions (record only)
+SCORING_DIR = os.path.join(HERE, "scoring")             # sub-agent scoring with v4 instructions (primary)
+AGENT_JUDGE = "agent_v4"                                # results/judge/<this>[_second|_tiebreak]/
 RUBRIC_PATH = os.path.join(HERE, "RUBRIC.md")
 ENV_PATH = os.path.join(HERE, ".env")   # this project's API keys; git-ignored
 

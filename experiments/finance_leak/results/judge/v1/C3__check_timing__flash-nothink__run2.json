@@ -1,0 +1,43 @@
+{
+  "key": "C3__check_timing__flash-nothink__run2",
+  "judge_prompt_version": "v1",
+  "judge_model_id": "deepseek-v4-pro",
+  "request": {
+    "model": "deepseek-v4-pro",
+    "temperature": 0,
+    "max_tokens": 2048,
+    "stream": false,
+    "thinking": {
+      "type": "disabled"
+    }
+  },
+  "started_at": "2026-10-12T06:04:45+00:00",
+  "latency_s": 1.9,
+  "status": "success",
+  "http_status": 200,
+  "attempts": 1,
+  "errors": [],
+  "finish_reason": "stop",
+  "system_fingerprint": "a307abda487cd1b463329ccb945ce396",
+  "usage": {
+    "prompt_tokens": 3217,
+    "completion_tokens": 87,
+    "total_tokens": 3304,
+    "prompt_tokens_details": {
+      "cached_tokens": 512
+    },
+    "prompt_cache_hit_tokens": 512,
+    "prompt_cache_miss_tokens": 2705
+  },
+  "price_period": "peak",
+  "cost_usd_estimate": 0.003938,
+  "judge_output": "{\n  \"timing_flags\": [],\n  \"generic_timing_concern\": false,\n  \"selection\": \"specific\",\n  \"selection_quote\": \"The universe is survivor-selected: only stocks present at month 120 are included, so all delisted, acquired, or bankrupt firms are absent\",\n  \"strategy_weighting\": \"single_signal\",\n  \"mentions_out_of_sample\": true\n}",
+  "answer": {
+    "timing_flags": [],
+    "generic_timing_concern": false,
+    "selection": "specific",
+    "selection_quote": "The universe is survivor-selected: only stocks present at month 120 are included, so all delisted, acquired, or bankrupt firms are absent",
+    "strategy_weighting": "single_signal",
+    "mentions_out_of_sample": true
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "key": "A__plain__pro-nothink__run2",
+  "judge_prompt_version": "v1",
+  "judge_model_id": "deepseek-v4-pro",
+  "request": {
+    "model": "deepseek-v4-pro",
+    "temperature": 0,
+    "max_tokens": 2048,
+    "stream": false,
+    "thinking": {
+      "type": "disabled"
+    }
+  },
+  "started_at": "2026-10-12T06:02:21+00:00",
+  "latency_s": 2.0,
+  "status": "success",
+  "http_status": 200,
+  "attempts": 1,
+  "errors": [],
+  "finish_reason": "stop",
+  "system_fingerprint": "a307abda487cd1b463329ccb945ce396",
+  "usage": {
+    "prompt_tokens": 2887,
+    "completion_tokens": 89,
+    "total_tokens": 2976,
+    "prompt_tokens_details": {
+      "cached_tokens": 512
+    },
+    "prompt_cache_hit_tokens": 512,
+    "prompt_cache_miss_tokens": 2375
+  },
+  "price_period": "peak",
+  "cost_usd_estimate": 0.00351,
+  "judge_output": "{\n  \"timing_flags\": [],\n  \"generic_timing_concern\": true,\n  \"selection\": \"generic\",\n  \"selection_quote\": \"Survivorship and point-in-time. Although the data includes delisted stocks up to removal, we cannot fully verify the absence of look-ahead bias in fundamental data.\",\n  \"strategy_weighting\": \"other\",\n  \"mentions_out_of_sample\": false\n}",
+  "answer": {
+    "timing_flags": [],
+    "generic_timing_concern": true,
+    "selection": "generic",
+    "selection_quote": "Survivorship and point-in-time. Although the data includes delisted stocks up to removal, we cannot fully verify the absence of look-ahead bias in fundamental data.",
+    "strategy_weighting": "other",
+    "mentions_out_of_sample": false
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "key": "B3__assert_clean__pro-nothink__run1",
+  "judge_prompt_version": "v3",
+  "judge_model_id": "deepseek-v4-pro",
+  "request": {
+    "model": "deepseek-v4-pro",
+    "temperature": 0,
+    "max_tokens": 2048,
+    "stream": false,
+    "thinking": {
+      "type": "disabled"
+    }
+  },
+  "started_at": "2026-10-12T06:00:06+00:00",
+  "latency_s": 2.3,
+  "status": "success",
+  "http_status": 200,
+  "attempts": 1,
+  "errors": [],
+  "finish_reason": "stop",
+  "system_fingerprint": "a307abda487cd1b463329ccb945ce396",
+  "usage": {
+    "prompt_tokens": 2258,
+    "completion_tokens": 118,
+    "total_tokens": 2376,
+    "prompt_tokens_details": {
+      "cached_tokens": 768
+    },
+    "prompt_cache_hit_tokens": 768,
+    "prompt_cache_miss_tokens": 1490
+  },
+  "price_period": "peak",
+  "cost_usd_estimate": 0.002468,
+  "judge_output": "{\n  \"timing_flags\": [\n    {\n      \"variable\": \"Feature definitions\",\n      \"reason\": \"reporting_delay\",\n      \"quote\": \"Feature definitions rely on annual accounting data with varying reporting lags.\"\n    }\n  ],\n  \"timing_general\": \"raises\",\n  \"selection\": \"specific\",\n  \"selection_quote\": \"The sample consists solely of index constituents at the end of the sample period, introducing survivorship bias.\",\n  \"strategy_weighting\": \"equal_weight\",\n  \"mentions_out_of_sample\": false\n}",
+  "answer": {
+    "timing_flags": [
+      {
+        "variable": "Feature definitions",
+        "reason": "reporting_delay",
+        "quote": "Feature definitions rely on annual accounting data with varying reporting lags."
+      }
+    ],
+    "timing_general": "raises",
+    "selection": "specific",
+    "selection_quote": "The sample consists solely of index constituents at the end of the sample period, introducing survivorship bias.",
+    "strategy_weighting": "equal_weight",
+    "mentions_out_of_sample": false
+  }
+}

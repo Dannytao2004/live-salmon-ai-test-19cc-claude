@@ -1,0 +1,43 @@
+{
+  "key": "A__check_timing__pro-think__run2",
+  "judge_prompt_version": "v3",
+  "judge_model_id": "deepseek-v4-pro",
+  "request": {
+    "model": "deepseek-v4-pro",
+    "temperature": 0,
+    "max_tokens": 2048,
+    "stream": false,
+    "thinking": {
+      "type": "disabled"
+    }
+  },
+  "started_at": "2026-10-12T05:59:09+00:00",
+  "latency_s": 1.5,
+  "status": "success",
+  "http_status": 200,
+  "attempts": 1,
+  "errors": [],
+  "finish_reason": "stop",
+  "system_fingerprint": "a307abda487cd1b463329ccb945ce396",
+  "usage": {
+    "prompt_tokens": 2418,
+    "completion_tokens": 58,
+    "total_tokens": 2476,
+    "prompt_tokens_details": {
+      "cached_tokens": 768
+    },
+    "prompt_cache_hit_tokens": 768,
+    "prompt_cache_miss_tokens": 1650
+  },
+  "price_period": "offpeak",
+  "cost_usd_estimate": 0.001221,
+  "judge_output": "{\n  \"timing_flags\": [],\n  \"timing_general\": \"says_absent\",\n  \"selection\": \"none\",\n  \"selection_quote\": \"\",\n  \"strategy_weighting\": \"equal_weight\",\n  \"mentions_out_of_sample\": true\n}",
+  "answer": {
+    "timing_flags": [],
+    "timing_general": "says_absent",
+    "selection": "none",
+    "selection_quote": "",
+    "strategy_weighting": "equal_weight",
+    "mentions_out_of_sample": true
+  }
+}

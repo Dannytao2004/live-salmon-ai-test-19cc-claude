@@ -1,0 +1,49 @@
+{
+  "key": "C2__plain__flash-think__run3",
+  "judge_prompt_version": "v3",
+  "judge_model_id": "deepseek-v4-pro",
+  "request": {
+    "model": "deepseek-v4-pro",
+    "temperature": 0,
+    "max_tokens": 2048,
+    "stream": false,
+    "thinking": {
+      "type": "disabled"
+    }
+  },
+  "started_at": "2026-10-12T06:01:24+00:00",
+  "latency_s": 2.4,
+  "status": "success",
+  "http_status": 200,
+  "attempts": 1,
+  "errors": [],
+  "finish_reason": "stop",
+  "system_fingerprint": "a307abda487cd1b463329ccb945ce396",
+  "usage": {
+    "prompt_tokens": 2679,
+    "completion_tokens": 127,
+    "total_tokens": 2806,
+    "prompt_tokens_details": {
+      "cached_tokens": 768
+    },
+    "prompt_cache_hit_tokens": 768,
+    "prompt_cache_miss_tokens": 1911
+  },
+  "price_period": "peak",
+  "cost_usd_estimate": 0.003059,
+  "judge_output": "{\n  \"timing_flags\": [\n    {\n      \"variable\": \"sue\",\n      \"reason\": \"other_timing\",\n      \"quote\": \"SUE timing may be sensitive to exact earnings-announcement and consensus-forecast availability assumptions.\"\n    }\n  ],\n  \"timing_general\": \"raises\",\n  \"selection\": \"generic\",\n  \"selection_quote\": \"The universe is limited to broad-index constituents, so results may not generalize to small-cap or non-index stocks.\",\n  \"strategy_weighting\": \"equal_weight\",\n  \"mentions_out_of_sample\": true\n}",
+  "answer": {
+    "timing_flags": [
+      {
+        "variable": "sue",
+        "reason": "other_timing",
+        "quote": "SUE timing may be sensitive to exact earnings-announcement and consensus-forecast availability assumptions."
+      }
+    ],
+    "timing_general": "raises",
+    "selection": "generic",
+    "selection_quote": "The universe is limited to broad-index constituents, so results may not generalize to small-cap or non-index stocks.",
+    "strategy_weighting": "equal_weight",
+    "mentions_out_of_sample": true
+  }
+}

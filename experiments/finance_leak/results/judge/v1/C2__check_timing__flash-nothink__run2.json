@@ -1,0 +1,49 @@
+{
+  "key": "C2__check_timing__flash-nothink__run2",
+  "judge_prompt_version": "v1",
+  "judge_model_id": "deepseek-v4-pro",
+  "request": {
+    "model": "deepseek-v4-pro",
+    "temperature": 0,
+    "max_tokens": 2048,
+    "stream": false,
+    "thinking": {
+      "type": "disabled"
+    }
+  },
+  "started_at": "2026-10-12T06:04:20+00:00",
+  "latency_s": 2.7,
+  "status": "success",
+  "http_status": 200,
+  "attempts": 1,
+  "errors": [],
+  "finish_reason": "stop",
+  "system_fingerprint": "a307abda487cd1b463329ccb945ce396",
+  "usage": {
+    "prompt_tokens": 3313,
+    "completion_tokens": 188,
+    "total_tokens": 3501,
+    "prompt_tokens_details": {
+      "cached_tokens": 512
+    },
+    "prompt_cache_hit_tokens": 512,
+    "prompt_cache_miss_tokens": 2801
+  },
+  "price_period": "peak",
+  "cost_usd_estimate": 0.004464,
+  "judge_output": "{\n  \"timing_flags\": [\n    {\n      \"variable\": \"SUE\",\n      \"reason\": \"reporting_delay\",\n      \"quote\": \"SUE is based on the most recent fiscal quarter ending on or before month-end t, with announcements occurring in the following month; the reported SUE is therefore information already public and reflected in prices by the time ret_next begins.\"\n    }\n  ],\n  \"generic_timing_concern\": false,\n  \"selection\": \"specific\",\n  \"selection_quote\": \"Because the universe is an index membership panel, stocks that leave the index (distress, delisting, acquisition) remain in the data through their final month, including the return over that final month. This mitigates survivorship bias but means the universe is not a fixed cohort.\",\n  \"strategy_weighting\": \"single_signal\",\n  \"mentions_out_of_sample\": true\n}",
+  "answer": {
+    "timing_flags": [
+      {
+        "variable": "SUE",
+        "reason": "reporting_delay",
+        "quote": "SUE is based on the most recent fiscal quarter ending on or before month-end t, with announcements occurring in the following month; the reported SUE is therefore information already public and reflected in prices by the time ret_next begins."
+      }
+    ],
+    "generic_timing_concern": false,
+    "selection": "specific",
+    "selection_quote": "Because the universe is an index membership panel, stocks that leave the index (distress, delisting, acquisition) remain in the data through their final month, including the return over that final month. This mitigates survivorship bias but means the universe is not a fixed cohort.",
+    "strategy_weighting": "single_signal",
+    "mentions_out_of_sample": true
+  }
+}

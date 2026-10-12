@@ -1,0 +1,49 @@
+{
+  "key": "C2__check_timing__pro-think__run1",
+  "judge_prompt_version": "v3",
+  "judge_model_id": "deepseek-v4-pro",
+  "request": {
+    "model": "deepseek-v4-pro",
+    "temperature": 0,
+    "max_tokens": 2048,
+    "stream": false,
+    "thinking": {
+      "type": "disabled"
+    }
+  },
+  "started_at": "2026-10-12T06:01:20+00:00",
+  "latency_s": 2.3,
+  "status": "success",
+  "http_status": 200,
+  "attempts": 1,
+  "errors": [],
+  "finish_reason": "stop",
+  "system_fingerprint": "a307abda487cd1b463329ccb945ce396",
+  "usage": {
+    "prompt_tokens": 2049,
+    "completion_tokens": 145,
+    "total_tokens": 2194,
+    "prompt_tokens_details": {
+      "cached_tokens": 768
+    },
+    "prompt_cache_hit_tokens": 768,
+    "prompt_cache_miss_tokens": 1281
+  },
+  "price_period": "peak",
+  "cost_usd_estimate": 0.002299,
+  "judge_output": "{\n  \"timing_flags\": [\n    {\n      \"variable\": \"sue\",\n      \"reason\": \"reporting_delay\",\n      \"quote\": \"firms announce quarterly earnings in the month after the fiscal quarter ends. The `sue` variable is defined using the most recent fiscal quarter ending on or before the end of month t. If that quarter ended during month t, its actual EPS would not be announced until month t+1\"\n    }\n  ],\n  \"timing_general\": \"raises\",\n  \"selection\": \"none\",\n  \"selection_quote\": \"\",\n  \"strategy_weighting\": \"no_strategy\",\n  \"mentions_out_of_sample\": false\n}",
+  "answer": {
+    "timing_flags": [
+      {
+        "variable": "sue",
+        "reason": "reporting_delay",
+        "quote": "firms announce quarterly earnings in the month after the fiscal quarter ends. The `sue` variable is defined using the most recent fiscal quarter ending on or before the end of month t. If that quarter ended during month t, its actual EPS would not be announced until month t+1"
+      }
+    ],
+    "timing_general": "raises",
+    "selection": "none",
+    "selection_quote": "",
+    "strategy_weighting": "no_strategy",
+    "mentions_out_of_sample": false
+  }
+}

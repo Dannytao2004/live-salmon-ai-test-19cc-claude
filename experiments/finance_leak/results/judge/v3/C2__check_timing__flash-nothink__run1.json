@@ -1,0 +1,49 @@
+{
+  "key": "C2__check_timing__flash-nothink__run1",
+  "judge_prompt_version": "v3",
+  "judge_model_id": "deepseek-v4-pro",
+  "request": {
+    "model": "deepseek-v4-pro",
+    "temperature": 0,
+    "max_tokens": 2048,
+    "stream": false,
+    "thinking": {
+      "type": "disabled"
+    }
+  },
+  "started_at": "2026-10-12T06:01:15+00:00",
+  "latency_s": 3.1,
+  "status": "success",
+  "http_status": 200,
+  "attempts": 1,
+  "errors": [],
+  "finish_reason": "stop",
+  "system_fingerprint": "a307abda487cd1b463329ccb945ce396",
+  "usage": {
+    "prompt_tokens": 3430,
+    "completion_tokens": 146,
+    "total_tokens": 3576,
+    "prompt_tokens_details": {
+      "cached_tokens": 768
+    },
+    "prompt_cache_hit_tokens": 768,
+    "prompt_cache_miss_tokens": 2662
+  },
+  "price_period": "peak",
+  "cost_usd_estimate": 0.004126,
+  "judge_output": "{\n  \"timing_flags\": [\n    {\n      \"variable\": \"sue\",\n      \"reason\": \"reporting_delay\",\n      \"quote\": \"SUE uses the most recent fiscal quarter ending on or before month-end t, with announcements occurring in the following month; the specification is therefore implementable in real time.\"\n    }\n  ],\n  \"timing_general\": \"raises\",\n  \"selection\": \"specific\",\n  \"selection_quote\": \"Survivorship is mitigated by retaining stocks through removal, but the index-constituent universe still excludes never-indexed firms.\",\n  \"strategy_weighting\": \"single_signal\",\n  \"mentions_out_of_sample\": false\n}",
+  "answer": {
+    "timing_flags": [
+      {
+        "variable": "sue",
+        "reason": "reporting_delay",
+        "quote": "SUE uses the most recent fiscal quarter ending on or before month-end t, with announcements occurring in the following month; the specification is therefore implementable in real time."
+      }
+    ],
+    "timing_general": "raises",
+    "selection": "specific",
+    "selection_quote": "Survivorship is mitigated by retaining stocks through removal, but the index-constituent universe still excludes never-indexed firms.",
+    "strategy_weighting": "single_signal",
+    "mentions_out_of_sample": false
+  }
+}

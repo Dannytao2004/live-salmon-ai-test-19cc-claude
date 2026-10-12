@@ -1,0 +1,43 @@
+{
+  "key": "C3__check_timing__flash-think__run2",
+  "judge_prompt_version": "v1",
+  "judge_model_id": "deepseek-v4-pro",
+  "request": {
+    "model": "deepseek-v4-pro",
+    "temperature": 0,
+    "max_tokens": 2048,
+    "stream": false,
+    "thinking": {
+      "type": "disabled"
+    }
+  },
+  "started_at": "2026-10-12T06:04:47+00:00",
+  "latency_s": 2.1,
+  "status": "success",
+  "http_status": 200,
+  "attempts": 1,
+  "errors": [],
+  "finish_reason": "stop",
+  "system_fingerprint": "a307abda487cd1b463329ccb945ce396",
+  "usage": {
+    "prompt_tokens": 2509,
+    "completion_tokens": 88,
+    "total_tokens": 2597,
+    "prompt_tokens_details": {
+      "cached_tokens": 512
+    },
+    "prompt_cache_hit_tokens": 512,
+    "prompt_cache_miss_tokens": 1997
+  },
+  "price_period": "peak",
+  "cost_usd_estimate": 0.003007,
+  "judge_output": "{\n  \"timing_flags\": [],\n  \"generic_timing_concern\": false,\n  \"selection\": \"specific\",\n  \"selection_quote\": \"The universe consists of stocks that are index constituents at the end of month 120, with history back to month 1 or to their index inclusion month.\",\n  \"strategy_weighting\": \"single_signal\",\n  \"mentions_out_of_sample\": false\n}",
+  "answer": {
+    "timing_flags": [],
+    "generic_timing_concern": false,
+    "selection": "specific",
+    "selection_quote": "The universe consists of stocks that are index constituents at the end of month 120, with history back to month 1 or to their index inclusion month.",
+    "strategy_weighting": "single_signal",
+    "mentions_out_of_sample": false
+  }
+}

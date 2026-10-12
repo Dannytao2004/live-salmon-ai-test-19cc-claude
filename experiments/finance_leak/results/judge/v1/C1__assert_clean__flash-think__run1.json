@@ -1,0 +1,49 @@
+{
+  "key": "C1__assert_clean__flash-think__run1",
+  "judge_prompt_version": "v1",
+  "judge_model_id": "deepseek-v4-pro",
+  "request": {
+    "model": "deepseek-v4-pro",
+    "temperature": 0,
+    "max_tokens": 2048,
+    "stream": false,
+    "thinking": {
+      "type": "disabled"
+    }
+  },
+  "started_at": "2026-10-12T06:03:43+00:00",
+  "latency_s": 2.3,
+  "status": "success",
+  "http_status": 200,
+  "attempts": 1,
+  "errors": [],
+  "finish_reason": "stop",
+  "system_fingerprint": "a307abda487cd1b463329ccb945ce396",
+  "usage": {
+    "prompt_tokens": 2325,
+    "completion_tokens": 146,
+    "total_tokens": 2471,
+    "prompt_tokens_details": {
+      "cached_tokens": 512
+    },
+    "prompt_cache_hit_tokens": 512,
+    "prompt_cache_miss_tokens": 1813
+  },
+  "price_period": "peak",
+  "cost_usd_estimate": 0.002994,
+  "judge_output": "{\n  \"timing_flags\": [\n    {\n      \"variable\": \"analyst_rev\",\n      \"reason\": \"measured_during_target_period\",\n      \"quote\": \"the change in the mean FY1 EPS forecast during month t+1, recorded at the end of month t+1. Since `ret_next` is also realized over month t+1, `analyst_rev` embeds future information relative to the portfolio formation date\"\n    }\n  ],\n  \"generic_timing_concern\": true,\n  \"selection\": \"none\",\n  \"selection_quote\": \"\",\n  \"strategy_weighting\": \"no_strategy\",\n  \"mentions_out_of_sample\": true\n}",
+  "answer": {
+    "timing_flags": [
+      {
+        "variable": "analyst_rev",
+        "reason": "measured_during_target_period",
+        "quote": "the change in the mean FY1 EPS forecast during month t+1, recorded at the end of month t+1. Since `ret_next` is also realized over month t+1, `analyst_rev` embeds future information relative to the portfolio formation date"
+      }
+    ],
+    "generic_timing_concern": true,
+    "selection": "none",
+    "selection_quote": "",
+    "strategy_weighting": "no_strategy",
+    "mentions_out_of_sample": true
+  }
+}
