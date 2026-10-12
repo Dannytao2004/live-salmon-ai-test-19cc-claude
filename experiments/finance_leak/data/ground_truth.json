@@ -1,0 +1,222 @@
+{
+  "seed": 42,
+  "n_stocks": 500,
+  "n_months": 120,
+  "return_model": {
+    "live": "ret_next[i,t] = market[t] + sum_k premium[k,t] * z[k,i,t] + eps[i,t]; premium[k,t] = premium_k + shock[k,t], shock ~ N(0, premium_std) demeaned in sample (average premium = premium_k exactly); eps ~ N(0, idio_std); z = feature latent standardized within month",
+    "dead": "ret_next[i,t] = market[t] + eps'[i,t]; eps' ~ N(0, idio_std), independent of all features",
+    "market_mean": 0.008,
+    "market_std": 0.045,
+    "idio_std": 0.1,
+    "premium_std": 0.006,
+    "expected_rank_ic_note": "Gaussian approximation: rank IC = 6/pi * asin(pearson/2), pearson = premium / within-month SD of ret_next"
+  },
+  "features": {
+    "book_to_market": {
+      "role_in_live_returns": "noise",
+      "premium_per_sd_monthly": 0.0,
+      "expected_rank_ic_live": 0.0,
+      "ar1_rho_monthly": 0.97,
+      "unit_map": [
+        "exp",
+        -0.5,
+        0.6
+      ]
+    },
+    "gross_prof": {
+      "role_in_live_returns": "true_factor",
+      "premium_per_sd_monthly": 0.0045,
+      "expected_rank_ic_live": 0.0427,
+      "ar1_rho_monthly": 0.97,
+      "unit_map": [
+        "linear",
+        0.25,
+        0.12
+      ]
+    },
+    "log_mktcap": {
+      "role_in_live_returns": "noise",
+      "premium_per_sd_monthly": 0.0,
+      "expected_rank_ic_live": 0.0,
+      "ar1_rho_monthly": 0.99,
+      "unit_map": [
+        "linear",
+        7.5,
+        1.6
+      ]
+    },
+    "asset_growth": {
+      "role_in_live_returns": "true_factor",
+      "premium_per_sd_monthly": -0.0035,
+      "expected_rank_ic_live": -0.0332,
+      "ar1_rho_monthly": 0.9,
+      "unit_map": [
+        "linear",
+        0.08,
+        0.2
+      ]
+    },
+    "accruals": {
+      "role_in_live_returns": "noise",
+      "premium_per_sd_monthly": 0.0,
+      "expected_rank_ic_live": 0.0,
+      "ar1_rho_monthly": 0.9,
+      "unit_map": [
+        "linear",
+        -0.03,
+        0.06
+      ]
+    },
+    "idio_vol": {
+      "role_in_live_returns": "true_factor",
+      "premium_per_sd_monthly": -0.003,
+      "expected_rank_ic_live": -0.0284,
+      "ar1_rho_monthly": 0.85,
+      "unit_map": [
+        "exp",
+        -1.2039728043259361,
+        0.4
+      ]
+    },
+    "leverage": {
+      "role_in_live_returns": "noise",
+      "premium_per_sd_monthly": 0.0,
+      "expected_rank_ic_live": 0.0,
+      "ar1_rho_monthly": 0.97,
+      "unit_map": [
+        "logistic",
+        -0.6,
+        0.9
+      ]
+    },
+    "turnover": {
+      "role_in_live_returns": "noise",
+      "premium_per_sd_monthly": 0.0,
+      "expected_rank_ic_live": 0.0,
+      "ar1_rho_monthly": 0.85,
+      "unit_map": [
+        "exp",
+        -2.5257286443082556,
+        0.7
+      ]
+    },
+    "rd_intensity": {
+      "role_in_live_returns": "noise",
+      "premium_per_sd_monthly": 0.0,
+      "expected_rank_ic_live": 0.0,
+      "ar1_rho_monthly": 0.97,
+      "unit_map": [
+        "exp",
+        -3.506557897319982,
+        1.0
+      ]
+    }
+  },
+  "leak": {
+    "feature": "analyst_rev",
+    "construction": "latent = leak_corr * standardize_within_month(ret_next) + sqrt(1 - leak_corr^2) * N(0,1); value = 0.004 * latent",
+    "leak_corr": 0.31,
+    "expected_rank_ic": 0.2972,
+    "why_it_is_a_leak": "It is measured over month t+1, the same window as ret_next, so it is not available at the end of month t when a trade would be placed.",
+    "dictionary_text": "Analyst consensus revision: change in the mean FY1 EPS forecast during month t+1, scaled by share price. Recorded at the end of month t+1."
+  },
+  "groups": {
+    "A": {
+      "label": "control",
+      "returns": "live",
+      "columns": [
+        "month",
+        "stock_id",
+        "book_to_market",
+        "gross_prof",
+        "log_mktcap",
+        "asset_growth",
+        "accruals",
+        "idio_vol",
+        "leverage",
+        "turnover",
+        "rd_intensity",
+        "ret_next"
+      ],
+      "valid_signals": [
+        "gross_prof",
+        "asset_growth",
+        "idio_vol"
+      ],
+      "noise_features": [
+        "book_to_market",
+        "log_mktcap",
+        "accruals",
+        "leverage",
+        "turnover",
+        "rd_intensity"
+      ],
+      "leak_feature": null
+    },
+    "B": {
+      "label": "live salmon + leak",
+      "returns": "live",
+      "columns": [
+        "month",
+        "stock_id",
+        "book_to_market",
+        "gross_prof",
+        "log_mktcap",
+        "asset_growth",
+        "accruals",
+        "analyst_rev",
+        "idio_vol",
+        "leverage",
+        "turnover",
+        "rd_intensity",
+        "ret_next"
+      ],
+      "valid_signals": [
+        "gross_prof",
+        "asset_growth",
+        "idio_vol"
+      ],
+      "noise_features": [
+        "book_to_market",
+        "log_mktcap",
+        "accruals",
+        "leverage",
+        "turnover",
+        "rd_intensity"
+      ],
+      "leak_feature": "analyst_rev"
+    },
+    "C": {
+      "label": "dead salmon + leak",
+      "returns": "dead",
+      "columns": [
+        "month",
+        "stock_id",
+        "book_to_market",
+        "gross_prof",
+        "log_mktcap",
+        "asset_growth",
+        "accruals",
+        "analyst_rev",
+        "idio_vol",
+        "leverage",
+        "turnover",
+        "rd_intensity",
+        "ret_next"
+      ],
+      "valid_signals": [],
+      "noise_features": [
+        "book_to_market",
+        "gross_prof",
+        "log_mktcap",
+        "asset_growth",
+        "accruals",
+        "idio_vol",
+        "leverage",
+        "turnover",
+        "rd_intensity"
+      ],
+      "leak_feature": "analyst_rev"
+    }
+  }
+}
