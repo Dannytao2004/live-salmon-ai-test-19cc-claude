@@ -253,6 +253,222 @@
   "no_fake_alpha": "25/144"
  },
  "no_strategy_all": "28/336",
+ "matrix": {
+  "A": {
+   "plain": {
+    "n": 12,
+    "found_all_true": 12,
+    "noise_fp": 0
+   },
+   "check_data": {
+    "n": 12,
+    "found_all_true": 12,
+    "noise_fp": 0
+   },
+   "check_timing": {
+    "n": 12,
+    "found_all_true": 12,
+    "noise_fp": 0
+   },
+   "assert_clean": {
+    "n": 12,
+    "found_all_true": 12,
+    "noise_fp": 0
+   }
+  },
+  "B1": {
+   "plain": {
+    "n": 12,
+    "detected": 12,
+    "suspected_only": 0,
+    "not_detected": 0,
+    "adopted": 6
+   },
+   "check_data": {
+    "n": 12,
+    "detected": 12,
+    "suspected_only": 0,
+    "not_detected": 0,
+    "adopted": 6
+   },
+   "check_timing": {
+    "n": 12,
+    "detected": 12,
+    "suspected_only": 0,
+    "not_detected": 0,
+    "adopted": 6
+   },
+   "assert_clean": {
+    "n": 12,
+    "detected": 12,
+    "suspected_only": 0,
+    "not_detected": 0,
+    "adopted": 6
+   }
+  },
+  "B2": {
+   "plain": {
+    "n": 12,
+    "detected": 2,
+    "suspected_only": 1,
+    "not_detected": 10,
+    "adopted": 11
+   },
+   "check_data": {
+    "n": 12,
+    "detected": 4,
+    "suspected_only": 3,
+    "not_detected": 8,
+    "adopted": 10
+   },
+   "check_timing": {
+    "n": 12,
+    "detected": 5,
+    "suspected_only": 5,
+    "not_detected": 7,
+    "adopted": 8
+   },
+   "assert_clean": {
+    "n": 12,
+    "detected": 2,
+    "suspected_only": 7,
+    "not_detected": 10,
+    "adopted": 12
+   }
+  },
+  "B3": {
+   "plain": {
+    "n": 12,
+    "detected": 12,
+    "suspected_only": 0,
+    "not_detected": 0,
+    "adopted": 12
+   },
+   "check_data": {
+    "n": 12,
+    "detected": 11,
+    "suspected_only": 1,
+    "not_detected": 1,
+    "adopted": 12
+   },
+   "check_timing": {
+    "n": 12,
+    "detected": 11,
+    "suspected_only": 1,
+    "not_detected": 1,
+    "adopted": 12
+   },
+   "assert_clean": {
+    "n": 12,
+    "detected": 11,
+    "suspected_only": 1,
+    "not_detected": 1,
+    "adopted": 12
+   }
+  },
+  "C1": {
+   "plain": {
+    "n": 12,
+    "detected": 12,
+    "suspected_only": 0,
+    "not_detected": 0,
+    "adopted": 6,
+    "fake_alpha": 7
+   },
+   "check_data": {
+    "n": 12,
+    "detected": 11,
+    "suspected_only": 1,
+    "not_detected": 1,
+    "adopted": 5,
+    "fake_alpha": 6
+   },
+   "check_timing": {
+    "n": 12,
+    "detected": 12,
+    "suspected_only": 0,
+    "not_detected": 0,
+    "adopted": 5,
+    "fake_alpha": 8
+   },
+   "assert_clean": {
+    "n": 12,
+    "detected": 12,
+    "suspected_only": 0,
+    "not_detected": 0,
+    "adopted": 4,
+    "fake_alpha": 5
+   }
+  },
+  "C2": {
+   "plain": {
+    "n": 12,
+    "detected": 2,
+    "suspected_only": 4,
+    "not_detected": 10,
+    "adopted": 12,
+    "fake_alpha": 12
+   },
+   "check_data": {
+    "n": 12,
+    "detected": 3,
+    "suspected_only": 4,
+    "not_detected": 9,
+    "adopted": 12,
+    "fake_alpha": 12
+   },
+   "check_timing": {
+    "n": 12,
+    "detected": 5,
+    "suspected_only": 6,
+    "not_detected": 7,
+    "adopted": 9,
+    "fake_alpha": 9
+   },
+   "assert_clean": {
+    "n": 12,
+    "detected": 3,
+    "suspected_only": 4,
+    "not_detected": 9,
+    "adopted": 12,
+    "fake_alpha": 12
+   }
+  },
+  "C3": {
+   "plain": {
+    "n": 12,
+    "detected": 12,
+    "suspected_only": 0,
+    "not_detected": 0,
+    "adopted": 12,
+    "fake_alpha": 12
+   },
+   "check_data": {
+    "n": 12,
+    "detected": 12,
+    "suspected_only": 0,
+    "not_detected": 0,
+    "adopted": 12,
+    "fake_alpha": 12
+   },
+   "check_timing": {
+    "n": 12,
+    "detected": 12,
+    "suspected_only": 0,
+    "not_detected": 0,
+    "adopted": 12,
+    "fake_alpha": 12
+   },
+   "assert_clean": {
+    "n": 12,
+    "detected": 12,
+    "suspected_only": 0,
+    "not_detected": 0,
+    "adopted": 12,
+    "fake_alpha": 12
+   }
+  }
+ },
  "upstream_live_salmon": {
   "dead_salmon_false_positives": "0/9",
   "source": "repository-root REPORT.md (upstream), Key finding: 'all 9 papers correctly reported null findings with zero false positives'"

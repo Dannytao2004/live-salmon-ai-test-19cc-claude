@@ -10,7 +10,7 @@ fig3_claimed_sharpe.png and a <name>_data.csv next to each.
 
 Usage:
   python make_figures.py                         # English, into figures/
-  python make_figures.py --lang zh --out <dir>   # Chinese
+  python make_figures.py --lang zh --out <dir> --fmt svg   # Chinese, vector
 """
 
 import argparse
@@ -110,7 +110,7 @@ def legend(fig, items, y):
                frameon=False, fontsize=9, labelcolor=INK_2, handlelength=1.0, handleheight=0.9, columnspacing=1.4)
 
 
-def fig1(df, t, out):
+def fig1(df, t, out, ext):
     rows = []
     for key, groups, col in TRAP_ROWS:
         for thinking in (True, False):
@@ -149,12 +149,12 @@ def fig1(df, t, out):
     titles(fig, t["fig1_title"], t["fig1_sub"])
     legend(fig, [(t["detected"], DETECTED), (t["adopted"], ADOPTED)], 0.83)
     fig.subplots_adjust(left=0.25, right=0.97, top=0.76, bottom=0.08)
-    fig.savefig(os.path.join(out, "fig1_detect_vs_adopt.png"), facecolor=SURFACE)
+    fig.savefig(os.path.join(out, f"fig1_detect_vs_adopt.{ext}"), facecolor=SURFACE)
     plt.close(fig)
     return data
 
 
-def fig2(df, t, out):
+def fig2(df, t, out, ext):
     d = df[df.group.isin(["B2", "C2"])]
     rows = []
     for cond in labels.CONDITIONS:
@@ -187,12 +187,12 @@ def fig2(df, t, out):
     titles(fig, t["fig2_title"], t["fig2_sub"])
     legend(fig, [(label, color) for _, label, color in series], 0.86)
     fig.subplots_adjust(left=0.06, right=0.98, top=0.76, bottom=0.2)
-    fig.savefig(os.path.join(out, "fig2_reporting_lag_by_condition.png"), facecolor=SURFACE)
+    fig.savefig(os.path.join(out, f"fig2_reporting_lag_by_condition.{ext}"), facecolor=SURFACE)
     plt.close(fig)
     return data
 
 
-def fig3(df, bench, t, out):
+def fig3(df, bench, t, out, ext):
     d = df.dropna(subset=["claimed_sharpe"])
     groups = list(labels.GROUPS)
     data = d[["key", "group", "condition", "model", "claimed_sharpe"]].copy()
@@ -222,7 +222,7 @@ def fig3(df, bench, t, out):
     ax.spines["left"].set_visible(False)
     titles(fig, t["fig3_title"], t["fig3_sub"].format(n=len(d)))
     fig.subplots_adjust(left=0.08, right=0.98, top=0.76, bottom=0.14)
-    fig.savefig(os.path.join(out, "fig3_claimed_sharpe.png"), facecolor=SURFACE)
+    fig.savefig(os.path.join(out, f"fig3_claimed_sharpe.{ext}"), facecolor=SURFACE)
     plt.close(fig)
     return data
 
@@ -231,17 +231,20 @@ def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--lang", choices=list(TEXT), default="en")
     parser.add_argument("--out", default=FIG_DIR)
+    parser.add_argument("--fmt", choices=["png", "svg"], default="png", help="svg draws text as paths (no font needed)")
     args = parser.parse_args()
     t = TEXT[args.lang]
     os.makedirs(args.out, exist_ok=True)
     plt.rcParams["font.family"] = t["fonts"]
     plt.rcParams["axes.unicode_minus"] = False
+    plt.rcParams["svg.fonttype"] = "path"
+    plt.rcParams["svg.hashsalt"] = "salmonheart"  # stable ids, so SVG output is reproducible
     df = pd.read_csv(os.path.join(labels.SCORES_DIR, "responses_agent_v4.csv"))
     with open(os.path.join(labels.SCORES_DIR, "judge_reliability.json"), encoding="utf-8") as f:
         bench = json.load(f)["benchmark_sharpe"]
-    print(fig1(df, t, args.out).drop(columns=["_trap_key", "_mode_key"]).round(3).to_string(index=False))
-    print(fig2(df, t, args.out).round(3).to_string(index=False))
-    fig3(df, bench, t, args.out)
+    print(fig1(df, t, args.out, args.fmt).drop(columns=["_trap_key", "_mode_key"]).round(3).to_string(index=False))
+    print(fig2(df, t, args.out, args.fmt).round(3).to_string(index=False))
+    fig3(df, bench, t, args.out, args.fmt)
     print(f"Saved {args.lang} figures and data to {args.out}")
 
 

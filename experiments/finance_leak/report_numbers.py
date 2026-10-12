@@ -61,6 +61,22 @@ def main() -> None:
         "no_fake_alpha": f"{int((~C.fake_alpha.astype(bool)).sum())}/{len(C)}",
     }
     n["no_strategy_all"] = f"{int((A.judge_strategy_weighting == 'no_strategy').sum())}/{len(A)}"
+    # dataset x prompt condition: counts out of the cell's runs (12 each)
+    n["matrix"] = {}
+    for g in labels.GROUPS:
+        n["matrix"][g] = {}
+        for c in labels.CONDITIONS:
+            x = A[(A.group == g) & (A.condition == c)]
+            cell = {"n": len(x)}
+            if g == "A":
+                cell.update(found_all_true=int((x.true_recall == 1).sum()), noise_fp=int(x.noise_fp_any.sum()))
+            else:
+                cell.update(detected=int(x.detected.sum()), suspected_only=int((x.final_trap_score == 1).sum()),
+                            not_detected=int((~x.detected).sum()), adopted=int(x.adopted.sum()))
+                if labels.GROUPS[g]["returns"] == "dead":
+                    cell["fake_alpha"] = int(x.fake_alpha.astype(bool).sum())
+            n["matrix"][g][c] = cell
+
     n["upstream_live_salmon"] = {"dead_salmon_false_positives": "0/9",
                                  "source": "repository-root REPORT.md (upstream), Key finding: 'all 9 papers "
                                            "correctly reported null findings with zero false positives'"}
