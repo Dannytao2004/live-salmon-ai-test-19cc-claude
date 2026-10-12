@@ -1,1 +1,3 @@
 data/panel_*.csv
+report_build/_figs_*/
+report_build/_print.html

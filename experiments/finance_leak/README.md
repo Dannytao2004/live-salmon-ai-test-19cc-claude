@@ -4,7 +4,7 @@ A finance variant of the Live Salmon Test. Synthetic monthly stock panels with a
 data-generating process each hide one classic look-ahead trap (a same-period variable, a
 reporting-lag misalignment, or survivorship selection); an AI "quantitative researcher" gets a
 text summary and must find signals, propose a strategy and write a short paper. Results:
-**[REPORT.md](REPORT.md)**. Scoring rules, pre-registered and with every later change recorded:
+**[REPORT.md](REPORT.md)**; a shorter summary as PDF: **[report_build/REPORT.pdf](report_build/REPORT.pdf)**. Scoring rules, pre-registered and with every later change recorded:
 **[RUBRIC.md](RUBRIC.md)**.
 
 Nothing outside this folder was modified.
@@ -24,6 +24,7 @@ Nothing outside this folder was modified.
 | `evaluate.py` | all metrics and tables (`results/scores/`) |
 | `make_figures.py` | the three figures and their data (`figures/`) |
 | `report_numbers.py` | every number cited in `REPORT.md` (`results/scores/report_numbers.json`) |
+| `report_build/` | the PDF summary: template, build script, `REPORT.html` and `REPORT.pdf` |
 | `.env.example` | template for the git-ignored `.env` that holds API keys |
 
 ## Reproducing
@@ -37,6 +38,7 @@ python build_prompts.py      # rewrites prompts/; git diff should be empty
 python evaluate.py           # tables and judge reliability, offline
 python make_figures.py       # figures, offline
 python report_numbers.py     # numbers cited in REPORT.md, offline
+python report_build/build_report.py   # REPORT.html and REPORT.pdf (needs Chrome or Edge), offline
 ```
 
 The last three rebuild every table, figure and number in `REPORT.md` from the committed

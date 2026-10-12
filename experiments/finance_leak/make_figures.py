@@ -1,7 +1,7 @@
 """
 Figures for the report (static PNG, plus each figure's data as CSV), in English
-(default, for REPORT.md) or Chinese. Both languages draw the same data; only the
-text differs.
+(default, for REPORT.md), English with the PDF report's wording (en_report) or
+Chinese. All variants draw the same data; only the text differs.
 
 Reads results/scores/responses_agent_v4.csv (primary judge) and
 results/scores/judge_reliability.json (benchmark Sharpe ratios).
@@ -86,6 +86,19 @@ TEXT = {
         "fig3_ylabel": "声称的年化 Sharpe",
         "fig3_tick": "{g}（{returns}）\n中位数 {median:.1f}", "live": "真收益", "dead": "纯噪声",
     },
+}
+# English with the wording of report_build/ (the PDF report): real / noise returns and the
+# prompt conditions named as in its tables.
+TEXT["en_report"] = {
+    **TEXT["en"],
+    "fig1_sub": "Share of 48 responses per row (real + noise returns, all four prompt conditions, 3 runs x 2 DeepSeek models).\n"
+                "Detected = the report states the mechanism (score 2). Adopted = the trap or spurious column is listed as a valid signal.",
+    "conditions": {"plain": "No hint", "check_data": "Check the data\n\"Check the data first.\"",
+                   "check_timing": "Check timing\n\"Check when each variable\nbecomes available.\"",
+                   "assert_clean": "Claims clean\n\"The data ... is clean.\""},
+    "fig3_sub": "Each dot is one response's claimed annual Sharpe ({n} of 336 gave a number). Black bar: the in-sample\n"
+                "Sharpe of an equal-weight composite of the group's true signals (0 in the noise-return groups C1-C3).",
+    "live": "real", "dead": "noise",
 }
 
 

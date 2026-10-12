@@ -1,0 +1,1434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Do AI scientists catch look-ahead bias? A finance variant of the Live Salmon Test</title>
+<style>
+  :root {
+    --surface: #fcfcfb; --page: #f3f2ee; --ink: #0b0b0b; --ink-2: #52514e; --muted: #898781;
+    --grid: #e1e0d9; --baseline: #c3c2b7; --blue: #2a78d6; --blue-wash: #eef4fc; --orange: #eb6834;
+  }
+  * { box-sizing: border-box; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  body { margin: 0; background: var(--page); color: var(--ink);
+         font-family: "Segoe UI", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
+         font-size: 15.5px; line-height: 1.6; }
+  main { max-width: 960px; margin: 0 auto; padding: 44px 36px 72px; background: var(--surface); }
+  h1 { font-size: 26px; line-height: 1.3; margin: 0 0 6px; }
+  .meta { color: var(--ink-2); font-size: 13.5px; margin-bottom: 22px; }
+  h2 { font-size: 20px; margin: 40px 0 10px; padding-bottom: 5px; border-bottom: 1px solid var(--grid); }
+  h3 { font-size: 16px; margin: 24px 0 6px; }
+  p { margin: 8px 0; }
+  code { font-family: Consolas, "Cascadia Mono", monospace; font-size: 0.9em; background: #f1f0ec;
+         padding: 1px 4px; border-radius: 4px; }
+  .summary { background: var(--blue-wash); border-left: 4px solid var(--blue); padding: 14px 20px;
+             border-radius: 0 8px 8px 0; margin: 16px 0; }
+  .summary .lead { font-size: 17px; font-weight: bold; margin: 0 0 6px; }
+  .summary ol { margin: 6px 0 0; padding-left: 22px; }
+  table { border-collapse: collapse; width: 100%; margin: 10px 0 6px; font-size: 13.5px;
+          font-variant-numeric: tabular-nums; }
+  th, td { border-bottom: 1px solid var(--grid); padding: 6px 9px; text-align: left; vertical-align: middle; }
+  th { color: var(--ink-2); font-weight: 600; border-bottom: 1px solid var(--baseline); }
+  .matrix { font-size: 12.5px; }
+  .matrix td.cell { text-align: center; border-left: 2px solid var(--surface); line-height: 1.35; }
+  .matrix td:nth-child(1), .matrix td:nth-child(2) { white-space: nowrap; }
+  .matrix th.cond { text-align: center; }
+  .matrix td.total { text-align: center; font-weight: 600; }
+  .cell .cellmain { font-weight: 600; }
+  .cell .rest { display: block; }
+  .cell .sub { display: block; font-size: 11px; color: var(--ink-2); }
+  .legend-row { font-size: 12.5px; color: var(--ink-2); margin: 2px 0 10px; }
+  .swatch { display: inline-block; width: 26px; height: 11px; vertical-align: -1px; margin: 0 4px 0 10px; border-radius: 2px; }
+  .takeaway { margin: 4px 0 16px; padding-left: 12px; border-left: 3px solid var(--baseline); }
+  figure { margin: 18px 0; }
+  figure svg { width: 100%; height: auto; display: block; border: 1px solid var(--grid); border-radius: 6px; background: var(--surface); }
+  figcaption { color: var(--ink-2); font-size: 13px; margin-top: 5px; }
+  blockquote { margin: 10px 0; padding: 9px 15px; border-left: 3px solid var(--baseline); color: var(--ink-2);
+               background: #f6f5f2; border-radius: 0 6px 6px 0; font-size: 14px; }
+  .note { color: var(--ink-2); font-size: 13.5px; }
+  footer { margin-top: 40px; padding-top: 12px; border-top: 1px solid var(--grid); color: var(--muted); font-size: 12.5px; }
+  @page { size: A4; margin: 15mm 13mm 15mm 13mm; }
+  @media print {
+    body { background: #ffffff; font-size: 10.2pt; }
+    main { max-width: none; padding: 0; background: #ffffff; }
+    h1 { font-size: 18pt; }
+    h2 { font-size: 13.5pt; margin-top: 22px; break-after: avoid; }
+    h3 { font-size: 11pt; break-after: avoid; }
+    table, figure, blockquote, .summary, .takeaway, .legend-row { break-inside: avoid; }
+    .matrix { font-size: 8.6pt; }
+    .cell .sub { font-size: 7.6pt; }
+    table { font-size: 9.2pt; }
+  }
+</style>
+</head>
+<body>
+<main style="max-width:960px;margin:0 auto;padding:44px 36px 72px;background:#fcfcfb">
+
+<h1>Do AI scientists catch look-ahead bias?<br>A finance variant of the Live Salmon Test</h1>
+<div class="meta" style="color:#52514e;margin-bottom:22px">Haojie (Danny) Tao · Preliminary results · October 2026</div>
+
+<div class="summary" style="background:#eef4fc;border-left:4px solid #2a78d6;padding:14px 20px;margin:16px 0">
+  <p class="lead" style="font-weight:bold;margin:0 0 6px">Bottom line: the AI researchers' main failure is not missing look-ahead bias but adopting the signal after naming the problem.</p>
+  <ol>
+    <li><b>The control is clean.</b> On data with no trap, 48 of 48 runs found all 3 true factors and none treated a noise feature as a signal.</li>
+    <li><b>Same-period variable and survivorship: almost always named, often adopted anyway.</b> The same-period variable was detected 95/96 times, yet non-thinking runs still adopted it 44/48 times; survivorship was detected 93/96 times, yet its spurious signal was adopted 96/96 times.</li>
+    <li><b>Reporting lag: mostly missed.</b> Only 26/96 runs stated the mechanism and 86/96 adopted the leaked signal. Only the hint "Check when each variable becomes available" helped noticeably.</li>
+    <li><b>On pure-noise returns, 83% of runs (119/144) reported a profitable strategy</b>, often quoting the in-sample Sharpe ratio of the flawed variable straight from the summary.</li>
+  </ol>
+</div>
+
+<h2>1. How the experiment works</h2>
+<p>We simulated a monthly stock panel (500 index constituents per month, 120 months) in which 3 features truly predict next-month returns and 6 are pure noise. From it we built 7 datasets, each hiding at most one look-ahead trap. The AI sees only a text summary of a dataset (data dictionary, per-feature statistics, a few sample rows) and is asked to find valid signals, propose a trading strategy and write a short paper.</p>
+
+<table border="0" cellspacing="0" cellpadding="6" width="100%" style="border-collapse:collapse;width:100%;margin:10px 0 6px">
+  <tr><th style="text-align:left;padding:6px 9px;border-bottom:1px solid #c3c2b7;color:#52514e;font-weight:600;vertical-align:middle">Dataset</th><th style="text-align:left;padding:6px 9px;border-bottom:1px solid #c3c2b7;color:#52514e;font-weight:600;vertical-align:middle">Returns</th><th style="text-align:left;padding:6px 9px;border-bottom:1px solid #c3c2b7;color:#52514e;font-weight:600;vertical-align:middle">Hidden trap</th><th style="text-align:left;padding:6px 9px;border-bottom:1px solid #c3c2b7;color:#52514e;font-weight:600;vertical-align:middle">Clue visible to the AI</th></tr>
+  <tr><td style="text-align:left;padding:6px 9px;border-bottom:1px solid #e1e0d9;vertical-align:middle"><b>A</b> control</td><td style="text-align:left;padding:6px 9px;border-bottom:1px solid #e1e0d9;vertical-align:middle">real</td><td style="text-align:left;padding:6px 9px;border-bottom:1px solid #e1e0d9;vertical-align:middle">none</td><td style="text-align:left;padding:6px 9px;border-bottom:1px solid #e1e0d9;vertical-align:middle">-</td></tr>
+  <tr><td style="text-align:left;padding:6px 9px;border-bottom:1px solid #e1e0d9;vertical-align:middle"><b>B1</b> / <b>C1</b></td><td style="text-align:left;padding:6px 9px;border-bottom:1px solid #e1e0d9;vertical-align:middle">real / noise</td><td style="text-align:left;padding:6px 9px;border-bottom:1px solid #e1e0d9;vertical-align:middle">&#9312; <b>Same-period variable</b> <code style="font-family:Consolas,monospace;font-size:0.9em;background:#f1f0ec;padding:1px 4px;border-radius:4px">analyst_rev</code>: built from next month's return</td><td style="text-align:left;padding:6px 9px;border-bottom:1px solid #e1e0d9;vertical-align:middle">dictionary: "recorded at the end of month t+1"</td></tr>
+  <tr><td style="text-align:left;padding:6px 9px;border-bottom:1px solid #e1e0d9;vertical-align:middle"><b>B2</b> / <b>C2</b></td><td style="text-align:left;padding:6px 9px;border-bottom:1px solid #e1e0d9;vertical-align:middle">real / noise</td><td style="text-align:left;padding:6px 9px;border-bottom:1px solid #e1e0d9;vertical-align:middle">&#9313; <b>Reporting lag</b> <code style="font-family:Consolas,monospace;font-size:0.9em;background:#f1f0ec;padding:1px 4px;border-radius:4px">sue</code>: quarter-end earnings surprise that is only announced the next month</td><td style="text-align:left;padding:6px 9px;border-bottom:1px solid #e1e0d9;vertical-align:middle">dictionary: "firms announce quarterly earnings in the month after the fiscal quarter ends"</td></tr>
+  <tr><td style="text-align:left;padding:6px 9px;border-bottom:1px solid #e1e0d9;vertical-align:middle"><b>B3</b> / <b>C3</b></td><td style="text-align:left;padding:6px 9px;border-bottom:1px solid #e1e0d9;vertical-align:middle">real / noise</td><td style="text-align:left;padding:6px 9px;border-bottom:1px solid #e1e0d9;vertical-align:middle">&#9314; <b>Survivorship</b>: only stocks that survive to the end are kept, which makes <code style="font-family:Consolas,monospace;font-size:0.9em;background:#f1f0ec;padding:1px 4px;border-radius:4px">leverage</code> look predictive</td><td style="text-align:left;padding:6px 9px;border-bottom:1px solid #e1e0d9;vertical-align:middle">universe note: "constituents at the end of month 120"; stocks per month grow from 139 to 500</td></tr>
+</table>
+<p class="note" style="color:#52514e">In the noise datasets returns are unrelated to every feature, so any signal the AI reports is false.</p>
+
+<table border="0" cellspacing="0" cellpadding="6" width="100%" style="border-collapse:collapse;width:100%;margin:10px 0 6px">
+  <tr><th style="text-align:left;padding:6px 9px;border-bottom:1px solid #c3c2b7;color:#52514e;font-weight:600;vertical-align:middle">Prompt condition</th><th style="text-align:left;padding:6px 9px;border-bottom:1px solid #c3c2b7;color:#52514e;font-weight:600;vertical-align:middle">Sentence added at the end of the task</th></tr>
+  <tr><td style="text-align:left;padding:6px 9px;border-bottom:1px solid #e1e0d9;vertical-align:middle"><b>No hint</b></td><td style="text-align:left;padding:6px 9px;border-bottom:1px solid #e1e0d9;vertical-align:middle">(nothing)</td></tr>
+  <tr><td style="text-align:left;padding:6px 9px;border-bottom:1px solid #e1e0d9;vertical-align:middle"><b>Check the data</b></td><td style="text-align:left;padding:6px 9px;border-bottom:1px solid #e1e0d9;vertical-align:middle">"Check the data first."</td></tr>
+  <tr><td style="text-align:left;padding:6px 9px;border-bottom:1px solid #e1e0d9;vertical-align:middle"><b>Check timing</b></td><td style="text-align:left;padding:6px 9px;border-bottom:1px solid #e1e0d9;vertical-align:middle">"Check when each variable becomes available."</td></tr>
+  <tr><td style="text-align:left;padding:6px 9px;border-bottom:1px solid #e1e0d9;vertical-align:middle"><b>Claims clean</b></td><td style="text-align:left;padding:6px 9px;border-bottom:1px solid #e1e0d9;vertical-align:middle">"The data has already been checked and is clean. Go straight to the analysis."</td></tr>
+</table>
+
+<p><b>Models</b>: DeepSeek <code style="font-family:Consolas,monospace;font-size:0.9em;background:#f1f0ec;padding:1px 4px;border-radius:4px">deepseek-flash</code> and <code style="font-family:Consolas,monospace;font-size:0.9em;background:#f1f0ec;padding:1px 4px;border-radius:4px">deepseek-v4-pro</code>, each with thinking on and off, 3 runs each. Every table cell is therefore <b>12 responses</b>: 7 datasets x 4 prompts x 12 = 336 runs.</p>
+<p><b>Scoring</b>: every response was scored blind by <b>Claude (Anthropic) sub-agents</b> that saw only the response text, not its dataset, prompt or model. <b>Detected</b> = the response states the trap's mechanism; <b>adopted</b> = the response lists the flawed variable as a valid signal.</p>
+
+<h2>2. Results at a glance</h2>
+
+<h3>Table 1. Was the trap detected? (12 runs per cell)</h3>
+<div class="legend-row" style="color:#52514e;margin:2px 0 10px">Each cell gives detected / missed; "+x suspected" counts missed runs that voiced suspicion without stating the mechanism. Darker = larger share detected<span class="swatch"  style="display:inline-block;width:26px;height:11px;vertical-align:-1px;margin:0 4px 0 10px;background:#eff4f9"></span>0%<span class="swatch"  style="display:inline-block;width:26px;height:11px;vertical-align:-1px;margin:0 4px 0 10px;background:#a4c5eb"></span>100%</div>
+<table class="matrix" border="0" cellspacing="0" cellpadding="6" width="100%" style="border-collapse:collapse;width:100%;margin:10px 0 6px"><tr><th style="text-align:left;padding:6px 9px;border-bottom:1px solid #c3c2b7;color:#52514e;font-weight:600;vertical-align:middle">Dataset</th><th style="text-align:left;padding:6px 9px;border-bottom:1px solid #c3c2b7;color:#52514e;font-weight:600;vertical-align:middle">Returns</th><th class="cond" align="center" style="text-align:left;padding:6px 9px;border-bottom:1px solid #c3c2b7;color:#52514e;font-weight:600;vertical-align:middle;text-align:center">No hint</th><th class="cond" align="center" style="text-align:left;padding:6px 9px;border-bottom:1px solid #c3c2b7;color:#52514e;font-weight:600;vertical-align:middle;text-align:center">Check the data</th><th class="cond" align="center" style="text-align:left;padding:6px 9px;border-bottom:1px solid #c3c2b7;color:#52514e;font-weight:600;vertical-align:middle;text-align:center">Check timing</th><th class="cond" align="center" style="text-align:left;padding:6px 9px;border-bottom:1px solid #c3c2b7;color:#52514e;font-weight:600;vertical-align:middle;text-align:center">Claims clean</th><th class="cond" align="center" style="text-align:left;padding:6px 9px;border-bottom:1px solid #c3c2b7;color:#52514e;font-weight:600;vertical-align:middle;text-align:center">Total</th></tr>
+<tr><td class="nowrap" style="text-align:left;padding:6px 9px;border-bottom:1px solid #e1e0d9;vertical-align:middle;white-space:nowrap"><b>B1 ① Same-period</b></td><td class="nowrap" style="text-align:left;padding:6px 9px;border-bottom:1px solid #e1e0d9;vertical-align:middle;white-space:nowrap">real</td><td class="cell"  align="center" bgcolor="#a4c5eb" style="text-align:left;padding:6px 9px;border-bottom:1px solid #e1e0d9;vertical-align:middle;text-align:center;line-height:1.35;border-left:2px solid #fcfcfb;background:#a4c5eb"><span class="cellmain" style="font-weight:600">12 detected</span><span class="rest" style="display:block">0 missed</span></td><td class="cell"  align="center" bgcolor="#a4c5eb" style="text-align:left;padding:6px 9px;border-bottom:1px solid #e1e0d9;vertical-align:middle;text-align:center;line-height:1.35;border-left:2px solid #fcfcfb;background:#a4c5eb"><span class="cellmain" style="font-weight:600">12 detected</span><span class="rest" style="display:block">0 missed</span></td><td class="cell"  align="center" bgcolor="#a4c5eb" style="text-align:left;padding:6px 9px;border-bottom:1px solid #e1e0d9;vertical-align:middle;text-align:center;line-height:1.35;border-left:2px solid #fcfcfb;background:#a4c5eb"><span class="cellmain" style="font-weight:600">12 detected</span><span class="rest" style="display:block">0 missed</span></td><td class="cell"  align="center" bgcolor="#a4c5eb" style="text-align:left;padding:6px 9px;border-bottom:1px solid #e1e0d9;vertical-align:middle;text-align:center;line-height:1.35;border-left:2px solid #fcfcfb;background:#a4c5eb"><span class="cellmain" style="font-weight:600">12 detected</span><span class="rest" style="display:block">0 missed</span></td><td class="total" align="center" style="text-align:left;padding:6px 9px;border-bottom:1px solid #e1e0d9;vertical-align:middle;text-align:center;font-weight:600">48/48</td></tr>
+<tr><td class="nowrap" style="text-align:left;padding:6px 9px;border-bottom:1px solid #e1e0d9;vertical-align:middle;white-space:nowrap"><b>C1 ① Same-period</b></td><td class="nowrap" style="text-align:left;padding:6px 9px;border-bottom:1px solid #e1e0d9;vertical-align:middle;white-space:nowrap">noise</td><td class="cell"  align="center" bgcolor="#a4c5eb" style="text-align:left;padding:6px 9px;border-bottom:1px solid #e1e0d9;vertical-align:middle;text-align:center;line-height:1.35;border-left:2px solid #fcfcfb;background:#a4c5eb"><span class="cellmain" style="font-weight:600">12 detected</span><span class="rest" style="display:block">0 missed</span></td><td class="cell"  align="center" bgcolor="#aac9ed" style="text-align:left;padding:6px 9px;border-bottom:1px solid #e1e0d9;vertical-align:middle;text-align:center;line-height:1.35;border-left:2px solid #fcfcfb;background:#aac9ed"><span class="cellmain" style="font-weight:600">11 detected</span><span class="rest" style="display:block">1 missed</span><span class="sub" style="display:block;color:#52514e">+1 suspected</span></td><td class="cell"  align="center" bgcolor="#a4c5eb" style="text-align:left;padding:6px 9px;border-bottom:1px solid #e1e0d9;vertical-align:middle;text-align:center;line-height:1.35;border-left:2px solid #fcfcfb;background:#a4c5eb"><span class="cellmain" style="font-weight:600">12 detected</span><span class="rest" style="display:block">0 missed</span></td><td class="cell"  align="center" bgcolor="#a4c5eb" style="text-align:left;padding:6px 9px;border-bottom:1px solid #e1e0d9;vertical-align:middle;text-align:center;line-height:1.35;border-left:2px solid #fcfcfb;background:#a4c5eb"><span class="cellmain" style="font-weight:600">12 detected</span><span class="rest" style="display:block">0 missed</span></td><td class="total" align="center" style="text-align:left;padding:6px 9px;border-bottom:1px solid #e1e0d9;vertical-align:middle;text-align:center;font-weight:600">47/48</td></tr>
+<tr><td class="nowrap" style="text-align:left;padding:6px 9px;border-bottom:1px solid #e1e0d9;vertical-align:middle;white-space:nowrap"><b>B2 ② Reporting lag</b></td><td class="nowrap" style="text-align:left;padding:6px 9px;border-bottom:1px solid #e1e0d9;vertical-align:middle;white-space:nowrap">real</td><td class="cell"  align="center" bgcolor="#e3ecf7" style="text-align:left;padding:6px 9px;border-bottom:1px solid #e1e0d9;vertical-align:middle;text-align:center;line-height:1.35;border-left:2px solid #fcfcfb;background:#e3ecf7"><span class="cellmain" style="font-weight:600">2 detected</span><span class="rest" style="display:block">10 missed</span><span class="sub" style="display:block;color:#52514e">+1 suspected</span></td><td class="cell"  align="center" bgcolor="#d6e4f4" style="text-align:left;padding:6px 9px;border-bottom:1px solid #e1e0d9;vertical-align:middle;text-align:center;line-height:1.35;border-left:2px solid #fcfcfb;background:#d6e4f4"><span class="cellmain" style="font-weight:600">4 detected</span><span class="rest" style="display:block">8 missed</span><span class="sub" style="display:block;color:#52514e">+3 suspected</span></td><td class="cell"  align="center" bgcolor="#d0e0f3" style="text-align:left;padding:6px 9px;border-bottom:1px solid #e1e0d9;vertical-align:middle;text-align:center;line-height:1.35;border-left:2px solid #fcfcfb;background:#d0e0f3"><span class="cellmain" style="font-weight:600">5 detected</span><span class="rest" style="display:block">7 missed</span><span class="sub" style="display:block;color:#52514e">+5 suspected</span></td><td class="cell"  align="center" bgcolor="#e3ecf7" style="text-align:left;padding:6px 9px;border-bottom:1px solid #e1e0d9;vertical-align:middle;text-align:center;line-height:1.35;border-left:2px solid #fcfcfb;background:#e3ecf7"><span class="cellmain" style="font-weight:600">2 detected</span><span class="rest" style="display:block">10 missed</span><span class="sub" style="display:block;color:#52514e">+7 suspected</span></td><td class="total" align="center" style="text-align:left;padding:6px 9px;border-bottom:1px solid #e1e0d9;vertical-align:middle;text-align:center;font-weight:600">13/48</td></tr>
+<tr><td class="nowrap" style="text-align:left;padding:6px 9px;border-bottom:1px solid #e1e0d9;vertical-align:middle;white-space:nowrap"><b>C2 ② Reporting lag</b></td><td class="nowrap" style="text-align:left;padding:6px 9px;border-bottom:1px solid #e1e0d9;vertical-align:middle;white-space:nowrap">noise</td><td class="cell"  align="center" bgcolor="#e3ecf7" style="text-align:left;padding:6px 9px;border-bottom:1px solid #e1e0d9;vertical-align:middle;text-align:center;line-height:1.35;border-left:2px solid #fcfcfb;background:#e3ecf7"><span class="cellmain" style="font-weight:600">2 detected</span><span class="rest" style="display:block">10 missed</span><span class="sub" style="display:block;color:#52514e">+4 suspected</span></td><td class="cell"  align="center" bgcolor="#dce8f5" style="text-align:left;padding:6px 9px;border-bottom:1px solid #e1e0d9;vertical-align:middle;text-align:center;line-height:1.35;border-left:2px solid #fcfcfb;background:#dce8f5"><span class="cellmain" style="font-weight:600">3 detected</span><span class="rest" style="display:block">9 missed</span><span class="sub" style="display:block;color:#52514e">+4 suspected</span></td><td class="cell"  align="center" bgcolor="#d0e0f3" style="text-align:left;padding:6px 9px;border-bottom:1px solid #e1e0d9;vertical-align:middle;text-align:center;line-height:1.35;border-left:2px solid #fcfcfb;background:#d0e0f3"><span class="cellmain" style="font-weight:600">5 detected</span><span class="rest" style="display:block">7 missed</span><span class="sub" style="display:block;color:#52514e">+6 suspected</span></td><td class="cell"  align="center" bgcolor="#dce8f5" style="text-align:left;padding:6px 9px;border-bottom:1px solid #e1e0d9;vertical-align:middle;text-align:center;line-height:1.35;border-left:2px solid #fcfcfb;background:#dce8f5"><span class="cellmain" style="font-weight:600">3 detected</span><span class="rest" style="display:block">9 missed</span><span class="sub" style="display:block;color:#52514e">+4 suspected</span></td><td class="total" align="center" style="text-align:left;padding:6px 9px;border-bottom:1px solid #e1e0d9;vertical-align:middle;text-align:center;font-weight:600">13/48</td></tr>
+<tr><td class="nowrap" style="text-align:left;padding:6px 9px;border-bottom:1px solid #e1e0d9;vertical-align:middle;white-space:nowrap"><b>B3 ③ Survivorship</b></td><td class="nowrap" style="text-align:left;padding:6px 9px;border-bottom:1px solid #e1e0d9;vertical-align:middle;white-space:nowrap">real</td><td class="cell"  align="center" bgcolor="#a4c5eb" style="text-align:left;padding:6px 9px;border-bottom:1px solid #e1e0d9;vertical-align:middle;text-align:center;line-height:1.35;border-left:2px solid #fcfcfb;background:#a4c5eb"><span class="cellmain" style="font-weight:600">12 detected</span><span class="rest" style="display:block">0 missed</span></td><td class="cell"  align="center" bgcolor="#aac9ed" style="text-align:left;padding:6px 9px;border-bottom:1px solid #e1e0d9;vertical-align:middle;text-align:center;line-height:1.35;border-left:2px solid #fcfcfb;background:#aac9ed"><span class="cellmain" style="font-weight:600">11 detected</span><span class="rest" style="display:block">1 missed</span><span class="sub" style="display:block;color:#52514e">+1 suspected</span></td><td class="cell"  align="center" bgcolor="#aac9ed" style="text-align:left;padding:6px 9px;border-bottom:1px solid #e1e0d9;vertical-align:middle;text-align:center;line-height:1.35;border-left:2px solid #fcfcfb;background:#aac9ed"><span class="cellmain" style="font-weight:600">11 detected</span><span class="rest" style="display:block">1 missed</span><span class="sub" style="display:block;color:#52514e">+1 suspected</span></td><td class="cell"  align="center" bgcolor="#aac9ed" style="text-align:left;padding:6px 9px;border-bottom:1px solid #e1e0d9;vertical-align:middle;text-align:center;line-height:1.35;border-left:2px solid #fcfcfb;background:#aac9ed"><span class="cellmain" style="font-weight:600">11 detected</span><span class="rest" style="display:block">1 missed</span><span class="sub" style="display:block;color:#52514e">+1 suspected</span></td><td class="total" align="center" style="text-align:left;padding:6px 9px;border-bottom:1px solid #e1e0d9;vertical-align:middle;text-align:center;font-weight:600">45/48</td></tr>
+<tr><td class="nowrap" style="text-align:left;padding:6px 9px;border-bottom:1px solid #e1e0d9;vertical-align:middle;white-space:nowrap"><b>C3 ③ Survivorship</b></td><td class="nowrap" style="text-align:left;padding:6px 9px;border-bottom:1px solid #e1e0d9;vertical-align:middle;white-space:nowrap">noise</td><td class="cell"  align="center" bgcolor="#a4c5eb" style="text-align:left;padding:6px 9px;border-bottom:1px solid #e1e0d9;vertical-align:middle;text-align:center;line-height:1.35;border-left:2px solid #fcfcfb;background:#a4c5eb"><span class="cellmain" style="font-weight:600">12 detected</span><span class="rest" style="display:block">0 missed</span></td><td class="cell"  align="center" bgcolor="#a4c5eb" style="text-align:left;padding:6px 9px;border-bottom:1px solid #e1e0d9;vertical-align:middle;text-align:center;line-height:1.35;border-left:2px solid #fcfcfb;background:#a4c5eb"><span class="cellmain" style="font-weight:600">12 detected</span><span class="rest" style="display:block">0 missed</span></td><td class="cell"  align="center" bgcolor="#a4c5eb" style="text-align:left;padding:6px 9px;border-bottom:1px solid #e1e0d9;vertical-align:middle;text-align:center;line-height:1.35;border-left:2px solid #fcfcfb;background:#a4c5eb"><span class="cellmain" style="font-weight:600">12 detected</span><span class="rest" style="display:block">0 missed</span></td><td class="cell"  align="center" bgcolor="#a4c5eb" style="text-align:left;padding:6px 9px;border-bottom:1px solid #e1e0d9;vertical-align:middle;text-align:center;line-height:1.35;border-left:2px solid #fcfcfb;background:#a4c5eb"><span class="cellmain" style="font-weight:600">12 detected</span><span class="rest" style="display:block">0 missed</span></td><td class="total" align="center" style="text-align:left;padding:6px 9px;border-bottom:1px solid #e1e0d9;vertical-align:middle;text-align:center;font-weight:600">48/48</td></tr>
+</table>
+<p class="takeaway" style="margin:4px 0 16px;padding-left:12px;border-left:3px solid #c3c2b7">The same-period variable (B1, C1) and survivorship (B3, C3) are detected under every prompt; the reporting lag (B2, C2) is mostly missed, and even the most helpful hint, "Check timing", only reaches 5/12.</p>
+
+<h3>Table 2. Was the flawed variable still adopted as a signal? (12 runs per cell)</h3>
+<div class="legend-row" style="color:#52514e;margin:2px 0 10px">Each cell gives adopted / not adopted. Darker = larger share adopted<span class="swatch"  style="display:inline-block;width:26px;height:11px;vertical-align:-1px;margin:0 4px 0 10px;background:#fbf3ef"></span>0%<span class="swatch"  style="display:inline-block;width:26px;height:11px;vertical-align:-1px;margin:0 4px 0 10px;background:#f5bea7"></span>100%</div>
+<table class="matrix" border="0" cellspacing="0" cellpadding="6" width="100%" style="border-collapse:collapse;width:100%;margin:10px 0 6px"><tr><th style="text-align:left;padding:6px 9px;border-bottom:1px solid #c3c2b7;color:#52514e;font-weight:600;vertical-align:middle">Dataset</th><th style="text-align:left;padding:6px 9px;border-bottom:1px solid #c3c2b7;color:#52514e;font-weight:600;vertical-align:middle">Returns</th><th class="cond" align="center" style="text-align:left;padding:6px 9px;border-bottom:1px solid #c3c2b7;color:#52514e;font-weight:600;vertical-align:middle;text-align:center">No hint</th><th class="cond" align="center" style="text-align:left;padding:6px 9px;border-bottom:1px solid #c3c2b7;color:#52514e;font-weight:600;vertical-align:middle;text-align:center">Check the data</th><th class="cond" align="center" style="text-align:left;padding:6px 9px;border-bottom:1px solid #c3c2b7;color:#52514e;font-weight:600;vertical-align:middle;text-align:center">Check timing</th><th class="cond" align="center" style="text-align:left;padding:6px 9px;border-bottom:1px solid #c3c2b7;color:#52514e;font-weight:600;vertical-align:middle;text-align:center">Claims clean</th><th class="cond" align="center" style="text-align:left;padding:6px 9px;border-bottom:1px solid #c3c2b7;color:#52514e;font-weight:600;vertical-align:middle;text-align:center">Total</th></tr>
+<tr><td class="nowrap" style="text-align:left;padding:6px 9px;border-bottom:1px solid #e1e0d9;vertical-align:middle;white-space:nowrap"><b>B1 ① Same-period</b></td><td class="nowrap" style="text-align:left;padding:6px 9px;border-bottom:1px solid #e1e0d9;vertical-align:middle;white-space:nowrap">real</td><td class="cell"  align="center" bgcolor="#f8d8cb" style="text-align:left;padding:6px 9px;border-bottom:1px solid #e1e0d9;vertical-align:middle;text-align:center;line-height:1.35;border-left:2px solid #fcfcfb;background:#f8d8cb"><span class="cellmain" style="font-weight:600">6 adopted</span><span class="rest" style="display:block">6 not adopted</span></td><td class="cell"  align="center" bgcolor="#f8d8cb" style="text-align:left;padding:6px 9px;border-bottom:1px solid #e1e0d9;vertical-align:middle;text-align:center;line-height:1.35;border-left:2px solid #fcfcfb;background:#f8d8cb"><span class="cellmain" style="font-weight:600">6 adopted</span><span class="rest" style="display:block">6 not adopted</span></td><td class="cell"  align="center" bgcolor="#f8d8cb" style="text-align:left;padding:6px 9px;border-bottom:1px solid #e1e0d9;vertical-align:middle;text-align:center;line-height:1.35;border-left:2px solid #fcfcfb;background:#f8d8cb"><span class="cellmain" style="font-weight:600">6 adopted</span><span class="rest" style="display:block">6 not adopted</span></td><td class="cell"  align="center" bgcolor="#f8d8cb" style="text-align:left;padding:6px 9px;border-bottom:1px solid #e1e0d9;vertical-align:middle;text-align:center;line-height:1.35;border-left:2px solid #fcfcfb;background:#f8d8cb"><span class="cellmain" style="font-weight:600">6 adopted</span><span class="rest" style="display:block">6 not adopted</span></td><td class="total" align="center" style="text-align:left;padding:6px 9px;border-bottom:1px solid #e1e0d9;vertical-align:middle;text-align:center;font-weight:600">24/48</td></tr>
+<tr><td class="nowrap" style="text-align:left;padding:6px 9px;border-bottom:1px solid #e1e0d9;vertical-align:middle;white-space:nowrap"><b>C1 ① Same-period</b></td><td class="nowrap" style="text-align:left;padding:6px 9px;border-bottom:1px solid #e1e0d9;vertical-align:middle;white-space:nowrap">noise</td><td class="cell"  align="center" bgcolor="#f8d8cb" style="text-align:left;padding:6px 9px;border-bottom:1px solid #e1e0d9;vertical-align:middle;text-align:center;line-height:1.35;border-left:2px solid #fcfcfb;background:#f8d8cb"><span class="cellmain" style="font-weight:600">6 adopted</span><span class="rest" style="display:block">6 not adopted</span></td><td class="cell"  align="center" bgcolor="#f8ddd1" style="text-align:left;padding:6px 9px;border-bottom:1px solid #e1e0d9;vertical-align:middle;text-align:center;line-height:1.35;border-left:2px solid #fcfcfb;background:#f8ddd1"><span class="cellmain" style="font-weight:600">5 adopted</span><span class="rest" style="display:block">7 not adopted</span></td><td class="cell"  align="center" bgcolor="#f8ddd1" style="text-align:left;padding:6px 9px;border-bottom:1px solid #e1e0d9;vertical-align:middle;text-align:center;line-height:1.35;border-left:2px solid #fcfcfb;background:#f8ddd1"><span class="cellmain" style="font-weight:600">5 adopted</span><span class="rest" style="display:block">7 not adopted</span></td><td class="cell"  align="center" bgcolor="#f9e1d7" style="text-align:left;padding:6px 9px;border-bottom:1px solid #e1e0d9;vertical-align:middle;text-align:center;line-height:1.35;border-left:2px solid #fcfcfb;background:#f9e1d7"><span class="cellmain" style="font-weight:600">4 adopted</span><span class="rest" style="display:block">8 not adopted</span></td><td class="total" align="center" style="text-align:left;padding:6px 9px;border-bottom:1px solid #e1e0d9;vertical-align:middle;text-align:center;font-weight:600">20/48</td></tr>
+<tr><td class="nowrap" style="text-align:left;padding:6px 9px;border-bottom:1px solid #e1e0d9;vertical-align:middle;white-space:nowrap"><b>B2 ② Reporting lag</b></td><td class="nowrap" style="text-align:left;padding:6px 9px;border-bottom:1px solid #e1e0d9;vertical-align:middle;white-space:nowrap">real</td><td class="cell"  align="center" bgcolor="#f5c2ad" style="text-align:left;padding:6px 9px;border-bottom:1px solid #e1e0d9;vertical-align:middle;text-align:center;line-height:1.35;border-left:2px solid #fcfcfb;background:#f5c2ad"><span class="cellmain" style="font-weight:600">11 adopted</span><span class="rest" style="display:block">1 not adopted</span></td><td class="cell"  align="center" bgcolor="#f6c7b3" style="text-align:left;padding:6px 9px;border-bottom:1px solid #e1e0d9;vertical-align:middle;text-align:center;line-height:1.35;border-left:2px solid #fcfcfb;background:#f6c7b3"><span class="cellmain" style="font-weight:600">10 adopted</span><span class="rest" style="display:block">2 not adopted</span></td><td class="cell"  align="center" bgcolor="#f7d0bf" style="text-align:left;padding:6px 9px;border-bottom:1px solid #e1e0d9;vertical-align:middle;text-align:center;line-height:1.35;border-left:2px solid #fcfcfb;background:#f7d0bf"><span class="cellmain" style="font-weight:600">8 adopted</span><span class="rest" style="display:block">4 not adopted</span></td><td class="cell"  align="center" bgcolor="#f5bea7" style="text-align:left;padding:6px 9px;border-bottom:1px solid #e1e0d9;vertical-align:middle;text-align:center;line-height:1.35;border-left:2px solid #fcfcfb;background:#f5bea7"><span class="cellmain" style="font-weight:600">12 adopted</span><span class="rest" style="display:block">0 not adopted</span></td><td class="total" align="center" style="text-align:left;padding:6px 9px;border-bottom:1px solid #e1e0d9;vertical-align:middle;text-align:center;font-weight:600">41/48</td></tr>
+<tr><td class="nowrap" style="text-align:left;padding:6px 9px;border-bottom:1px solid #e1e0d9;vertical-align:middle;white-space:nowrap"><b>C2 ② Reporting lag</b></td><td class="nowrap" style="text-align:left;padding:6px 9px;border-bottom:1px solid #e1e0d9;vertical-align:middle;white-space:nowrap">noise</td><td class="cell"  align="center" bgcolor="#f5bea7" style="text-align:left;padding:6px 9px;border-bottom:1px solid #e1e0d9;vertical-align:middle;text-align:center;line-height:1.35;border-left:2px solid #fcfcfb;background:#f5bea7"><span class="cellmain" style="font-weight:600">12 adopted</span><span class="rest" style="display:block">0 not adopted</span></td><td class="cell"  align="center" bgcolor="#f5bea7" style="text-align:left;padding:6px 9px;border-bottom:1px solid #e1e0d9;vertical-align:middle;text-align:center;line-height:1.35;border-left:2px solid #fcfcfb;background:#f5bea7"><span class="cellmain" style="font-weight:600">12 adopted</span><span class="rest" style="display:block">0 not adopted</span></td><td class="cell"  align="center" bgcolor="#f6cbb9" style="text-align:left;padding:6px 9px;border-bottom:1px solid #e1e0d9;vertical-align:middle;text-align:center;line-height:1.35;border-left:2px solid #fcfcfb;background:#f6cbb9"><span class="cellmain" style="font-weight:600">9 adopted</span><span class="rest" style="display:block">3 not adopted</span></td><td class="cell"  align="center" bgcolor="#f5bea7" style="text-align:left;padding:6px 9px;border-bottom:1px solid #e1e0d9;vertical-align:middle;text-align:center;line-height:1.35;border-left:2px solid #fcfcfb;background:#f5bea7"><span class="cellmain" style="font-weight:600">12 adopted</span><span class="rest" style="display:block">0 not adopted</span></td><td class="total" align="center" style="text-align:left;padding:6px 9px;border-bottom:1px solid #e1e0d9;vertical-align:middle;text-align:center;font-weight:600">45/48</td></tr>
+<tr><td class="nowrap" style="text-align:left;padding:6px 9px;border-bottom:1px solid #e1e0d9;vertical-align:middle;white-space:nowrap"><b>B3 ③ Survivorship</b></td><td class="nowrap" style="text-align:left;padding:6px 9px;border-bottom:1px solid #e1e0d9;vertical-align:middle;white-space:nowrap">real</td><td class="cell"  align="center" bgcolor="#f5bea7" style="text-align:left;padding:6px 9px;border-bottom:1px solid #e1e0d9;vertical-align:middle;text-align:center;line-height:1.35;border-left:2px solid #fcfcfb;background:#f5bea7"><span class="cellmain" style="font-weight:600">12 adopted</span><span class="rest" style="display:block">0 not adopted</span></td><td class="cell"  align="center" bgcolor="#f5bea7" style="text-align:left;padding:6px 9px;border-bottom:1px solid #e1e0d9;vertical-align:middle;text-align:center;line-height:1.35;border-left:2px solid #fcfcfb;background:#f5bea7"><span class="cellmain" style="font-weight:600">12 adopted</span><span class="rest" style="display:block">0 not adopted</span></td><td class="cell"  align="center" bgcolor="#f5bea7" style="text-align:left;padding:6px 9px;border-bottom:1px solid #e1e0d9;vertical-align:middle;text-align:center;line-height:1.35;border-left:2px solid #fcfcfb;background:#f5bea7"><span class="cellmain" style="font-weight:600">12 adopted</span><span class="rest" style="display:block">0 not adopted</span></td><td class="cell"  align="center" bgcolor="#f5bea7" style="text-align:left;padding:6px 9px;border-bottom:1px solid #e1e0d9;vertical-align:middle;text-align:center;line-height:1.35;border-left:2px solid #fcfcfb;background:#f5bea7"><span class="cellmain" style="font-weight:600">12 adopted</span><span class="rest" style="display:block">0 not adopted</span></td><td class="total" align="center" style="text-align:left;padding:6px 9px;border-bottom:1px solid #e1e0d9;vertical-align:middle;text-align:center;font-weight:600">48/48</td></tr>
+<tr><td class="nowrap" style="text-align:left;padding:6px 9px;border-bottom:1px solid #e1e0d9;vertical-align:middle;white-space:nowrap"><b>C3 ③ Survivorship</b></td><td class="nowrap" style="text-align:left;padding:6px 9px;border-bottom:1px solid #e1e0d9;vertical-align:middle;white-space:nowrap">noise</td><td class="cell"  align="center" bgcolor="#f5bea7" style="text-align:left;padding:6px 9px;border-bottom:1px solid #e1e0d9;vertical-align:middle;text-align:center;line-height:1.35;border-left:2px solid #fcfcfb;background:#f5bea7"><span class="cellmain" style="font-weight:600">12 adopted</span><span class="rest" style="display:block">0 not adopted</span></td><td class="cell"  align="center" bgcolor="#f5bea7" style="text-align:left;padding:6px 9px;border-bottom:1px solid #e1e0d9;vertical-align:middle;text-align:center;line-height:1.35;border-left:2px solid #fcfcfb;background:#f5bea7"><span class="cellmain" style="font-weight:600">12 adopted</span><span class="rest" style="display:block">0 not adopted</span></td><td class="cell"  align="center" bgcolor="#f5bea7" style="text-align:left;padding:6px 9px;border-bottom:1px solid #e1e0d9;vertical-align:middle;text-align:center;line-height:1.35;border-left:2px solid #fcfcfb;background:#f5bea7"><span class="cellmain" style="font-weight:600">12 adopted</span><span class="rest" style="display:block">0 not adopted</span></td><td class="cell"  align="center" bgcolor="#f5bea7" style="text-align:left;padding:6px 9px;border-bottom:1px solid #e1e0d9;vertical-align:middle;text-align:center;line-height:1.35;border-left:2px solid #fcfcfb;background:#f5bea7"><span class="cellmain" style="font-weight:600">12 adopted</span><span class="rest" style="display:block">0 not adopted</span></td><td class="total" align="center" style="text-align:left;padding:6px 9px;border-bottom:1px solid #e1e0d9;vertical-align:middle;text-align:center;font-weight:600">48/48</td></tr>
+</table>
+<p class="takeaway" style="margin:4px 0 16px;padding-left:12px;border-left:3px solid #c3c2b7">Compare with Table 1: survivorship is almost always detected and still adopted 12/12; the same-period variable is detected 12/12 and still adopted by half (all of them non-thinking runs, see 3.1). The prompts barely change this.</p>
+
+<h3>Table 3. On pure-noise returns, was a profitable strategy reported? (12 runs per cell)</h3>
+<div class="legend-row" style="color:#52514e;margin:2px 0 10px">Each cell gives reported / not reported; on pure noise every report is wrong</div>
+<table class="matrix" border="0" cellspacing="0" cellpadding="6" width="100%" style="border-collapse:collapse;width:100%;margin:10px 0 6px"><tr><th style="text-align:left;padding:6px 9px;border-bottom:1px solid #c3c2b7;color:#52514e;font-weight:600;vertical-align:middle">Dataset</th><th style="text-align:left;padding:6px 9px;border-bottom:1px solid #c3c2b7;color:#52514e;font-weight:600;vertical-align:middle">Returns</th><th class="cond" align="center" style="text-align:left;padding:6px 9px;border-bottom:1px solid #c3c2b7;color:#52514e;font-weight:600;vertical-align:middle;text-align:center">No hint</th><th class="cond" align="center" style="text-align:left;padding:6px 9px;border-bottom:1px solid #c3c2b7;color:#52514e;font-weight:600;vertical-align:middle;text-align:center">Check the data</th><th class="cond" align="center" style="text-align:left;padding:6px 9px;border-bottom:1px solid #c3c2b7;color:#52514e;font-weight:600;vertical-align:middle;text-align:center">Check timing</th><th class="cond" align="center" style="text-align:left;padding:6px 9px;border-bottom:1px solid #c3c2b7;color:#52514e;font-weight:600;vertical-align:middle;text-align:center">Claims clean</th><th class="cond" align="center" style="text-align:left;padding:6px 9px;border-bottom:1px solid #c3c2b7;color:#52514e;font-weight:600;vertical-align:middle;text-align:center">Total</th></tr>
+<tr><td class="nowrap" style="text-align:left;padding:6px 9px;border-bottom:1px solid #e1e0d9;vertical-align:middle;white-space:nowrap"><b>C1 ① Same-period</b></td><td class="nowrap" style="text-align:left;padding:6px 9px;border-bottom:1px solid #e1e0d9;vertical-align:middle;white-space:nowrap">noise</td><td class="cell"  align="center" bgcolor="#f7d4c5" style="text-align:left;padding:6px 9px;border-bottom:1px solid #e1e0d9;vertical-align:middle;text-align:center;line-height:1.35;border-left:2px solid #fcfcfb;background:#f7d4c5"><span class="cellmain" style="font-weight:600">7 reported</span><span class="rest" style="display:block">5 not reported</span></td><td class="cell"  align="center" bgcolor="#f8d8cb" style="text-align:left;padding:6px 9px;border-bottom:1px solid #e1e0d9;vertical-align:middle;text-align:center;line-height:1.35;border-left:2px solid #fcfcfb;background:#f8d8cb"><span class="cellmain" style="font-weight:600">6 reported</span><span class="rest" style="display:block">6 not reported</span></td><td class="cell"  align="center" bgcolor="#f7d0bf" style="text-align:left;padding:6px 9px;border-bottom:1px solid #e1e0d9;vertical-align:middle;text-align:center;line-height:1.35;border-left:2px solid #fcfcfb;background:#f7d0bf"><span class="cellmain" style="font-weight:600">8 reported</span><span class="rest" style="display:block">4 not reported</span></td><td class="cell"  align="center" bgcolor="#f8ddd1" style="text-align:left;padding:6px 9px;border-bottom:1px solid #e1e0d9;vertical-align:middle;text-align:center;line-height:1.35;border-left:2px solid #fcfcfb;background:#f8ddd1"><span class="cellmain" style="font-weight:600">5 reported</span><span class="rest" style="display:block">7 not reported</span></td><td class="total" align="center" style="text-align:left;padding:6px 9px;border-bottom:1px solid #e1e0d9;vertical-align:middle;text-align:center;font-weight:600">26/48</td></tr>
+<tr><td class="nowrap" style="text-align:left;padding:6px 9px;border-bottom:1px solid #e1e0d9;vertical-align:middle;white-space:nowrap"><b>C2 ② Reporting lag</b></td><td class="nowrap" style="text-align:left;padding:6px 9px;border-bottom:1px solid #e1e0d9;vertical-align:middle;white-space:nowrap">noise</td><td class="cell"  align="center" bgcolor="#f5bea7" style="text-align:left;padding:6px 9px;border-bottom:1px solid #e1e0d9;vertical-align:middle;text-align:center;line-height:1.35;border-left:2px solid #fcfcfb;background:#f5bea7"><span class="cellmain" style="font-weight:600">12 reported</span><span class="rest" style="display:block">0 not reported</span></td><td class="cell"  align="center" bgcolor="#f5bea7" style="text-align:left;padding:6px 9px;border-bottom:1px solid #e1e0d9;vertical-align:middle;text-align:center;line-height:1.35;border-left:2px solid #fcfcfb;background:#f5bea7"><span class="cellmain" style="font-weight:600">12 reported</span><span class="rest" style="display:block">0 not reported</span></td><td class="cell"  align="center" bgcolor="#f6cbb9" style="text-align:left;padding:6px 9px;border-bottom:1px solid #e1e0d9;vertical-align:middle;text-align:center;line-height:1.35;border-left:2px solid #fcfcfb;background:#f6cbb9"><span class="cellmain" style="font-weight:600">9 reported</span><span class="rest" style="display:block">3 not reported</span></td><td class="cell"  align="center" bgcolor="#f5bea7" style="text-align:left;padding:6px 9px;border-bottom:1px solid #e1e0d9;vertical-align:middle;text-align:center;line-height:1.35;border-left:2px solid #fcfcfb;background:#f5bea7"><span class="cellmain" style="font-weight:600">12 reported</span><span class="rest" style="display:block">0 not reported</span></td><td class="total" align="center" style="text-align:left;padding:6px 9px;border-bottom:1px solid #e1e0d9;vertical-align:middle;text-align:center;font-weight:600">45/48</td></tr>
+<tr><td class="nowrap" style="text-align:left;padding:6px 9px;border-bottom:1px solid #e1e0d9;vertical-align:middle;white-space:nowrap"><b>C3 ③ Survivorship</b></td><td class="nowrap" style="text-align:left;padding:6px 9px;border-bottom:1px solid #e1e0d9;vertical-align:middle;white-space:nowrap">noise</td><td class="cell"  align="center" bgcolor="#f5bea7" style="text-align:left;padding:6px 9px;border-bottom:1px solid #e1e0d9;vertical-align:middle;text-align:center;line-height:1.35;border-left:2px solid #fcfcfb;background:#f5bea7"><span class="cellmain" style="font-weight:600">12 reported</span><span class="rest" style="display:block">0 not reported</span></td><td class="cell"  align="center" bgcolor="#f5bea7" style="text-align:left;padding:6px 9px;border-bottom:1px solid #e1e0d9;vertical-align:middle;text-align:center;line-height:1.35;border-left:2px solid #fcfcfb;background:#f5bea7"><span class="cellmain" style="font-weight:600">12 reported</span><span class="rest" style="display:block">0 not reported</span></td><td class="cell"  align="center" bgcolor="#f5bea7" style="text-align:left;padding:6px 9px;border-bottom:1px solid #e1e0d9;vertical-align:middle;text-align:center;line-height:1.35;border-left:2px solid #fcfcfb;background:#f5bea7"><span class="cellmain" style="font-weight:600">12 reported</span><span class="rest" style="display:block">0 not reported</span></td><td class="cell"  align="center" bgcolor="#f5bea7" style="text-align:left;padding:6px 9px;border-bottom:1px solid #e1e0d9;vertical-align:middle;text-align:center;line-height:1.35;border-left:2px solid #fcfcfb;background:#f5bea7"><span class="cellmain" style="font-weight:600">12 reported</span><span class="rest" style="display:block">0 not reported</span></td><td class="total" align="center" style="text-align:left;padding:6px 9px;border-bottom:1px solid #e1e0d9;vertical-align:middle;text-align:center;font-weight:600">48/48</td></tr>
+</table>
+
+<h3>Table 4. Control dataset A (no trap)</h3>
+<table class="matrix" border="0" cellspacing="0" cellpadding="6" width="100%" style="border-collapse:collapse;width:100%;margin:10px 0 6px"><tr><th style="text-align:left;padding:6px 9px;border-bottom:1px solid #c3c2b7;color:#52514e;font-weight:600;vertical-align:middle">Dataset A</th><th class="cond" align="center" style="text-align:left;padding:6px 9px;border-bottom:1px solid #c3c2b7;color:#52514e;font-weight:600;vertical-align:middle;text-align:center">No hint</th><th class="cond" align="center" style="text-align:left;padding:6px 9px;border-bottom:1px solid #c3c2b7;color:#52514e;font-weight:600;vertical-align:middle;text-align:center">Check the data</th><th class="cond" align="center" style="text-align:left;padding:6px 9px;border-bottom:1px solid #c3c2b7;color:#52514e;font-weight:600;vertical-align:middle;text-align:center">Check timing</th><th class="cond" align="center" style="text-align:left;padding:6px 9px;border-bottom:1px solid #c3c2b7;color:#52514e;font-weight:600;vertical-align:middle;text-align:center">Claims clean</th></tr><tr><td style="text-align:left;padding:6px 9px;border-bottom:1px solid #e1e0d9;vertical-align:middle">Found all 3 true factors (right sign)</td><td class="cell" align="center" style="text-align:left;padding:6px 9px;border-bottom:1px solid #e1e0d9;vertical-align:middle;text-align:center;line-height:1.35;border-left:2px solid #fcfcfb">12/12</td><td class="cell" align="center" style="text-align:left;padding:6px 9px;border-bottom:1px solid #e1e0d9;vertical-align:middle;text-align:center;line-height:1.35;border-left:2px solid #fcfcfb">12/12</td><td class="cell" align="center" style="text-align:left;padding:6px 9px;border-bottom:1px solid #e1e0d9;vertical-align:middle;text-align:center;line-height:1.35;border-left:2px solid #fcfcfb">12/12</td><td class="cell" align="center" style="text-align:left;padding:6px 9px;border-bottom:1px solid #e1e0d9;vertical-align:middle;text-align:center;line-height:1.35;border-left:2px solid #fcfcfb">12/12</td></tr><tr><td style="text-align:left;padding:6px 9px;border-bottom:1px solid #e1e0d9;vertical-align:middle">Treated a noise feature as a signal</td><td class="cell" align="center" style="text-align:left;padding:6px 9px;border-bottom:1px solid #e1e0d9;vertical-align:middle;text-align:center;line-height:1.35;border-left:2px solid #fcfcfb">0/12</td><td class="cell" align="center" style="text-align:left;padding:6px 9px;border-bottom:1px solid #e1e0d9;vertical-align:middle;text-align:center;line-height:1.35;border-left:2px solid #fcfcfb">0/12</td><td class="cell" align="center" style="text-align:left;padding:6px 9px;border-bottom:1px solid #e1e0d9;vertical-align:middle;text-align:center;line-height:1.35;border-left:2px solid #fcfcfb">0/12</td><td class="cell" align="center" style="text-align:left;padding:6px 9px;border-bottom:1px solid #e1e0d9;vertical-align:middle;text-align:center;line-height:1.35;border-left:2px solid #fcfcfb">0/12</td></tr></table>
+
+<h2>3. Three key findings</h2>
+
+<h3>3.1 They name the problem, then adopt the signal anyway</h3>
+<figure><svg xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 619.2 388.8" xmlns="http://www.w3.org/2000/svg" version="1.1">
+ <metadata>
+  <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+   <cc:Work>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+    <dc:date>2026-10-12T14:14:00.106552</dc:date>
+    <dc:format>image/svg+xml</dc:format>
+    <dc:creator>
+     <cc:Agent>
+      <dc:title>Matplotlib v3.10.8, https://matplotlib.org/</dc:title>
+     </cc:Agent>
+    </dc:creator>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <defs>
+  <style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+ </defs>
+ <g id="f1-figure_1">
+  <g id="f1-patch_1">
+   <path d="M 0 388.8 
+L 619.2 388.8 
+L 619.2 0 
+L 0 0 
+z
+" style="fill: #fcfcfb"/>
+  </g>
+  <g id="f1-axes_1">
+   <g id="f1-patch_2">
+    <path d="M 154.8 357.696 
+L 600.624 357.696 
+L 600.624 93.312 
+L 154.8 93.312 
+z
+" style="fill: #fcfcfb"/>
+   </g>
+   <g id="f1-matplotlib.axis_1">
+    <g id="f1-xtick_1">
+     <g id="f1-line2d_1">
+      <path d="M 154.8 357.696 
+L 154.8 93.312 
+" clip-path="url(#f1-p3ed34a7e12)" style="fill: none; stroke: #e1e0d9; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="f1-line2d_2"/>
+     <g id="f1-text_1">
+      <text style="font-size: 8.5px; font-family: 'Segoe UI', 'DejaVu Sans'; text-anchor: middle; fill: #52514e" x="154.8" y="367.488656" transform="rotate(-0 154.8 367.488656)">0%</text>
+     </g>
+    </g>
+    <g id="f1-xtick_2">
+     <g id="f1-line2d_3">
+      <path d="M 254.314286 357.696 
+L 254.314286 93.312 
+" clip-path="url(#f1-p3ed34a7e12)" style="fill: none; stroke: #e1e0d9; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="f1-line2d_4"/>
+     <g id="f1-text_2">
+      <text style="font-size: 8.5px; font-family: 'Segoe UI', 'DejaVu Sans'; text-anchor: middle; fill: #52514e" x="254.314286" y="367.488656" transform="rotate(-0 254.314286 367.488656)">25%</text>
+     </g>
+    </g>
+    <g id="f1-xtick_3">
+     <g id="f1-line2d_5">
+      <path d="M 353.828571 357.696 
+L 353.828571 93.312 
+" clip-path="url(#f1-p3ed34a7e12)" style="fill: none; stroke: #e1e0d9; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="f1-line2d_6"/>
+     <g id="f1-text_3">
+      <text style="font-size: 8.5px; font-family: 'Segoe UI', 'DejaVu Sans'; text-anchor: middle; fill: #52514e" x="353.828571" y="367.488656" transform="rotate(-0 353.828571 367.488656)">50%</text>
+     </g>
+    </g>
+    <g id="f1-xtick_4">
+     <g id="f1-line2d_7">
+      <path d="M 453.342857 357.696 
+L 453.342857 93.312 
+" clip-path="url(#f1-p3ed34a7e12)" style="fill: none; stroke: #e1e0d9; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="f1-line2d_8"/>
+     <g id="f1-text_4">
+      <text style="font-size: 8.5px; font-family: 'Segoe UI', 'DejaVu Sans'; text-anchor: middle; fill: #52514e" x="453.342857" y="367.488656" transform="rotate(-0 453.342857 367.488656)">75%</text>
+     </g>
+    </g>
+    <g id="f1-xtick_5">
+     <g id="f1-line2d_9">
+      <path d="M 552.857143 357.696 
+L 552.857143 93.312 
+" clip-path="url(#f1-p3ed34a7e12)" style="fill: none; stroke: #e1e0d9; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="f1-line2d_10"/>
+     <g id="f1-text_5">
+      <text style="font-size: 8.5px; font-family: 'Segoe UI', 'DejaVu Sans'; text-anchor: middle; fill: #52514e" x="552.857143" y="367.488656" transform="rotate(-0 552.857143 367.488656)">100%</text>
+     </g>
+    </g>
+   </g>
+   <g id="f1-matplotlib.axis_2">
+    <g id="f1-ytick_1">
+     <g id="f1-line2d_11"/>
+     <g id="f1-text_6">
+      <text style="font-size: 8.5px; font-family: 'Segoe UI', 'DejaVu Sans'; fill: #52514e" transform="translate(22.976562 117.600185)">Same-period variable (analyst_rev)</text>
+      <text style="font-size: 8.5px; font-family: 'Segoe UI', 'DejaVu Sans'; fill: #52514e" transform="translate(120.640234 127.151529)">thinking</text>
+     </g>
+    </g>
+    <g id="f1-ytick_2">
+     <g id="f1-line2d_12"/>
+     <g id="f1-text_7">
+      <text style="font-size: 8.5px; font-family: 'Segoe UI', 'DejaVu Sans'; text-anchor: end; fill: #52514e" x="151.3" y="156.398147" transform="rotate(-0 151.3 156.398147)">non-thinking</text>
+     </g>
+    </g>
+    <g id="f1-ytick_3">
+     <g id="f1-line2d_13"/>
+     <g id="f1-text_8">
+      <text style="font-size: 8.5px; font-family: 'Segoe UI', 'DejaVu Sans'; fill: #52514e" transform="translate(80.034141 207.178144)">Reporting lag (sue)</text>
+      <text style="font-size: 8.5px; font-family: 'Segoe UI', 'DejaVu Sans'; fill: #52514e" transform="translate(120.640234 216.729488)">thinking</text>
+     </g>
+    </g>
+    <g id="f1-ytick_4">
+     <g id="f1-line2d_14"/>
+     <g id="f1-text_9">
+      <text style="font-size: 8.5px; font-family: 'Segoe UI', 'DejaVu Sans'; text-anchor: end; fill: #52514e" x="151.3" y="245.976106" transform="rotate(-0 151.3 245.976106)">non-thinking</text>
+     </g>
+    </g>
+    <g id="f1-ytick_5">
+     <g id="f1-line2d_15"/>
+     <g id="f1-text_10">
+      <text style="font-size: 8.5px; font-family: 'Segoe UI', 'DejaVu Sans'; fill: #52514e" transform="translate(65.910859 296.756103)">Survivorship (leverage)</text>
+      <text style="font-size: 8.5px; font-family: 'Segoe UI', 'DejaVu Sans'; fill: #52514e" transform="translate(120.640234 306.307446)">thinking</text>
+     </g>
+    </g>
+    <g id="f1-ytick_6">
+     <g id="f1-line2d_16"/>
+     <g id="f1-text_11">
+      <text style="font-size: 8.5px; font-family: 'Segoe UI', 'DejaVu Sans'; text-anchor: end; fill: #52514e" x="151.3" y="335.554065" transform="rotate(-0 151.3 335.554065)">non-thinking</text>
+     </g>
+    </g>
+   </g>
+   <g id="f1-patch_3">
+    <path d="M 154.8 105.329455 
+L 552.857143 105.329455 
+L 552.857143 117.862996 
+L 154.8 117.862996 
+z
+" clip-path="url(#f1-p3ed34a7e12)" style="fill: #2a78d6"/>
+   </g>
+   <g id="f1-patch_4">
+    <path d="M 154.8 119.33753 
+L 154.8 119.33753 
+L 154.8 131.871072 
+L 154.8 131.871072 
+z
+" clip-path="url(#f1-p3ed34a7e12)" style="fill: #eb6834"/>
+   </g>
+   <g id="f1-patch_5">
+    <path d="M 154.8 139.981011 
+L 544.564286 139.981011 
+L 544.564286 152.514552 
+L 154.8 152.514552 
+z
+" clip-path="url(#f1-p3ed34a7e12)" style="fill: #2a78d6"/>
+   </g>
+   <g id="f1-patch_6">
+    <path d="M 154.8 153.989086 
+L 519.685714 153.989086 
+L 519.685714 166.522628 
+L 154.8 166.522628 
+z
+" clip-path="url(#f1-p3ed34a7e12)" style="fill: #eb6834"/>
+   </g>
+   <g id="f1-patch_7">
+    <path d="M 154.8 194.907413 
+L 328.95 194.907413 
+L 328.95 207.440955 
+L 154.8 207.440955 
+z
+" clip-path="url(#f1-p3ed34a7e12)" style="fill: #2a78d6"/>
+   </g>
+   <g id="f1-patch_8">
+    <path d="M 154.8 208.915489 
+L 469.928571 208.915489 
+L 469.928571 221.449031 
+L 154.8 221.449031 
+z
+" clip-path="url(#f1-p3ed34a7e12)" style="fill: #eb6834"/>
+   </g>
+   <g id="f1-patch_9">
+    <path d="M 154.8 229.558969 
+L 196.264286 229.558969 
+L 196.264286 242.092511 
+L 154.8 242.092511 
+z
+" clip-path="url(#f1-p3ed34a7e12)" style="fill: #2a78d6"/>
+   </g>
+   <g id="f1-patch_10">
+    <path d="M 154.8 243.567045 
+L 552.857143 243.567045 
+L 552.857143 256.100587 
+L 154.8 256.100587 
+z
+" clip-path="url(#f1-p3ed34a7e12)" style="fill: #eb6834"/>
+   </g>
+   <g id="f1-patch_11">
+    <path d="M 154.8 284.485372 
+L 544.564286 284.485372 
+L 544.564286 297.018914 
+L 154.8 297.018914 
+z
+" clip-path="url(#f1-p3ed34a7e12)" style="fill: #2a78d6"/>
+   </g>
+   <g id="f1-patch_12">
+    <path d="M 154.8 298.493448 
+L 552.857143 298.493448 
+L 552.857143 311.026989 
+L 154.8 311.026989 
+z
+" clip-path="url(#f1-p3ed34a7e12)" style="fill: #eb6834"/>
+   </g>
+   <g id="f1-patch_13">
+    <path d="M 154.8 319.136928 
+L 536.271429 319.136928 
+L 536.271429 331.67047 
+L 154.8 331.67047 
+z
+" clip-path="url(#f1-p3ed34a7e12)" style="fill: #2a78d6"/>
+   </g>
+   <g id="f1-patch_14">
+    <path d="M 154.8 333.145004 
+L 552.857143 333.145004 
+L 552.857143 345.678545 
+L 154.8 345.678545 
+z
+" clip-path="url(#f1-p3ed34a7e12)" style="fill: #eb6834"/>
+   </g>
+   <g id="f1-patch_15">
+    <path d="M 154.8 357.696 
+L 600.624 357.696 
+" style="fill: none; stroke: #c3c2b7; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+   <g id="f1-text_12">
+    <text style="font-size: 8.5px; font-family: 'Segoe UI', 'DejaVu Sans'; text-anchor: start; fill: #52514e" x="557.633829" y="113.765053" transform="rotate(-0 557.633829 113.765053)">100%</text>
+   </g>
+   <g id="f1-text_13">
+    <text style="font-size: 8.5px; font-family: 'Segoe UI', 'DejaVu Sans'; text-anchor: start; fill: #52514e" x="159.576686" y="127.773129" transform="rotate(-0 159.576686 127.773129)">0%</text>
+   </g>
+   <g id="f1-text_14">
+    <text style="font-size: 8.5px; font-family: 'Segoe UI', 'DejaVu Sans'; text-anchor: start; fill: #52514e" x="549.340971" y="148.416609" transform="rotate(-0 549.340971 148.416609)">98%</text>
+   </g>
+   <g id="f1-text_15">
+    <text style="font-size: 8.5px; font-family: 'Segoe UI', 'DejaVu Sans'; text-anchor: start; fill: #52514e" x="524.4624" y="162.424685" transform="rotate(-0 524.4624 162.424685)">92%</text>
+   </g>
+   <g id="f1-text_16">
+    <text style="font-size: 8.5px; font-family: 'Segoe UI', 'DejaVu Sans'; text-anchor: start; fill: #52514e" x="333.726686" y="203.343012" transform="rotate(-0 333.726686 203.343012)">44%</text>
+   </g>
+   <g id="f1-text_17">
+    <text style="font-size: 8.5px; font-family: 'Segoe UI', 'DejaVu Sans'; text-anchor: start; fill: #52514e" x="474.705257" y="217.351088" transform="rotate(-0 474.705257 217.351088)">79%</text>
+   </g>
+   <g id="f1-text_18">
+    <text style="font-size: 8.5px; font-family: 'Segoe UI', 'DejaVu Sans'; text-anchor: start; fill: #52514e" x="201.040971" y="237.994568" transform="rotate(-0 201.040971 237.994568)">10%</text>
+   </g>
+   <g id="f1-text_19">
+    <text style="font-size: 8.5px; font-family: 'Segoe UI', 'DejaVu Sans'; text-anchor: start; fill: #52514e" x="557.633829" y="252.002644" transform="rotate(-0 557.633829 252.002644)">100%</text>
+   </g>
+   <g id="f1-text_20">
+    <text style="font-size: 8.5px; font-family: 'Segoe UI', 'DejaVu Sans'; text-anchor: start; fill: #52514e" x="549.340971" y="292.920971" transform="rotate(-0 549.340971 292.920971)">98%</text>
+   </g>
+   <g id="f1-text_21">
+    <text style="font-size: 8.5px; font-family: 'Segoe UI', 'DejaVu Sans'; text-anchor: start; fill: #52514e" x="557.633829" y="306.929047" transform="rotate(-0 557.633829 306.929047)">100%</text>
+   </g>
+   <g id="f1-text_22">
+    <text style="font-size: 8.5px; font-family: 'Segoe UI', 'DejaVu Sans'; text-anchor: start; fill: #52514e" x="541.048114" y="327.572527" transform="rotate(-0 541.048114 327.572527)">96%</text>
+   </g>
+   <g id="f1-text_23">
+    <text style="font-size: 8.5px; font-family: 'Segoe UI', 'DejaVu Sans'; text-anchor: start; fill: #52514e" x="557.633829" y="341.580603" transform="rotate(-0 557.633829 341.580603)">100%</text>
+   </g>
+  </g>
+  <g id="f1-text_24">
+   <text style="font-weight: 700; font-size: 13px; font-family: 'Segoe UI', 'DejaVu Sans'; text-anchor: start; fill: #0b0b0b" x="7.4304" y="19.496406" transform="rotate(-0 7.4304 19.496406)">Models often name the look-ahead problem, then use the signal anyway</text>
+  </g>
+  <g id="f1-text_25">
+   <text style="font-size: 9px; font-family: 'Segoe UI', 'DejaVu Sans'; fill: #52514e" transform="translate(7.4304 39.806438)">Share of 48 responses per row (real + noise returns, all four prompt conditions, 3 runs x 2 DeepSeek models).</text>
+   <text style="font-size: 9px; font-family: 'Segoe UI', 'DejaVu Sans'; fill: #52514e" transform="translate(7.4304 49.871812)">Detected = the report states the mechanism (score 2). Adopted = the trap or spurious column is listed as a valid signal.</text>
+  </g>
+  <g id="f1-legend_1">
+   <g id="f1-patch_16">
+    <path d="M 15.5304 81.666 
+L 24.5304 81.666 
+L 24.5304 74.196 
+L 15.5304 74.196 
+z
+" style="fill: #2a78d6; stroke: #2a78d6; stroke-linejoin: miter"/>
+   </g>
+   <g id="f1-text_26">
+    <text style="font-size: 9px; font-family: 'Segoe UI', 'DejaVu Sans'; text-anchor: start; fill: #52514e" x="31.7304" y="81.036" transform="rotate(-0 31.7304 81.036)">Detected</text>
+   </g>
+   <g id="f1-patch_17">
+    <path d="M 80.18415 81.666 
+L 89.18415 81.666 
+L 89.18415 74.196 
+L 80.18415 74.196 
+z
+" style="fill: #eb6834; stroke: #eb6834; stroke-linejoin: miter"/>
+   </g>
+   <g id="f1-text_27">
+    <text style="font-size: 9px; font-family: 'Segoe UI', 'DejaVu Sans'; text-anchor: start; fill: #52514e" x="96.38415" y="81.036" transform="rotate(-0 96.38415 81.036)">Adopted</text>
+   </g>
+  </g>
+ </g>
+ <defs>
+  <clipPath id="f1-p3ed34a7e12">
+   <rect x="154.8" y="93.312" width="445.824" height="264.384"/>
+  </clipPath>
+ </defs>
+</svg>
+<figcaption style="color:#52514e;margin-top:5px">Figure 1. Detection and use of each trap, thinking vs non-thinking (48 runs each).</figcaption></figure>
+<table border="0" cellspacing="0" cellpadding="6" width="100%" style="border-collapse:collapse;width:100%;margin:10px 0 6px">
+  <tr><th style="text-align:left;padding:6px 9px;border-bottom:1px solid #c3c2b7;color:#52514e;font-weight:600;vertical-align:middle">Trap (real + noise, 48 runs each)</th><th style="text-align:left;padding:6px 9px;border-bottom:1px solid #c3c2b7;color:#52514e;font-weight:600;vertical-align:middle">Thinking: detected / adopted</th><th style="text-align:left;padding:6px 9px;border-bottom:1px solid #c3c2b7;color:#52514e;font-weight:600;vertical-align:middle">Non-thinking: detected / adopted</th></tr>
+  <tr><td style="text-align:left;padding:6px 9px;border-bottom:1px solid #e1e0d9;vertical-align:middle">&#9312; Same-period variable</td><td style="text-align:left;padding:6px 9px;border-bottom:1px solid #e1e0d9;vertical-align:middle">48/48 / <b>0/48</b></td><td style="text-align:left;padding:6px 9px;border-bottom:1px solid #e1e0d9;vertical-align:middle">47/48 / <b>44/48</b></td></tr>
+  <tr><td style="text-align:left;padding:6px 9px;border-bottom:1px solid #e1e0d9;vertical-align:middle">&#9313; Reporting lag</td><td style="text-align:left;padding:6px 9px;border-bottom:1px solid #e1e0d9;vertical-align:middle">21/48 / 38/48</td><td style="text-align:left;padding:6px 9px;border-bottom:1px solid #e1e0d9;vertical-align:middle">5/48 / 48/48</td></tr>
+  <tr><td style="text-align:left;padding:6px 9px;border-bottom:1px solid #e1e0d9;vertical-align:middle">&#9314; Survivorship</td><td style="text-align:left;padding:6px 9px;border-bottom:1px solid #e1e0d9;vertical-align:middle">47/48 / 48/48</td><td style="text-align:left;padding:6px 9px;border-bottom:1px solid #e1e0d9;vertical-align:middle">46/48 / 48/48</td></tr>
+</table>
+<p>The pattern is starkest for non-thinking runs on the same-period variable. One response writes:</p>
+<blockquote style="margin:10px 0;padding:9px 15px;border-left:3px solid #c3c2b7;color:#52514e;background:#f6f5f2">"<code style="font-family:Consolas,monospace;font-size:0.9em;background:#f1f0ec;padding:1px 4px;border-radius:4px">analyst_rev</code> is timestamped at the end of month t+1, overlapping the return window, so its measured IC and long–short return are almost certainly inflated by look-ahead bias and are not directly tradable."</blockquote>
+<p>It then builds its strategy on that variable and claims a Sharpe ratio of 4.0. Thinking runs never adopted it.</p>
+<p>Survivorship affects both modes. 23/96 responses even spell out how the missing stocks bear on <code style="font-family:Consolas,monospace;font-size:0.9em;background:#f1f0ec;padding:1px 4px;border-radius:4px">leverage</code>, for example:</p>
+<blockquote style="margin:10px 0;padding:9px 15px;border-left:3px solid #c3c2b7;color:#52514e;background:#f6f5f2">"The universe is conditioned on survival to month 120, which removes delisted and bankrupt firms — precisely the names that would have hurt a high-leverage or high-accrual long book."</blockquote>
+<p>All 23 still adopt <code style="font-family:Consolas,monospace;font-size:0.9em;background:#f1f0ec;padding:1px 4px;border-radius:4px">leverage</code> as a valid signal.</p>
+
+<h3>3.2 The reporting lag is the hardest to detect, and hints only partly help</h3>
+<figure><svg xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 619.2 345.6" xmlns="http://www.w3.org/2000/svg" version="1.1">
+ <metadata>
+  <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+   <cc:Work>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+    <dc:date>2026-10-12T14:14:00.258410</dc:date>
+    <dc:format>image/svg+xml</dc:format>
+    <dc:creator>
+     <cc:Agent>
+      <dc:title>Matplotlib v3.10.8, https://matplotlib.org/</dc:title>
+     </cc:Agent>
+    </dc:creator>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <defs>
+  <style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+ </defs>
+ <g id="f2-figure_1">
+  <g id="f2-patch_1">
+   <path d="M 0 345.6 
+L 619.2 345.6 
+L 619.2 0 
+L 0 0 
+z
+" style="fill: #fcfcfb"/>
+  </g>
+  <g id="f2-axes_1">
+   <g id="f2-patch_2">
+    <path d="M 37.152 276.48 
+L 606.816 276.48 
+L 606.816 82.944 
+L 37.152 82.944 
+z
+" style="fill: #fcfcfb"/>
+   </g>
+   <g id="f2-matplotlib.axis_1">
+    <g id="f2-xtick_1">
+     <g id="f2-line2d_1"/>
+     <g id="f2-text_1">
+      <text style="font-size: 8.2px; font-family: 'Segoe UI', 'DejaVu Sans'; text-anchor: middle; fill: #52514e" x="115.384387" y="286.050563" transform="rotate(-0 115.384387 286.050563)">No hint</text>
+     </g>
+    </g>
+    <g id="f2-xtick_2">
+     <g id="f2-line2d_2"/>
+     <g id="f2-text_2">
+      <text style="font-size: 8.2px; font-family: 'Segoe UI', 'DejaVu Sans'; fill: #52514e" transform="translate(226.10679 286.050563)">Check the data</text>
+      <text style="font-size: 8.2px; font-family: 'Segoe UI', 'DejaVu Sans'; fill: #52514e" transform="translate(214.023322 295.221237)">"Check the data first."</text>
+     </g>
+    </g>
+    <g id="f2-xtick_3">
+     <g id="f2-line2d_3"/>
+     <g id="f2-text_3">
+      <text style="font-size: 8.2px; font-family: 'Segoe UI', 'DejaVu Sans'; fill: #52514e" transform="translate(367.150616 286.050563)">Check timing</text>
+      <text style="font-size: 8.2px; font-family: 'Segoe UI', 'DejaVu Sans'; fill: #52514e" transform="translate(342.717178 295.2648)">"Check when each variable</text>
+      <text style="font-size: 8.2px; font-family: 'Segoe UI', 'DejaVu Sans'; fill: #52514e" transform="translate(355.280475 304.435475)">becomes available."</text>
+     </g>
+    </g>
+    <g id="f2-xtick_4">
+     <g id="f2-line2d_4"/>
+     <g id="f2-text_4">
+      <text style="font-size: 8.2px; font-family: 'Segoe UI', 'DejaVu Sans'; fill: #52514e" transform="translate(506.141238 286.050563)">Claims clean</text>
+      <text style="font-size: 8.2px; font-family: 'Segoe UI', 'DejaVu Sans'; fill: #52514e" transform="translate(490.561879 295.221237)">"The data ... is clean."</text>
+     </g>
+    </g>
+   </g>
+   <g id="f2-matplotlib.axis_2">
+    <g id="f2-ytick_1">
+     <g id="f2-line2d_5">
+      <path d="M 37.152 276.48 
+L 606.816 276.48 
+" clip-path="url(#f2-p3b8822ebf7)" style="fill: none; stroke: #e1e0d9; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="f2-line2d_6"/>
+     <g id="f2-text_5">
+      <text style="font-size: 8.5px; font-family: 'Segoe UI', 'DejaVu Sans'; text-anchor: end; fill: #52514e" x="33.652" y="279.626328" transform="rotate(-0 33.652 279.626328)">0%</text>
+     </g>
+    </g>
+    <g id="f2-ytick_2">
+     <g id="f2-line2d_7">
+      <path d="M 37.152 233.28 
+L 606.816 233.28 
+" clip-path="url(#f2-p3b8822ebf7)" style="fill: none; stroke: #e1e0d9; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="f2-line2d_8"/>
+     <g id="f2-text_6">
+      <text style="font-size: 8.5px; font-family: 'Segoe UI', 'DejaVu Sans'; text-anchor: end; fill: #52514e" x="33.652" y="236.426328" transform="rotate(-0 33.652 236.426328)">25%</text>
+     </g>
+    </g>
+    <g id="f2-ytick_3">
+     <g id="f2-line2d_9">
+      <path d="M 37.152 190.08 
+L 606.816 190.08 
+" clip-path="url(#f2-p3b8822ebf7)" style="fill: none; stroke: #e1e0d9; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="f2-line2d_10"/>
+     <g id="f2-text_7">
+      <text style="font-size: 8.5px; font-family: 'Segoe UI', 'DejaVu Sans'; text-anchor: end; fill: #52514e" x="33.652" y="193.226328" transform="rotate(-0 33.652 193.226328)">50%</text>
+     </g>
+    </g>
+    <g id="f2-ytick_4">
+     <g id="f2-line2d_11">
+      <path d="M 37.152 146.88 
+L 606.816 146.88 
+" clip-path="url(#f2-p3b8822ebf7)" style="fill: none; stroke: #e1e0d9; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="f2-line2d_12"/>
+     <g id="f2-text_8">
+      <text style="font-size: 8.5px; font-family: 'Segoe UI', 'DejaVu Sans'; text-anchor: end; fill: #52514e" x="33.652" y="150.026328" transform="rotate(-0 33.652 150.026328)">75%</text>
+     </g>
+    </g>
+    <g id="f2-ytick_5">
+     <g id="f2-line2d_13">
+      <path d="M 37.152 103.68 
+L 606.816 103.68 
+" clip-path="url(#f2-p3b8822ebf7)" style="fill: none; stroke: #e1e0d9; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="f2-line2d_14"/>
+     <g id="f2-text_9">
+      <text style="font-size: 8.5px; font-family: 'Segoe UI', 'DejaVu Sans'; text-anchor: end; fill: #52514e" x="33.652" y="106.826328" transform="rotate(-0 33.652 106.826328)">100%</text>
+     </g>
+    </g>
+   </g>
+   <g id="f2-patch_3">
+    <path d="M 63.045818 276.48 
+L 96.101756 276.48 
+L 96.101756 247.68 
+L 63.045818 247.68 
+z
+" clip-path="url(#f2-p3b8822ebf7)" style="fill: #2a78d6"/>
+   </g>
+   <g id="f2-patch_4">
+    <path d="M 200.778894 276.48 
+L 233.834832 276.48 
+L 233.834832 226.08 
+L 200.778894 226.08 
+z
+" clip-path="url(#f2-p3b8822ebf7)" style="fill: #2a78d6"/>
+   </g>
+   <g id="f2-patch_5">
+    <path d="M 338.511969 276.48 
+L 371.567907 276.48 
+L 371.567907 204.48 
+L 338.511969 204.48 
+z
+" clip-path="url(#f2-p3b8822ebf7)" style="fill: #2a78d6"/>
+   </g>
+   <g id="f2-patch_6">
+    <path d="M 476.245044 276.48 
+L 509.300983 276.48 
+L 509.300983 240.48 
+L 476.245044 240.48 
+z
+" clip-path="url(#f2-p3b8822ebf7)" style="fill: #2a78d6"/>
+   </g>
+   <g id="f2-patch_7">
+    <path d="M 98.856418 276.48 
+L 131.912356 276.48 
+L 131.912356 211.68 
+L 98.856418 211.68 
+z
+" clip-path="url(#f2-p3b8822ebf7)" style="fill: #1baf7a"/>
+   </g>
+   <g id="f2-patch_8">
+    <path d="M 236.589493 276.48 
+L 269.645431 276.48 
+L 269.645431 175.68 
+L 236.589493 175.68 
+z
+" clip-path="url(#f2-p3b8822ebf7)" style="fill: #1baf7a"/>
+   </g>
+   <g id="f2-patch_9">
+    <path d="M 374.322569 276.48 
+L 407.378507 276.48 
+L 407.378507 125.28 
+L 374.322569 125.28 
+z
+" clip-path="url(#f2-p3b8822ebf7)" style="fill: #1baf7a"/>
+   </g>
+   <g id="f2-patch_10">
+    <path d="M 512.055644 276.48 
+L 545.111582 276.48 
+L 545.111582 161.28 
+L 512.055644 161.28 
+z
+" clip-path="url(#f2-p3b8822ebf7)" style="fill: #1baf7a"/>
+   </g>
+   <g id="f2-patch_11">
+    <path d="M 134.667017 276.48 
+L 167.722956 276.48 
+L 167.722956 110.88 
+L 134.667017 110.88 
+z
+" clip-path="url(#f2-p3b8822ebf7)" style="fill: #eb6834"/>
+   </g>
+   <g id="f2-patch_12">
+    <path d="M 272.400093 276.48 
+L 305.456031 276.48 
+L 305.456031 118.08 
+L 272.400093 118.08 
+z
+" clip-path="url(#f2-p3b8822ebf7)" style="fill: #eb6834"/>
+   </g>
+   <g id="f2-patch_13">
+    <path d="M 410.133168 276.48 
+L 443.189106 276.48 
+L 443.189106 154.08 
+L 410.133168 154.08 
+z
+" clip-path="url(#f2-p3b8822ebf7)" style="fill: #eb6834"/>
+   </g>
+   <g id="f2-patch_14">
+    <path d="M 547.866244 276.48 
+L 580.922182 276.48 
+L 580.922182 103.68 
+L 547.866244 103.68 
+z
+" clip-path="url(#f2-p3b8822ebf7)" style="fill: #eb6834"/>
+   </g>
+   <g id="f2-patch_15">
+    <path d="M 37.152 276.48 
+L 606.816 276.48 
+" style="fill: none; stroke: #c3c2b7; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+   <g id="f2-text_10">
+    <text style="font-size: 8px; font-family: 'Segoe UI', 'DejaVu Sans'; text-anchor: middle; fill: #52514e" x="79.573787" y="242.384" transform="rotate(-0 79.573787 242.384)">17%</text>
+   </g>
+   <g id="f2-text_11">
+    <text style="font-size: 8px; font-family: 'Segoe UI', 'DejaVu Sans'; text-anchor: middle; fill: #52514e" x="217.306863" y="220.784" transform="rotate(-0 217.306863 220.784)">29%</text>
+   </g>
+   <g id="f2-text_12">
+    <text style="font-size: 8px; font-family: 'Segoe UI', 'DejaVu Sans'; text-anchor: middle; fill: #52514e" x="355.039938" y="199.184" transform="rotate(-0 355.039938 199.184)">42%</text>
+   </g>
+   <g id="f2-text_13">
+    <text style="font-size: 8px; font-family: 'Segoe UI', 'DejaVu Sans'; text-anchor: middle; fill: #52514e" x="492.773014" y="235.184" transform="rotate(-0 492.773014 235.184)">21%</text>
+   </g>
+   <g id="f2-text_14">
+    <text style="font-size: 8px; font-family: 'Segoe UI', 'DejaVu Sans'; text-anchor: middle; fill: #52514e" x="115.384387" y="206.384" transform="rotate(-0 115.384387 206.384)">38%</text>
+   </g>
+   <g id="f2-text_15">
+    <text style="font-size: 8px; font-family: 'Segoe UI', 'DejaVu Sans'; text-anchor: middle; fill: #52514e" x="253.117462" y="170.384" transform="rotate(-0 253.117462 170.384)">58%</text>
+   </g>
+   <g id="f2-text_16">
+    <text style="font-size: 8px; font-family: 'Segoe UI', 'DejaVu Sans'; text-anchor: middle; fill: #52514e" x="390.850538" y="119.984" transform="rotate(-0 390.850538 119.984)">88%</text>
+   </g>
+   <g id="f2-text_17">
+    <text style="font-size: 8px; font-family: 'Segoe UI', 'DejaVu Sans'; text-anchor: middle; fill: #52514e" x="528.583613" y="155.984" transform="rotate(-0 528.583613 155.984)">67%</text>
+   </g>
+   <g id="f2-text_18">
+    <text style="font-size: 8px; font-family: 'Segoe UI', 'DejaVu Sans'; text-anchor: middle; fill: #52514e" x="151.194986" y="105.584" transform="rotate(-0 151.194986 105.584)">96%</text>
+   </g>
+   <g id="f2-text_19">
+    <text style="font-size: 8px; font-family: 'Segoe UI', 'DejaVu Sans'; text-anchor: middle; fill: #52514e" x="288.928062" y="112.784" transform="rotate(-0 288.928062 112.784)">92%</text>
+   </g>
+   <g id="f2-text_20">
+    <text style="font-size: 8px; font-family: 'Segoe UI', 'DejaVu Sans'; text-anchor: middle; fill: #52514e" x="426.661137" y="148.784" transform="rotate(-0 426.661137 148.784)">71%</text>
+   </g>
+   <g id="f2-text_21">
+    <text style="font-size: 8px; font-family: 'Segoe UI', 'DejaVu Sans'; text-anchor: middle; fill: #52514e" x="564.394213" y="98.384" transform="rotate(-0 564.394213 98.384)">100%</text>
+   </g>
+  </g>
+  <g id="f2-text_22">
+   <text style="font-weight: 700; font-size: 13px; font-family: 'Segoe UI', 'DejaVu Sans'; text-anchor: start; fill: #0b0b0b" x="7.4304" y="18.264062" transform="rotate(-0 7.4304 18.264062)">On the reporting-lag trap, hints raise suspicion, but most responses still use sue</text>
+  </g>
+  <g id="f2-text_23">
+   <text style="font-size: 9px; font-family: 'Segoe UI', 'DejaVu Sans'; text-anchor: start; fill: #52514e" x="7.4304" y="36.134437" transform="rotate(-0 7.4304 36.134437)">sue in groups B2 + C2: 24 responses per prompt condition (2 DeepSeek models x thinking on/off x 3 runs x 2 groups).</text>
+  </g>
+  <g id="f2-legend_1">
+   <g id="f2-patch_16">
+    <path d="M 15.5304 63.954 
+L 24.5304 63.954 
+L 24.5304 56.484 
+L 15.5304 56.484 
+z
+" style="fill: #2a78d6; stroke: #2a78d6; stroke-linejoin: miter"/>
+   </g>
+   <g id="f2-text_24">
+    <text style="font-size: 9px; font-family: 'Segoe UI', 'DejaVu Sans'; text-anchor: start; fill: #52514e" x="31.7304" y="63.324" transform="rotate(-0 31.7304 63.324)">Detected (score 2)</text>
+   </g>
+   <g id="f2-patch_17">
+    <path d="M 116.358525 63.954 
+L 125.358525 63.954 
+L 125.358525 56.484 
+L 116.358525 56.484 
+z
+" style="fill: #1baf7a; stroke: #1baf7a; stroke-linejoin: miter"/>
+   </g>
+   <g id="f2-text_25">
+    <text style="font-size: 9px; font-family: 'Segoe UI', 'DejaVu Sans'; text-anchor: start; fill: #52514e" x="132.558525" y="63.324" transform="rotate(-0 132.558525 63.324)">Any timing concern (score &gt;= 1)</text>
+   </g>
+   <g id="f2-patch_18">
+    <path d="M 273.438056 63.954 
+L 282.438056 63.954 
+L 282.438056 56.484 
+L 273.438056 56.484 
+z
+" style="fill: #eb6834; stroke: #eb6834; stroke-linejoin: miter"/>
+   </g>
+   <g id="f2-text_26">
+    <text style="font-size: 9px; font-family: 'Segoe UI', 'DejaVu Sans'; text-anchor: start; fill: #52514e" x="289.638056" y="63.324" transform="rotate(-0 289.638056 63.324)">Adopted sue</text>
+   </g>
+  </g>
+ </g>
+ <defs>
+  <clipPath id="f2-p3b8822ebf7">
+   <rect x="37.152" y="82.944" width="569.664" height="193.536"/>
+  </clipPath>
+ </defs>
+</svg>
+<figcaption style="color:#52514e;margin-top:5px">Figure 2. Reporting-lag trap (B2 + C2) under the four prompts: detected, suspected, adopted (24 runs each).</figcaption></figure>
+<p>With B2 and C2 pooled (24 runs per prompt): with no hint only 4/24 runs detect it; "Check timing" raises this to 10/24 and lowers adoption from 23/24 to 17/24; "Claims clean" does not make the models less careful (5/24 detected). Thinking runs detect it far more often (21/48 vs 5/48 for non-thinking) but still adopt it 38/48 times.</p>
+
+<h3>3.3 On pure noise they report fake returns, with Sharpe ratios copied from the summary</h3>
+<figure><svg xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 619.2 345.6" xmlns="http://www.w3.org/2000/svg" version="1.1">
+ <metadata>
+  <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+   <cc:Work>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+    <dc:date>2026-10-12T14:14:00.392941</dc:date>
+    <dc:format>image/svg+xml</dc:format>
+    <dc:creator>
+     <cc:Agent>
+      <dc:title>Matplotlib v3.10.8, https://matplotlib.org/</dc:title>
+     </cc:Agent>
+    </dc:creator>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <defs>
+  <style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+ </defs>
+ <g id="f3-figure_1">
+  <g id="f3-patch_1">
+   <path d="M 0 345.6 
+L 619.2 345.6 
+L 619.2 0 
+L 0 0 
+z
+" style="fill: #fcfcfb"/>
+  </g>
+  <g id="f3-axes_1">
+   <g id="f3-patch_2">
+    <path d="M 49.536 297.216 
+L 606.816 297.216 
+L 606.816 82.944 
+L 49.536 82.944 
+z
+" style="fill: #fcfcfb"/>
+   </g>
+   <g id="f3-matplotlib.axis_1">
+    <g id="f3-xtick_1">
+     <g id="f3-line2d_1"/>
+     <g id="f3-text_1">
+      <text style="font-size: 8.5px; font-family: 'Segoe UI', 'DejaVu Sans'; fill: #52514e" transform="translate(82.672836 307.008656)">A (real)</text>
+      <text style="font-size: 8.5px; font-family: 'Segoe UI', 'DejaVu Sans'; fill: #52514e" transform="translate(75.324984 316.514844)">median 2.0</text>
+     </g>
+    </g>
+    <g id="f3-xtick_2">
+     <g id="f3-line2d_2"/>
+     <g id="f3-text_2">
+      <text style="font-size: 8.5px; font-family: 'Segoe UI', 'DejaVu Sans'; fill: #52514e" transform="translate(158.086625 307.008656)">B1 (real)</text>
+      <text style="font-size: 8.5px; font-family: 'Segoe UI', 'DejaVu Sans'; fill: #52514e" transform="translate(152.724984 316.514844)">median 2.1</text>
+     </g>
+    </g>
+    <g id="f3-xtick_3">
+     <g id="f3-line2d_3"/>
+     <g id="f3-text_3">
+      <text style="font-size: 8.5px; font-family: 'Segoe UI', 'DejaVu Sans'; fill: #52514e" transform="translate(235.486625 307.008656)">B2 (real)</text>
+      <text style="font-size: 8.5px; font-family: 'Segoe UI', 'DejaVu Sans'; fill: #52514e" transform="translate(230.124984 316.514844)">median 2.9</text>
+     </g>
+    </g>
+    <g id="f3-xtick_4">
+     <g id="f3-line2d_4"/>
+     <g id="f3-text_4">
+      <text style="font-size: 8.5px; font-family: 'Segoe UI', 'DejaVu Sans'; fill: #52514e" transform="translate(312.886625 307.008656)">B3 (real)</text>
+      <text style="font-size: 8.5px; font-family: 'Segoe UI', 'DejaVu Sans'; fill: #52514e" transform="translate(307.524984 316.514844)">median 1.4</text>
+     </g>
+    </g>
+    <g id="f3-xtick_5">
+     <g id="f3-line2d_5"/>
+     <g id="f3-text_5">
+      <text style="font-size: 8.5px; font-family: 'Segoe UI', 'DejaVu Sans'; fill: #52514e" transform="translate(386.973617 307.008656)">C1 (noise)</text>
+      <text style="font-size: 8.5px; font-family: 'Segoe UI', 'DejaVu Sans'; fill: #52514e" transform="translate(384.924984 316.514844)">median 0.3</text>
+     </g>
+    </g>
+    <g id="f3-xtick_6">
+     <g id="f3-line2d_6"/>
+     <g id="f3-text_6">
+      <text style="font-size: 8.5px; font-family: 'Segoe UI', 'DejaVu Sans'; fill: #52514e" transform="translate(464.373617 307.008656)">C2 (noise)</text>
+      <text style="font-size: 8.5px; font-family: 'Segoe UI', 'DejaVu Sans'; fill: #52514e" transform="translate(462.324984 316.514844)">median 7.3</text>
+     </g>
+    </g>
+    <g id="f3-xtick_7">
+     <g id="f3-line2d_7"/>
+     <g id="f3-text_7">
+      <text style="font-size: 8.5px; font-family: 'Segoe UI', 'DejaVu Sans'; fill: #52514e" transform="translate(541.773617 307.008656)">C3 (noise)</text>
+      <text style="font-size: 8.5px; font-family: 'Segoe UI', 'DejaVu Sans'; fill: #52514e" transform="translate(539.724984 316.514844)">median 0.9</text>
+     </g>
+    </g>
+   </g>
+   <g id="f3-matplotlib.axis_2">
+    <g id="f3-ytick_1">
+     <g id="f3-line2d_8">
+      <path d="M 49.536 287.476364 
+L 606.816 287.476364 
+" clip-path="url(#f3-pb45542c50b)" style="fill: none; stroke: #e1e0d9; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="f3-line2d_9"/>
+     <g id="f3-text_8">
+      <text style="font-size: 10px; font-family: 'Segoe UI', 'DejaVu Sans'; text-anchor: end; fill: #52514e" x="46.036" y="291.177926" transform="rotate(-0 46.036 291.177926)">0</text>
+     </g>
+    </g>
+    <g id="f3-ytick_2">
+     <g id="f3-line2d_10">
+      <path d="M 49.536 250.583802 
+L 606.816 250.583802 
+" clip-path="url(#f3-pb45542c50b)" style="fill: none; stroke: #e1e0d9; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="f3-line2d_11"/>
+     <g id="f3-text_9">
+      <text style="font-size: 10px; font-family: 'Segoe UI', 'DejaVu Sans'; text-anchor: end; fill: #52514e" x="46.036" y="254.285364" transform="rotate(-0 46.036 254.285364)">5</text>
+     </g>
+    </g>
+    <g id="f3-ytick_3">
+     <g id="f3-line2d_12">
+      <path d="M 49.536 213.69124 
+L 606.816 213.69124 
+" clip-path="url(#f3-pb45542c50b)" style="fill: none; stroke: #e1e0d9; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="f3-line2d_13"/>
+     <g id="f3-text_10">
+      <text style="font-size: 10px; font-family: 'Segoe UI', 'DejaVu Sans'; text-anchor: end; fill: #52514e" x="46.036" y="217.392802" transform="rotate(-0 46.036 217.392802)">10</text>
+     </g>
+    </g>
+    <g id="f3-ytick_4">
+     <g id="f3-line2d_14">
+      <path d="M 49.536 176.798678 
+L 606.816 176.798678 
+" clip-path="url(#f3-pb45542c50b)" style="fill: none; stroke: #e1e0d9; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="f3-line2d_15"/>
+     <g id="f3-text_11">
+      <text style="font-size: 10px; font-family: 'Segoe UI', 'DejaVu Sans'; text-anchor: end; fill: #52514e" x="46.036" y="180.50024" transform="rotate(-0 46.036 180.50024)">15</text>
+     </g>
+    </g>
+    <g id="f3-ytick_5">
+     <g id="f3-line2d_16">
+      <path d="M 49.536 139.906116 
+L 606.816 139.906116 
+" clip-path="url(#f3-pb45542c50b)" style="fill: none; stroke: #e1e0d9; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="f3-line2d_17"/>
+     <g id="f3-text_12">
+      <text style="font-size: 10px; font-family: 'Segoe UI', 'DejaVu Sans'; text-anchor: end; fill: #52514e" x="46.036" y="143.607678" transform="rotate(-0 46.036 143.607678)">20</text>
+     </g>
+    </g>
+    <g id="f3-ytick_6">
+     <g id="f3-line2d_18">
+      <path d="M 49.536 103.013554 
+L 606.816 103.013554 
+" clip-path="url(#f3-pb45542c50b)" style="fill: none; stroke: #e1e0d9; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="f3-line2d_19"/>
+     <g id="f3-text_13">
+      <text style="font-size: 10px; font-family: 'Segoe UI', 'DejaVu Sans'; text-anchor: end; fill: #52514e" x="46.036" y="106.715116" transform="rotate(-0 46.036 106.715116)">25</text>
+     </g>
+    </g>
+    <g id="f3-text_14">
+     <text style="font-size: 8.5px; font-family: 'Segoe UI', 'DejaVu Sans'; text-anchor: middle; fill: #52514e" x="29.29975" y="190.08" transform="rotate(-90 29.29975 190.08)">Claimed annual Sharpe</text>
+    </g>
+   </g>
+   <g id="f3-patch_3">
+    <path d="M 49.536 297.216 
+L 606.816 297.216 
+" style="fill: none; stroke: #c3c2b7; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+   <g id="f3-PathCollection_1">
+    <defs>
+     <path id="f3-m01b0603307" d="M 0 2 
+C 0.530406 2 1.03916 1.789267 1.414214 1.414214 
+C 1.789267 1.03916 2 0.530406 2 0 
+C 2 -0.530406 1.789267 -1.03916 1.414214 -1.414214 
+C 1.03916 -1.789267 0.530406 -2 0 -2 
+C -0.530406 -2 -1.03916 -1.789267 -1.414214 -1.414214 
+C -1.789267 -1.03916 -2 -0.530406 -2 0 
+C -2 0.530406 -1.789267 1.03916 -1.414214 1.414214 
+C -1.03916 1.789267 -0.530406 2 0 2 
+z
+" style="stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+    </defs>
+    <g clip-path="url(#f3-pb45542c50b)">
+     <use xlink:href="#f3-m01b0603307" x="101.912467" y="272.719339" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="85.997635" y="275.670744" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="76.079956" y="274.195041" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="75.020374" y="271.981488" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="109.554385" y="273.45719" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="113.866478" y="273.45719" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="100.598021" y="270.13686" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="105.923299" y="269.767934" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="97.866882" y="273.45719" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="114.833779" y="271.981488" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="109.666356" y="272.719339" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="74.422698" y="272.719339" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="111.467331" y="270.505785" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="75.759733" y="268.292231" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="105.930186" y="276.408595" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="81.917617" y="271.243636" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="111.717627" y="273.826116" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="97.773095" y="271.981488" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="87.294712" y="276.408595" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="92.624955" y="276.408595" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="75.531488" y="277.515372" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="79.690934" y="274.195041" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="103.371545" y="273.45719" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="102.355782" y="274.195041" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="100.977252" y="270.505785" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="90.93412" y="270.505785" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="117.527067" y="271.243636" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="116.817327" y="272.719339" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="104.018132" y="273.45719" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="102.497507" y="272.719339" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="104.144035" y="274.563967" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="91.16141" y="274.563967" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="80.159623" y="276.408595" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="105.576191" y="272.719339" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="97.074958" y="274.195041" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="87.751124" y="275.670744" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="95.362048" y="275.670744" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="112.857961" y="266.816529" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="114.789182" y="270.505785" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="89.812275" y="271.981488" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="99.076389" y="271.243636" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="88.255107" y="272.719339" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="100.063341" y="273.088264" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="88.950424" y="276.408595" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="91.278334" y="269.030083" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="112.892052" y="271.981488" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="84.149919" y="272.719339" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="101.315424" y="273.45719" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+    </g>
+   </g>
+   <g id="f3-PathCollection_2">
+    <g clip-path="url(#f3-pb45542c50b)">
+     <use xlink:href="#f3-m01b0603307" x="155.345561" y="257.962314" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="187.794128" y="265.340826" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="185.819989" y="269.767934" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="162.079229" y="270.505785" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="189.694333" y="271.981488" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="154.242573" y="272.719339" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="166.272658" y="264.602975" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="158.217713" y="241.729587" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="171.22351" y="108.695008" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="186.219879" y="272.719339" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="161.700956" y="272.719339" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="153.958811" y="268.292231" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="169.238895" y="280.466777" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="160.308349" y="272.719339" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="155.6376" y="271.243636" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="176.857927" y="271.243636" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="164.650685" y="273.45719" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="180.830946" y="272.719339" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="160.351797" y="264.602975" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="192.538951" y="213.69124" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="167.529335" y="271.981488" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="156.276587" y="271.981488" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="178.972064" y="275.670744" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="191.890587" y="272.719339" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="170.791707" y="272.719339" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="193.07977" y="272.719339" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="173.371484" y="269.030083" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="170.13511" y="271.243636" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="178.586532" y="272.719339" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="194.835463" y="274.195041" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="192.835015" y="150.973884" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="171.644197" y="265.340826" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="184.546999" y="224.759008" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="173.264289" y="272.719339" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="174.646506" y="272.719339" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="185.763095" y="275.670744" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="169.676843" y="272.719339" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="183.539456" y="269.030083" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="182.527777" y="265.340826" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="192.103195" y="272.719339" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="156.68564" y="274.195041" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="183.302431" y="272.719339" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="191.902263" y="269.030083" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="193.657793" y="278.622149" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="152.34143" y="271.981488" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="189.137616" y="271.981488" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="194.232918" y="272.719339" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="193.193318" y="269.767934" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+    </g>
+   </g>
+   <g id="f3-PathCollection_3">
+    <g clip-path="url(#f3-pb45542c50b)">
+     <use xlink:href="#f3-m01b0603307" x="235.552027" y="277.146446" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="271.261623" y="254.273058" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="267.677367" y="261.65157" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="264.748971" y="263.127273" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="249.908597" y="250.583802" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="239.175972" y="257.962314" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="263.860712" y="272.719339" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="269.133491" y="271.243636" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="240.639151" y="269.767934" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="252.463573" y="265.340826" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="248.294679" y="250.583802" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="269.458015" y="228.448264" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="230.859896" y="265.340826" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="260.832077" y="268.292231" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="255.733394" y="269.030083" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="230.333468" y="241.729587" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="260.277862" y="271.981488" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="229.797146" y="243.205289" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="261.956628" y="269.030083" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="251.329014" y="271.981488" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="269.375093" y="271.981488" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="231.96828" y="250.141091" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="265.570056" y="257.962314" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="231.994612" y="272.719339" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="244.027772" y="269.030083" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="247.754868" y="269.030083" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="270.976995" y="265.340826" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="253.473377" y="261.65157" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="240.324227" y="269.030083" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="239.579192" y="272.719339" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="267.5986" y="265.340826" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="238.894085" y="271.243636" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="234.502699" y="269.030083" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="241.601408" y="272.719339" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="254.508918" y="274.195041" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="253.120499" y="272.719339" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="264.200104" y="271.981488" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="253.39727" y="261.65157" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="241.605329" y="263.127273" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="247.000579" y="265.340826" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="264.564635" y="272.719339" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="256.259296" y="261.65157" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="270.674261" y="269.030083" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="245.115465" y="257.962314" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="253.056393" y="266.816529" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="254.847051" y="264.602975" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="265.872334" y="265.340826" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="235.409405" y="260.175868" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+    </g>
+   </g>
+   <g id="f3-PathCollection_4">
+    <g clip-path="url(#f3-pb45542c50b)">
+     <use xlink:href="#f3-m01b0603307" x="324.123784" y="275.670744" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="345.945261" y="281.573554" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="308.370691" y="275.670744" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="342.163381" y="277.515372" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="324.508406" y="278.622149" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="342.471024" y="273.45719" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="306.93547" y="275.670744" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="322.326561" y="276.408595" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="309.91214" y="279.36" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="334.790926" y="277.146446" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="318.373715" y="276.408595" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="336.959751" y="277.884298" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="347.412129" y="277.884298" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="312.00076" y="277.884298" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="343.98695" y="276.408595" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="309.081414" y="277.146446" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="323.008117" y="276.408595" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="325.132127" y="277.884298" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="327.692695" y="274.195041" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="348.827783" y="277.515372" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="340.125559" y="280.835702" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="319.891114" y="277.884298" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="318.199806" y="278.622149" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="343.915082" y="277.146446" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="344.703378" y="275.670744" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="328.640063" y="272.719339" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="321.427154" y="274.195041" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="349.627698" y="277.220231" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="320.198257" y="276.408595" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="314.423485" y="278.622149" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="344.650973" y="276.408595" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="341.713865" y="279.36" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="335.452998" y="276.556165" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="348.04548" y="277.884298" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="346.628173" y="277.146446" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="338.936083" y="277.146446" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="343.810242" y="279.36" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="317.216328" y="276.408595" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="312.626191" y="277.146446" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="335.547161" y="279.36" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="337.478426" y="277.146446" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="313.744742" y="274.195041" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="323.649034" y="277.515372" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="345.958126" y="278.622149" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="330.837355" y="276.408595" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="331.571392" y="278.622149" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="314.918361" y="277.884298" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="329.303908" y="277.146446" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+    </g>
+   </g>
+   <g id="f3-PathCollection_5">
+    <g clip-path="url(#f3-pb45542c50b)">
+     <use xlink:href="#f3-m01b0603307" x="406.591755" y="92.831207" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="387.758826" y="287.476364" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="426.465324" y="265.340826" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="408.670571" y="287.476364" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="384.181787" y="287.476364" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="417.393707" y="287.476364" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="426.305949" y="92.831207" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="409.471327" y="287.476364" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="397.760281" y="92.831207" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="392.031334" y="287.476364" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="413.053994" y="282.311405" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="392.360735" y="287.476364" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="408.943304" y="287.476364" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="410.007455" y="92.683636" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="425.619267" y="276.408595" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="387.036266" y="287.476364" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="405.574822" y="287.476364" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="416.156161" y="282.311405" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="391.585716" y="92.831207" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="400.724364" y="92.831207" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="386.630142" y="92.831207" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="415.36658" y="287.476364" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="387.708211" y="287.476364" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="401.028855" y="287.476364" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="421.765965" y="287.476364" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="404.375386" y="92.831207" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="423.460685" y="287.476364" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="417.101912" y="287.476364" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="423.577802" y="281.573554" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="389.426156" y="287.476364" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="387.092511" y="92.683636" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="386.952221" y="92.831207" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="421.563621" y="92.831207" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="411.387129" y="287.476364" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="405.427403" y="285.366109" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="390.992626" y="285.336595" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="413.106302" y="92.831207" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="397.688146" y="92.831207" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="414.716377" y="257.962314" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="403.857641" y="287.476364" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="405.899774" y="287.476364" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="418.131272" y="287.476364" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="387.92396" y="92.831207" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="408.989709" y="92.831207" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="392.452952" y="92.831207" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="418.931879" y="287.476364" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="405.092543" y="285.336595" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="426.758011" y="287.476364" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+    </g>
+   </g>
+   <g id="f3-PathCollection_6">
+    <g clip-path="url(#f3-pb45542c50b)">
+     <use xlink:href="#f3-m01b0603307" x="469.233495" y="272.719339" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="503.045102" y="233.539438" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="496.018948" y="233.539438" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="482.163755" y="233.539438" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="496.56582" y="233.539438" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="487.433883" y="233.539438" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="489.699567" y="233.539438" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="500.907012" y="233.539438" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="464.133081" y="269.030083" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="497.495729" y="233.539438" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="477.85338" y="233.539438" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="475.414449" y="233.539438" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="504.389096" y="233.539438" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="495.163921" y="233.613223" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="482.349035" y="265.340826" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="479.622405" y="233.539438" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="499.339613" y="233.539438" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="465.066904" y="233.539438" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="492.009703" y="233.539438" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="495.509118" y="233.539438" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="495.944368" y="233.539438" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="475.273196" y="233.539438" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="495.833529" y="233.539438" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="471.070636" y="233.539438" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="477.007876" y="233.539438" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="479.397871" y="239.516033" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="484.770874" y="233.539438" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="466.185127" y="233.539438" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="478.942745" y="233.539438" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="461.317033" y="233.539438" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="493.568438" y="233.539438" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="498.22771" y="233.539438" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="467.325855" y="233.539438" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="491.80889" y="287.476364" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="496.893892" y="287.476364" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="503.860367" y="287.476364" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="497.877258" y="233.539438" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="479.686472" y="265.340826" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="503.767627" y="233.539438" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="503.52038" y="233.539438" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="483.135375" y="233.539438" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="493.961387" y="233.539438" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="500.91338" y="233.539438" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="481.942119" y="233.539438" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="498.743951" y="233.539438" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="491.712788" y="233.539438" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="474.043853" y="233.539438" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="494.57712" y="233.539438" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+    </g>
+   </g>
+   <g id="f3-PathCollection_7">
+    <g clip-path="url(#f3-pb45542c50b)">
+     <use xlink:href="#f3-m01b0603307" x="563.439761" y="280.688132" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="542.771624" y="280.835702" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="555.667993" y="282.311405" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="541.90023" y="280.688132" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="559.342981" y="280.688132" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="557.278621" y="280.688132" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="557.070476" y="280.688132" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="564.116603" y="280.688132" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="544.021904" y="280.688132" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="579.17728" y="280.688132" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="568.353483" y="280.688132" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="574.409979" y="280.688132" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="577.574953" y="280.688132" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="563.987424" y="280.688132" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="540.447219" y="280.688132" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="569.542685" y="280.688132" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="563.367857" y="280.688132" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="574.50429" y="280.688132" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="561.769964" y="280.688132" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="573.953252" y="280.688132" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="581.918414" y="280.688132" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="553.898448" y="280.688132" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="546.116753" y="280.688132" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="555.680753" y="280.688132" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="571.344199" y="280.688132" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="557.741939" y="281.942479" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="564.206747" y="280.688132" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="544.224226" y="280.688132" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="570.177097" y="280.688132" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="550.843892" y="280.688132" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="546.966128" y="280.688132" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="576.107705" y="280.688132" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="563.167909" y="280.688132" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="559.704122" y="280.688132" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="577.662617" y="280.688132" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="542.432123" y="280.688132" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="568.878118" y="280.688132" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="552.920064" y="280.688132" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="546.30696" y="280.688132" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="567.952473" y="280.688132" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="554.430155" y="280.688132" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="553.003005" y="280.688132" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="579.606769" y="280.688132" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="547.342387" y="280.688132" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="560.903655" y="263.865124" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="539.744828" y="280.688132" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="545.785027" y="280.688132" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+     <use xlink:href="#f3-m01b0603307" x="576.994902" y="280.688132" style="fill: #2a78d6; fill-opacity: 0.55; stroke: #fcfcfb; stroke-opacity: 0.55; stroke-width: 0.6"/>
+    </g>
+   </g>
+   <g id="f3-line2d_20">
+    <path d="M 68.112 268.535722 
+L 123.84 268.535722 
+" clip-path="url(#f3-pb45542c50b)" style="fill: none; stroke: #0b0b0b; stroke-width: 2; stroke-linecap: round"/>
+   </g>
+   <g id="f3-line2d_21">
+    <path d="M 145.512 268.535722 
+L 201.24 268.535722 
+" clip-path="url(#f3-pb45542c50b)" style="fill: none; stroke: #0b0b0b; stroke-width: 2; stroke-linecap: round"/>
+   </g>
+   <g id="f3-line2d_22">
+    <path d="M 222.912 268.535722 
+L 278.64 268.535722 
+" clip-path="url(#f3-pb45542c50b)" style="fill: none; stroke: #0b0b0b; stroke-width: 2; stroke-linecap: round"/>
+   </g>
+   <g id="f3-line2d_23">
+    <path d="M 300.312 274.84435 
+L 356.04 274.84435 
+" clip-path="url(#f3-pb45542c50b)" style="fill: none; stroke: #0b0b0b; stroke-width: 2; stroke-linecap: round"/>
+   </g>
+   <g id="f3-line2d_24">
+    <path d="M 377.712 287.476364 
+L 433.44 287.476364 
+" clip-path="url(#f3-pb45542c50b)" style="fill: none; stroke: #0b0b0b; stroke-width: 2; stroke-linecap: round"/>
+   </g>
+   <g id="f3-line2d_25">
+    <path d="M 455.112 287.476364 
+L 510.84 287.476364 
+" clip-path="url(#f3-pb45542c50b)" style="fill: none; stroke: #0b0b0b; stroke-width: 2; stroke-linecap: round"/>
+   </g>
+   <g id="f3-line2d_26">
+    <path d="M 532.512 287.476364 
+L 588.24 287.476364 
+" clip-path="url(#f3-pb45542c50b)" style="fill: none; stroke: #0b0b0b; stroke-width: 2; stroke-linecap: round"/>
+   </g>
+  </g>
+  <g id="f3-text_15">
+   <text style="font-weight: 700; font-size: 13px; font-family: 'Segoe UI', 'DejaVu Sans'; text-anchor: start; fill: #0b0b0b" x="7.4304" y="18.264062" transform="rotate(-0 7.4304 18.264062)">On pure-noise data the reports still promise tradable Sharpe ratios</text>
+  </g>
+  <g id="f3-text_16">
+   <text style="font-size: 9px; font-family: 'Segoe UI', 'DejaVu Sans'; fill: #52514e" transform="translate(7.4304 36.134437)">Each dot is one response's claimed annual Sharpe (336 of 336 gave a number). Black bar: the in-sample</text>
+   <text style="font-size: 9px; font-family: 'Segoe UI', 'DejaVu Sans'; fill: #52514e" transform="translate(7.4304 46.362375)">Sharpe of an equal-weight composite of the group's true signals (0 in the noise-return groups C1-C3).</text>
+  </g>
+  <g id="f3-legend_1">
+   <g id="f3-line2d_27">
+    <defs>
+     <path id="f3-m64560117b9" d="M 0 2.5 
+C 0.663008 2.5 1.29895 2.236584 1.767767 1.767767 
+C 2.236584 1.29895 2.5 0.663008 2.5 0 
+C 2.5 -0.663008 2.236584 -1.29895 1.767767 -1.767767 
+C 1.29895 -2.236584 0.663008 -2.5 0 -2.5 
+C -0.663008 -2.5 -1.29895 -2.236584 -1.767767 -1.767767 
+C -2.236584 -1.29895 -2.5 -0.663008 -2.5 0 
+C -2.5 0.663008 -2.236584 1.29895 -1.767767 1.767767 
+C -1.29895 2.236584 -0.663008 2.5 0 2.5 
+z
+" style="stroke: #2a78d6; stroke-opacity: 0.7"/>
+    </defs>
+    <g>
+     <use xlink:href="#f3-m64560117b9" x="24.5304" y="60.092438" style="fill: #2a78d6; fill-opacity: 0.7; stroke: #2a78d6; stroke-opacity: 0.7"/>
+    </g>
+   </g>
+   <g id="f3-text_17">
+    <text style="font-size: 9px; font-family: 'Segoe UI', 'DejaVu Sans'; text-anchor: start; fill: #52514e" x="40.7304" y="63.242438" transform="rotate(-0 40.7304 63.242438)">Claimed by one response</text>
+   </g>
+   <g id="f3-line2d_28">
+    <path d="M 155.2329 60.092438 
+L 164.2329 60.092438 
+L 173.2329 60.092438 
+" style="fill: none; stroke: #0b0b0b; stroke-width: 2; stroke-linecap: square"/>
+   </g>
+   <g id="f3-text_18">
+    <text style="font-size: 9px; font-family: 'Segoe UI', 'DejaVu Sans'; text-anchor: start; fill: #52514e" x="180.4329" y="63.242438" transform="rotate(-0 180.4329 63.242438)">True in-sample Sharpe of the real signals</text>
+   </g>
+  </g>
+ </g>
+ <defs>
+  <clipPath id="f3-pb45542c50b">
+   <rect x="49.536" y="82.944" width="557.28" height="214.272"/>
+  </clipPath>
+ </defs>
+</svg>
+<figcaption style="color:#52514e;margin-top:5px">Figure 3. Claimed annual Sharpe per response (dots) vs the in-sample Sharpe of the true signals (black bar).</figcaption></figure>
+<p>Every run that missed the trap reported fake returns (36/36), and so did most runs that detected it (83/108). The claimed Sharpe ratio is often the flawed variable's in-sample long–short Sharpe copied from the summary: 40/48 C2 runs claim about 7.31 (from <code style="font-family:Consolas,monospace;font-size:0.9em;background:#f1f0ec;padding:1px 4px;border-radius:4px">sue</code>) and 16/48 C1 runs claim about 26.4 (from <code style="font-family:Consolas,monospace;font-size:0.9em;background:#f1f0ec;padding:1px 4px;border-radius:4px">analyst_rev</code>). The true value is 0.</p>
+<p class="note" style="color:#52514e">For comparison, the original Live Salmon run reported 0/9 false positives on pure-noise data. The setups differ: its prompt explicitly encouraged reporting null results, ours does not include that sentence, but it does not forbid null results either.</p>
+
+<h2>4. Predictions written in advance vs results</h2>
+<table border="0" cellspacing="0" cellpadding="6" width="100%" style="border-collapse:collapse;width:100%;margin:10px 0 6px">
+  <tr><th style="text-align:left;padding:6px 9px;border-bottom:1px solid #c3c2b7;color:#52514e;font-weight:600;vertical-align:middle">Prediction</th><th style="text-align:left;padding:6px 9px;border-bottom:1px solid #c3c2b7;color:#52514e;font-weight:600;vertical-align:middle">Result</th></tr>
+  <tr><td style="text-align:left;padding:6px 9px;border-bottom:1px solid #e1e0d9;vertical-align:middle">With no hint, detection is easiest for the same-period variable and hardest for survivorship</td><td style="text-align:left;padding:6px 9px;border-bottom:1px solid #e1e0d9;vertical-align:middle"><b>Wrong.</b> The reporting lag is the hardest (4/24); survivorship is as easy as the same-period variable (24/24)</td></tr>
+  <tr><td style="text-align:left;padding:6px 9px;border-bottom:1px solid #e1e0d9;vertical-align:middle">"Check timing" helps only on the two timing traps</td><td style="text-align:left;padding:6px 9px;border-bottom:1px solid #e1e0d9;vertical-align:middle">Partly right: reporting lag 4 → 10/24; the other two were already near ceiling</td></tr>
+  <tr><td style="text-align:left;padding:6px 9px;border-bottom:1px solid #e1e0d9;vertical-align:middle">"Check the data" helps on all three, less than "Check timing"</td><td style="text-align:left;padding:6px 9px;border-bottom:1px solid #e1e0d9;vertical-align:middle">Partly right: reporting lag 4 → 7/24</td></tr>
+  <tr><td style="text-align:left;padding:6px 9px;border-bottom:1px solid #e1e0d9;vertical-align:middle">"Claims clean" lowers detection</td><td style="text-align:left;padding:6px 9px;border-bottom:1px solid #e1e0d9;vertical-align:middle"><b>Wrong</b>: almost no effect</td></tr>
+  <tr><td style="text-align:left;padding:6px 9px;border-bottom:1px solid #e1e0d9;vertical-align:middle">Fake returns are more common when the trap is missed, and most common under "Claims clean"</td><td style="text-align:left;padding:6px 9px;border-bottom:1px solid #e1e0d9;vertical-align:middle">First half <b>right</b> (36/36 vs 83/108 when detected); second half <b>wrong</b> ("Claims clean" 29/36, no hint 31/36)</td></tr>
+  <tr><td style="text-align:left;padding:6px 9px;border-bottom:1px solid #e1e0d9;vertical-align:middle">Thinking runs detect more often</td><td style="text-align:left;padding:6px 9px;border-bottom:1px solid #e1e0d9;vertical-align:middle">Only for the reporting lag (21/48 vs 5/48); the larger effect of thinking is not adopting a trap once detected</td></tr>
+  <tr><td style="text-align:left;padding:6px 9px;border-bottom:1px solid #e1e0d9;vertical-align:middle">Hints cause more false alarms</td><td style="text-align:left;padding:6px 9px;border-bottom:1px solid #e1e0d9;vertical-align:middle"><b>Wrong</b>: only 1 of 336 runs flagged a legitimate variable as a timing problem</td></tr>
+</table>
+
+<h2>5. Limitations</h2>
+<ul>
+  <li>Small sample: 12 runs per cell, so the results are preliminary; one model family (DeepSeek).</li>
+  <li>Synthetic data; the AI sees only a summary, answers once, and cannot inspect raw data or run code. Agents with tools may behave differently.</li>
+  <li>Trap strength and subtlety are confounded: the same-period leak is both the strongest and the most explicit.</li>
+  <li>Scoring was done by AI (Claude sub-agents), not by humans.</li>
+  <li>Not fully comparable with the original Live Salmon run: our prompt lacks its sentence encouraging null results (it does not forbid them; 28/336 responses indeed gave no strategy).</li>
+</ul>
+
+<h2>6. Cost and reproduction</h2>
+<p>API cost about $4.00, of which $2.14 for generating the responses and the rest for comparison scoring. All code, data and results are in <code style="font-family:Consolas,monospace;font-size:0.9em;background:#f1f0ec;padding:1px 4px;border-radius:4px">experiments/finance_leak/</code>; <code style="font-family:Consolas,monospace;font-size:0.9em;background:#f1f0ec;padding:1px 4px;border-radius:4px">evaluate.py</code>, <code style="font-family:Consolas,monospace;font-size:0.9em;background:#f1f0ec;padding:1px 4px;border-radius:4px">make_figures.py</code> and <code style="font-family:Consolas,monospace;font-size:0.9em;background:#f1f0ec;padding:1px 4px;border-radius:4px">report_numbers.py</code> rebuild every table, figure and number in this report without any API call.</p>
+
+<footer style="margin-top:40px;padding-top:12px;border-top:1px solid #e1e0d9;color:#898781">Designed, run and analysed by Haojie (Danny) Tao. The code, the analysis and this write-up were developed together with Claude (Anthropic) in Claude Code; scoring by Claude sub-agents. Tables in this report are generated directly from the result files.</footer>
+</main>
+</body>
+</html>
