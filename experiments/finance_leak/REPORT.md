@@ -60,9 +60,10 @@ and size characteristics, have no premium. Seven datasets:
 | A | live | none | point-in-time panel | - |
 | B1 / C1 | live / dead | same-period variable | `analyst_rev` = noisy copy of next-month return (rank IC 0.30) | dictionary: "change ... during month t+1 ... recorded at the end of month t+1" |
 | B2 / C2 | live / dead | reporting lag | `sue` aligned to the fiscal-quarter end, so in quarter-end rows it holds the surprise announced during month t+1 (rank IC 0.095) | dictionary: "most recent fiscal quarter ending on or before the end of month t ... firms announce ... in the month after the quarter ends" |
-| B3 / C3 | live / dead | survivorship | only stocks still in the index in month 120 are kept; removal depended on leverage, so `leverage` looks predictive (IC 0.014, t 2.6) and average returns are overstated by about 11% a year | universe note: "constituents ... at the end of month 120"; stock count rises from 139 to 500 |
+| B3 / C3 | live / dead | survivorship | only stocks still in the index in month 120 are kept; removal depended on leverage, so `leverage` looks predictive (IC 0.014, t 2.6) and average returns are overstated by about 11% a year | universe note: "constituents ... at the end of month 120"; stock count rises from 139 (B3) or 143 (C3) to 500 |
 
-"Dead" groups replace returns by pure noise: no feature predicts them, so any reported signal is
+"Dead" groups replace returns by pure noise: no feature known when a trade is placed predicts them
+(only the trap variable is related to them, through the trap itself), so any reported signal is
 false. Survivor selection also weakens a true factor in B3 (`asset_growth` t falls to −1.9).
 `sanity/sanity_report.md` lists 19 automated checks that the traps behave as designed (all pass).
 
@@ -151,7 +152,8 @@ the true factors (2.57).
 Detection and action come apart. A typical non-thinking report on B1 states that `analyst_rev`
 "is timestamped at the end of month t+1, overlapping the return window, so its measured IC and
 long–short return are almost certainly inflated by look-ahead bias and are not directly
-tradable", and then builds its strategy on it with a claimed Sharpe of 4.0
+tradable", and then still puts it into its strategy (a composite with the three true factors) with a
+claimed Sharpe of 4.0
 (`results/raw/B1__assert_clean__flash-nothink__run1.json`). For survivorship, reports name the
 selection on month-120 membership, and 23/96 even have a sentence tying survivorship or
 delisting to `leverage` (keyword search), e.g. "The universe is conditioned on survival to month
@@ -234,7 +236,7 @@ handles it, the failure documented in `RUBRIC.md` section 7; this was not verifi
 | P-d | `assert_clean` lowers detection | **not supported** (24/24, 5/24, 23/24) |
 | P-e | fake alpha more common when the trap is missed, highest under `assert_clean` | first half supported (36/36 vs 83/108); second not (29/36 vs 31/36 for `plain`) |
 | P-f | thinking configurations detect more often | supported on reporting lag (21/48 vs 5/48); no difference elsewhere; the larger effect is on adoption |
-| P-g | false alarms rise under the hints | **not supported** |
+| P-g | false alarms rise under the hints | **not supported**: timing false alarms 1/336 in total; selection concerns on point-in-time data 12/60 under each of `check_data` and `check_timing` vs 10/60 under `plain` |
 
 ## 6. Limitations
 

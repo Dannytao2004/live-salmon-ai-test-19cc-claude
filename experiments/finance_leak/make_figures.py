@@ -57,8 +57,8 @@ TEXT = {
                        "check_timing": "check_timing\n\"Check when each variable\nbecomes available.\"",
                        "assert_clean": "assert_clean\n\"The data ... is clean.\""},
         "fig3_title": "On pure-noise data the reports still promise tradable Sharpe ratios",
-        "fig3_sub": "Each dot is one response's claimed annual Sharpe ({n} of 336 gave a number). Black bar: the in-sample\n"
-                    "Sharpe of an equal-weight composite of the group's true signals (0 in the dead-return groups C1-C3).",
+        "fig3_sub": "Each dot is one response's claimed annual Sharpe ({n} of 336 gave a number; the {zero} at exactly 0 proposed no strategy).\n"
+                    "Black bar: the in-sample Sharpe of an equal-weight composite of the group's true signals (0 in the dead-return groups C1-C3).",
         "fig3_dot": "Claimed by one response", "fig3_bar": "True in-sample Sharpe of the real signals",
         "fig3_ylabel": "Claimed annual Sharpe",
         "fig3_tick": "{g} ({returns})\nmedian {median:.1f}", "live": "live", "dead": "dead",
@@ -80,8 +80,8 @@ TEXT = {
                        "check_timing": "检查变量可得时间\n“Check when each variable\nbecomes available.”",
                        "assert_clean": "声称数据干净\n“The data ... is clean.”"},
         "fig3_title": "在纯噪声数据上，报告仍然声称有可交易的 Sharpe",
-        "fig3_sub": "每个点是一份回答声称的年化 Sharpe（336 份中有 {n} 份给出了数字）。黑线：用该组真实信号\n"
-                    "等权合成后在样本内能达到的 Sharpe（纯噪声组 C1–C3 为 0）。",
+        "fig3_sub": "每个点是一份回答声称的年化 Sharpe（336 份中有 {n} 份给出了数字；恰好为 0 的 {zero} 份都没有提出策略）。\n"
+                    "黑线：用该组真实信号等权合成后在样本内能达到的 Sharpe（纯噪声组 C1–C3 为 0）。",
         "fig3_dot": "单份回答声称的 Sharpe", "fig3_bar": "真实信号在样本内的 Sharpe",
         "fig3_ylabel": "声称的年化 Sharpe",
         "fig3_tick": "{g}（{returns}）\n中位数 {median:.1f}", "live": "真收益", "dead": "纯噪声",
@@ -96,8 +96,8 @@ TEXT["en_report"] = {
     "conditions": {"plain": "No hint", "check_data": "Check the data\n\"Check the data first.\"",
                    "check_timing": "Check timing\n\"Check when each variable\nbecomes available.\"",
                    "assert_clean": "Claims clean\n\"The data ... is clean.\""},
-    "fig3_sub": "Each dot is one response's claimed annual Sharpe ({n} of 336 gave a number). Black bar: the in-sample\n"
-                "Sharpe of an equal-weight composite of the group's true signals (0 in the noise-return groups C1-C3).",
+    "fig3_sub": "Each dot is one response's claimed annual Sharpe ({n} of 336 gave a number; the {zero} at exactly 0 proposed no strategy).\n"
+                "Black bar: the in-sample Sharpe of an equal-weight composite of the group's true signals (0 in the noise-return groups C1-C3).",
     "live": "real", "dead": "noise",
 }
 
@@ -233,7 +233,7 @@ def fig3(df, bench, t, out, ext):
     ax.set_ylabel(t["fig3_ylabel"], fontsize=8.5, color=INK_2)
     ax.yaxis.grid(True, color=GRID, linewidth=0.8)
     ax.spines["left"].set_visible(False)
-    titles(fig, t["fig3_title"], t["fig3_sub"].format(n=len(d)))
+    titles(fig, t["fig3_title"], t["fig3_sub"].format(n=len(d), zero=int((d.claimed_sharpe == 0).sum())))
     fig.subplots_adjust(left=0.08, right=0.98, top=0.76, bottom=0.14)
     fig.savefig(os.path.join(out, f"fig3_claimed_sharpe.{ext}"), facecolor=SURFACE)
     plt.close(fig)
