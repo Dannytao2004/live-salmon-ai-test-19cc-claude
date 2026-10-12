@@ -1,0 +1,314 @@
+{
+ "responses": 336,
+ "parse_failed": 0,
+ "reliability": {
+  "primary_double_coding": {
+   "double_coding": {
+    "raters": "first pass vs second pass",
+    "n": 30,
+    "trap_score": "26/26",
+    "selection_label": "30/30",
+    "timing_general": "29/30",
+    "strategy_weighting": "30/30",
+    "mentions_out_of_sample": "30/30",
+    "false_timing_presence": "30/30",
+    "trap_score_by_trap": {
+     "contemporaneous": "8/8",
+     "reporting_lag": "8/8",
+     "survivorship": "10/10"
+    }
+   },
+   "tiebreaks_needed": [],
+   "tiebreaks_missing": []
+  },
+  "agent_v4_missing": 0,
+  "deepseek_v3_missing": 0,
+  "deepseek_v1_missing": 0,
+  "agent_v4_vs_deepseek_v3": {
+   "raters": "agent_v4 vs deepseek_v3",
+   "n": 336,
+   "trap_score": "263/288",
+   "selection_label": "301/336",
+   "timing_general": "184/336",
+   "strategy_weighting": "269/336",
+   "mentions_out_of_sample": "315/336",
+   "false_timing_presence": "318/336",
+   "trap_score_by_trap": {
+    "contemporaneous": "95/96",
+    "reporting_lag": "72/96",
+    "survivorship": "96/96"
+   }
+  },
+  "agent_v4_vs_deepseek_v1": {
+   "raters": "agent_v4 vs deepseek_v1",
+   "n": 336,
+   "trap_score": "259/288",
+   "selection_label": "241/336",
+   "timing_general": "144/336",
+   "strategy_weighting": "270/336",
+   "mentions_out_of_sample": "315/336",
+   "false_timing_presence": "273/336",
+   "trap_score_by_trap": {
+    "contemporaneous": "96/96",
+    "reporting_lag": "67/96",
+    "survivorship": "96/96"
+   }
+  },
+  "agent_v4_vs_keyword_rules": {
+   "agreement": "210/288",
+   "rule_higher": 68,
+   "rule_lower": 10
+  }
+ },
+ "benchmark_sharpe": {
+  "A": 2.567,
+  "B1": 2.567,
+  "B2": 2.567,
+  "B3": 1.712,
+  "C1": 0.0,
+  "C2": 0.0,
+  "C3": 0.0
+ },
+ "A": {
+  "all_three_true_factors": "48/48",
+  "noise_fp_any": "0/48"
+ },
+ "by_trap": {
+  "contemporaneous": {
+   "detected": "95/96",
+   "suspected": "96/96",
+   "adopted": "44/96",
+   "by_mode": {
+    "non_thinking": {
+     "detected": "47/48",
+     "adopted": "44/48"
+    },
+    "thinking": {
+     "detected": "48/48",
+     "adopted": "0/48"
+    }
+   },
+   "by_condition": {
+    "assert_clean": {
+     "detected": "24/24",
+     "suspected": "24/24",
+     "adopted": "10/24"
+    },
+    "check_data": {
+     "detected": "23/24",
+     "suspected": "24/24",
+     "adopted": "11/24"
+    },
+    "check_timing": {
+     "detected": "24/24",
+     "suspected": "24/24",
+     "adopted": "11/24"
+    },
+    "plain": {
+     "detected": "24/24",
+     "suspected": "24/24",
+     "adopted": "12/24"
+    }
+   },
+   "by_group": {
+    "B1": {
+     "detected": "48/48",
+     "adopted": "24/48"
+    },
+    "C1": {
+     "detected": "47/48",
+     "adopted": "20/48"
+    }
+   },
+   "detected_and_adopted": "43/96"
+  },
+  "reporting_lag": {
+   "detected": "26/96",
+   "suspected": "60/96",
+   "adopted": "86/96",
+   "by_mode": {
+    "non_thinking": {
+     "detected": "5/48",
+     "adopted": "48/48"
+    },
+    "thinking": {
+     "detected": "21/48",
+     "adopted": "38/48"
+    }
+   },
+   "by_condition": {
+    "assert_clean": {
+     "detected": "5/24",
+     "suspected": "16/24",
+     "adopted": "24/24"
+    },
+    "check_data": {
+     "detected": "7/24",
+     "suspected": "14/24",
+     "adopted": "22/24"
+    },
+    "check_timing": {
+     "detected": "10/24",
+     "suspected": "21/24",
+     "adopted": "17/24"
+    },
+    "plain": {
+     "detected": "4/24",
+     "suspected": "9/24",
+     "adopted": "23/24"
+    }
+   },
+   "by_group": {
+    "B2": {
+     "detected": "13/48",
+     "adopted": "41/48"
+    },
+    "C2": {
+     "detected": "13/48",
+     "adopted": "45/48"
+    }
+   },
+   "detected_and_adopted": "16/96"
+  },
+  "survivorship": {
+   "detected": "93/96",
+   "suspected": "96/96",
+   "adopted": "96/96",
+   "by_mode": {
+    "non_thinking": {
+     "detected": "46/48",
+     "adopted": "48/48"
+    },
+    "thinking": {
+     "detected": "47/48",
+     "adopted": "48/48"
+    }
+   },
+   "by_condition": {
+    "assert_clean": {
+     "detected": "23/24",
+     "suspected": "24/24",
+     "adopted": "24/24"
+    },
+    "check_data": {
+     "detected": "23/24",
+     "suspected": "24/24",
+     "adopted": "24/24"
+    },
+    "check_timing": {
+     "detected": "23/24",
+     "suspected": "24/24",
+     "adopted": "24/24"
+    },
+    "plain": {
+     "detected": "24/24",
+     "suspected": "24/24",
+     "adopted": "24/24"
+    }
+   },
+   "by_group": {
+    "B3": {
+     "detected": "45/48",
+     "adopted": "48/48"
+    },
+    "C3": {
+     "detected": "48/48",
+     "adopted": "48/48"
+    }
+   },
+   "detected_and_adopted": "93/96"
+  }
+ },
+ "fake_alpha": {
+  "all_dead": "119/144",
+  "by_group": {
+   "C1": "26/48",
+   "C2": "45/48",
+   "C3": "48/48"
+  },
+  "by_detection": {
+   "not_detected": "36/36",
+   "detected": "83/108"
+  },
+  "by_mode": {
+   "C1": {
+    "non_thinking": "20/24",
+    "thinking": "6/24"
+   },
+   "C2": {
+    "non_thinking": "24/24",
+    "thinking": "21/24"
+   },
+   "C3": {
+    "non_thinking": "24/24",
+    "thinking": "24/24"
+   }
+  },
+  "by_condition": {
+   "assert_clean": "29/36",
+   "check_data": "30/36",
+   "check_timing": "29/36",
+   "plain": "31/36"
+  },
+  "no_fake_alpha": 25
+ },
+ "no_strategy_all": 28,
+ "claimed_sharpe_median": {
+  "A": 2.0,
+  "B1": 2.1,
+  "B2": 2.9,
+  "B3": 1.4,
+  "C1": 0.29,
+  "C2": 7.31,
+  "C3": 0.92
+ },
+ "leak_ls_sharpe_in_summary": {
+  "B1": 24.23,
+  "C1": 26.38,
+  "B2": 7.65,
+  "C2": 7.31
+ },
+ "C1_claims_near_analyst_rev_sharpe": "16/48",
+ "C2_claims_near_sue_sharpe": "40/48",
+ "B3": {
+  "noise_fp_any": "47/48",
+  "noise_features_adopted": {
+   "accruals": 47
+  },
+  "noise_fp_excluding_in_sample_significant": "0/48",
+  "true_recall_dgp_mean": 0.743,
+  "true_recall_in_sample_mean": 1.0,
+  "selection_says_absent_B3_C3": "0/96"
+ },
+ "survivorship_linked_to_leverage": {
+  "reports": "23/96",
+  "of_which_adopted_leverage": "23/23"
+ },
+ "false_alarms": {
+  "timing_any_all": "1/336",
+  "selection_point_in_time": "43/240",
+  "selection_by_condition": {
+   "assert_clean": "9/60",
+   "check_data": "12/60",
+   "check_timing": "12/60",
+   "plain": "10/60"
+  }
+ },
+ "strategy": {
+  "weighting": {
+   "equal_weight": 178,
+   "single_signal": 113,
+   "no_strategy": 28,
+   "weighted_by_reported_statistics": 10,
+   "other": 7
+  },
+  "mentions_out_of_sample": "165/336"
+ },
+ "cost_usd": {
+  "generation": 2.1429,
+  "deepseek_judge_v1": 1.0407,
+  "deepseek_judge_v2": 0.0101,
+  "deepseek_judge_v3": 0.804,
+  "total_recorded": 3.9977
+ }
+}

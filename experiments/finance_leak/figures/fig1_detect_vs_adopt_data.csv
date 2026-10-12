@@ -1,0 +1,7 @@
+trap,mode,n,detected,adopted
+Same-period variable (analyst_rev),thinking,48,1.0,0.0
+Same-period variable (analyst_rev),non-thinking,48,0.9791666666666666,0.9166666666666666
+Reporting lag (sue),thinking,48,0.4375,0.7916666666666666
+Reporting lag (sue),non-thinking,48,0.10416666666666667,1.0
+Survivorship (leverage),thinking,48,0.9791666666666666,1.0
+Survivorship (leverage),non-thinking,48,0.9583333333333334,1.0
