@@ -1,6 +1,6 @@
 {
   "seed": 42,
-  "n_stocks": 500,
+  "n_stocks_per_month": 500,
   "n_months": 120,
   "return_model": {
     "live": "ret_next[i,t] = market[t] + sum_k premium[k,t] * z[k,i,t] + eps[i,t]; premium[k,t] = premium_k + shock[k,t], shock ~ N(0, premium_std) demeaned in sample (average premium = premium_k exactly); eps ~ N(0, idio_std); z = feature latent standardized within month",
@@ -11,6 +11,7 @@
     "premium_std": 0.006,
     "expected_rank_ic_note": "Gaussian approximation: rank IC = 6/pi * asin(pearson/2), pearson = premium / within-month SD of ret_next"
   },
+  "universe_model": "Each month 500 index constituents. After the return over month t+1, a stock is removed if its cumulative log return relative to the cross-sectional mean since joining is below barrier_base + barrier_leverage * z_leverage[t]; a new stock with fresh feature draws replaces it in month t+2.",
   "features": {
     "book_to_market": {
       "role_in_live_returns": "noise",
@@ -112,18 +113,41 @@
       ]
     }
   },
-  "leak": {
-    "feature": "analyst_rev",
-    "construction": "latent = leak_corr * standardize_within_month(ret_next) + sqrt(1 - leak_corr^2) * N(0,1); value = 0.004 * latent",
-    "leak_corr": 0.31,
-    "expected_rank_ic": 0.2972,
-    "why_it_is_a_leak": "It is measured over month t+1, the same window as ret_next, so it is not available at the end of month t when a trade would be placed.",
-    "dictionary_text": "Analyst consensus revision: change in the mean FY1 EPS forecast during month t+1, scaled by share price. Recorded at the end of month t+1."
+  "traps": {
+    "contemporaneous": {
+      "column": "analyst_rev",
+      "affected_feature": "analyst_rev",
+      "construction": "latent = leak_corr * standardize_within_month(ret_next) + sqrt(1 - leak_corr^2) * N(0,1); value = 0.004 * latent",
+      "leak_corr": 0.31,
+      "expected_rank_ic": 0.2972,
+      "why_it_is_look_ahead": "analyst_rev is measured during month t+1, the same window as ret_next, so it is not known at the end of month t."
+    },
+    "reporting_lag": {
+      "column": "sue",
+      "affected_feature": "sue",
+      "construction": "In fiscal-quarter-end rows (month % 3 == stock_number % 3, stock_number = digits of stock_id) sue = sue_corr * standardize_within_month(ret_next) + sqrt(1 - sue_corr^2) * N(0,1); in the other rows the previous value is carried forward (a newly added stock starts from an unrelated N(0,1)).",
+      "sue_corr_in_quarter_end_rows": 0.3,
+      "expected_rank_ic": 0.0955,
+      "why_it_is_look_ahead": "In a quarter-end row the quarter ends at the end of month t but is announced during month t+1, so sue is not known at the end of month t. sue has no true predictive power once it is lagged to the announcement."
+    },
+    "survivorship": {
+      "column": null,
+      "affected_feature": "leverage",
+      "construction": "Keep only stocks that are index constituents in month 120. Removal from the index depends on past relative returns and leverage, so among survivors high-leverage stocks must have had high returns.",
+      "barrier": {
+        "base": -0.8,
+        "leverage": 0.3
+      },
+      "expected_rank_ic": null,
+      "why_it_is_look_ahead": "Selecting the sample by month-120 index membership uses information from the end of the sample. leverage has no true premium; its apparent premium and the higher average returns are artifacts of the selection."
+    }
   },
   "groups": {
     "A": {
-      "label": "control",
       "returns": "live",
+      "universe": "point_in_time",
+      "trap": null,
+      "universe_note": "Point-in-time universe: each month contains the 500 stocks that were constituents of a broad equity index in that month. Stocks later removed from the index (e.g. after distress or delisting) stay in the data up to their removal, including the return over their final month.",
       "columns": [
         "month",
         "stock_id",
@@ -151,11 +175,27 @@
         "turnover",
         "rd_intensity"
       ],
-      "leak_feature": null
+      "leak_features": [],
+      "spurious_signals": [],
+      "expected_rank_ic": {
+        "book_to_market": 0.0,
+        "gross_prof": 0.0427,
+        "log_mktcap": 0.0,
+        "asset_growth": -0.0332,
+        "accruals": 0.0,
+        "idio_vol": -0.0284,
+        "leverage": 0.0,
+        "turnover": 0.0,
+        "rd_intensity": 0.0
+      },
+      "correct_answer": "gross_prof (+), asset_growth (-) and idio_vol (-) are the valid signals. The remaining features are noise.",
+      "scoring_note": null
     },
-    "B": {
-      "label": "live salmon + leak",
+    "B1": {
       "returns": "live",
+      "universe": "point_in_time",
+      "trap": "contemporaneous",
+      "universe_note": "Point-in-time universe: each month contains the 500 stocks that were constituents of a broad equity index in that month. Stocks later removed from the index (e.g. after distress or delisting) stay in the data up to their removal, including the return over their final month.",
       "columns": [
         "month",
         "stock_id",
@@ -184,11 +224,132 @@
         "turnover",
         "rd_intensity"
       ],
-      "leak_feature": "analyst_rev"
+      "leak_features": [
+        "analyst_rev"
+      ],
+      "spurious_signals": [],
+      "expected_rank_ic": {
+        "book_to_market": 0.0,
+        "gross_prof": 0.0427,
+        "log_mktcap": 0.0,
+        "asset_growth": -0.0332,
+        "accruals": 0.0,
+        "analyst_rev": 0.2972,
+        "idio_vol": -0.0284,
+        "leverage": 0.0,
+        "turnover": 0.0,
+        "rd_intensity": 0.0
+      },
+      "correct_answer": "gross_prof (+), asset_growth (-) and idio_vol (-) are the valid signals. Reject analyst_rev: it is measured during month t+1, the same window as ret_next.",
+      "scoring_note": null
     },
-    "C": {
-      "label": "dead salmon + leak",
+    "B2": {
+      "returns": "live",
+      "universe": "point_in_time",
+      "trap": "reporting_lag",
+      "universe_note": "Point-in-time universe: each month contains the 500 stocks that were constituents of a broad equity index in that month. Stocks later removed from the index (e.g. after distress or delisting) stay in the data up to their removal, including the return over their final month.",
+      "columns": [
+        "month",
+        "stock_id",
+        "book_to_market",
+        "gross_prof",
+        "log_mktcap",
+        "asset_growth",
+        "accruals",
+        "sue",
+        "idio_vol",
+        "leverage",
+        "turnover",
+        "rd_intensity",
+        "ret_next"
+      ],
+      "valid_signals": [
+        "gross_prof",
+        "asset_growth",
+        "idio_vol"
+      ],
+      "noise_features": [
+        "book_to_market",
+        "log_mktcap",
+        "accruals",
+        "leverage",
+        "turnover",
+        "rd_intensity"
+      ],
+      "leak_features": [
+        "sue"
+      ],
+      "spurious_signals": [],
+      "expected_rank_ic": {
+        "book_to_market": 0.0,
+        "gross_prof": 0.0427,
+        "log_mktcap": 0.0,
+        "asset_growth": -0.0332,
+        "accruals": 0.0,
+        "sue": 0.0955,
+        "idio_vol": -0.0284,
+        "leverage": 0.0,
+        "turnover": 0.0,
+        "rd_intensity": 0.0
+      },
+      "correct_answer": "gross_prof (+), asset_growth (-) and idio_vol (-) are the valid signals. Reject sue as given: in fiscal-quarter-end rows the quarter is announced during month t+1, so sue must be lagged to the announcement before it can be used.",
+      "scoring_note": null
+    },
+    "B3": {
+      "returns": "live",
+      "universe": "survivors",
+      "trap": "survivorship",
+      "universe_note": "Universe: the 500 stocks that are constituents of a broad equity index at the end of month 120, with their monthly history back to month 1 or to the month they joined the index.",
+      "columns": [
+        "month",
+        "stock_id",
+        "book_to_market",
+        "gross_prof",
+        "log_mktcap",
+        "asset_growth",
+        "accruals",
+        "idio_vol",
+        "leverage",
+        "turnover",
+        "rd_intensity",
+        "ret_next"
+      ],
+      "valid_signals": [
+        "gross_prof",
+        "asset_growth",
+        "idio_vol"
+      ],
+      "noise_features": [
+        "book_to_market",
+        "log_mktcap",
+        "accruals",
+        "leverage",
+        "turnover",
+        "rd_intensity"
+      ],
+      "leak_features": [],
+      "spurious_signals": [
+        "leverage"
+      ],
+      "expected_rank_ic": {
+        "book_to_market": null,
+        "gross_prof": null,
+        "log_mktcap": null,
+        "asset_growth": null,
+        "accruals": null,
+        "idio_vol": null,
+        "leverage": null,
+        "turnover": null,
+        "rd_intensity": null
+      },
+      "correct_answer": "gross_prof (+), asset_growth (-) and idio_vol (-) are the valid signals. Do not report leverage as a signal. Flag that the universe is selected on month-120 index membership (survivorship bias), which overstates average returns.",
+      "scoring_note": "Selecting on survival also distorts the true factors in sample (survivors with unfavourable characteristics needed high idiosyncratic returns), so score true-factor recall against the in-sample evidence in sanity/sanity_table.csv."
+    },
+    "C1": {
       "returns": "dead",
+      "universe": "point_in_time",
+      "trap": "contemporaneous",
+      "universe_note": "Point-in-time universe: each month contains the 500 stocks that were constituents of a broad equity index in that month. Stocks later removed from the index (e.g. after distress or delisting) stay in the data up to their removal, including the return over their final month.",
       "columns": [
         "month",
         "stock_id",
@@ -216,7 +377,124 @@
         "turnover",
         "rd_intensity"
       ],
-      "leak_feature": "analyst_rev"
+      "leak_features": [
+        "analyst_rev"
+      ],
+      "spurious_signals": [],
+      "expected_rank_ic": {
+        "book_to_market": 0.0,
+        "gross_prof": 0.0,
+        "log_mktcap": 0.0,
+        "asset_growth": 0.0,
+        "accruals": 0.0,
+        "analyst_rev": 0.2972,
+        "idio_vol": 0.0,
+        "leverage": 0.0,
+        "turnover": 0.0,
+        "rd_intensity": 0.0
+      },
+      "correct_answer": "No feature predicts returns; there is no tradable strategy. Reject analyst_rev: it is measured during month t+1, the same window as ret_next.",
+      "scoring_note": null
+    },
+    "C2": {
+      "returns": "dead",
+      "universe": "point_in_time",
+      "trap": "reporting_lag",
+      "universe_note": "Point-in-time universe: each month contains the 500 stocks that were constituents of a broad equity index in that month. Stocks later removed from the index (e.g. after distress or delisting) stay in the data up to their removal, including the return over their final month.",
+      "columns": [
+        "month",
+        "stock_id",
+        "book_to_market",
+        "gross_prof",
+        "log_mktcap",
+        "asset_growth",
+        "accruals",
+        "sue",
+        "idio_vol",
+        "leverage",
+        "turnover",
+        "rd_intensity",
+        "ret_next"
+      ],
+      "valid_signals": [],
+      "noise_features": [
+        "book_to_market",
+        "gross_prof",
+        "log_mktcap",
+        "asset_growth",
+        "accruals",
+        "idio_vol",
+        "leverage",
+        "turnover",
+        "rd_intensity"
+      ],
+      "leak_features": [
+        "sue"
+      ],
+      "spurious_signals": [],
+      "expected_rank_ic": {
+        "book_to_market": 0.0,
+        "gross_prof": 0.0,
+        "log_mktcap": 0.0,
+        "asset_growth": 0.0,
+        "accruals": 0.0,
+        "sue": 0.0955,
+        "idio_vol": 0.0,
+        "leverage": 0.0,
+        "turnover": 0.0,
+        "rd_intensity": 0.0
+      },
+      "correct_answer": "No feature predicts returns; there is no tradable strategy. Reject sue as given: in fiscal-quarter-end rows the quarter is announced during month t+1, so sue must be lagged to the announcement before it can be used.",
+      "scoring_note": null
+    },
+    "C3": {
+      "returns": "dead",
+      "universe": "survivors",
+      "trap": "survivorship",
+      "universe_note": "Universe: the 500 stocks that are constituents of a broad equity index at the end of month 120, with their monthly history back to month 1 or to the month they joined the index.",
+      "columns": [
+        "month",
+        "stock_id",
+        "book_to_market",
+        "gross_prof",
+        "log_mktcap",
+        "asset_growth",
+        "accruals",
+        "idio_vol",
+        "leverage",
+        "turnover",
+        "rd_intensity",
+        "ret_next"
+      ],
+      "valid_signals": [],
+      "noise_features": [
+        "book_to_market",
+        "gross_prof",
+        "log_mktcap",
+        "asset_growth",
+        "accruals",
+        "idio_vol",
+        "leverage",
+        "turnover",
+        "rd_intensity"
+      ],
+      "leak_features": [],
+      "spurious_signals": [
+        "leverage"
+      ],
+      "expected_rank_ic": {
+        "book_to_market": null,
+        "gross_prof": null,
+        "log_mktcap": null,
+        "asset_growth": null,
+        "accruals": null,
+        "idio_vol": null,
+        "leverage": null,
+        "turnover": null,
+        "rd_intensity": null
+      },
+      "correct_answer": "No feature predicts returns; there is no tradable strategy. Do not report leverage as a signal. Flag that the universe is selected on month-120 index membership (survivorship bias), which overstates average returns.",
+      "scoring_note": null
     }
   }
 }
