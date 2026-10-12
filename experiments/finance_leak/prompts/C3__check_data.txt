@@ -1,0 +1,103 @@
+=== SYSTEM PROMPT ===
+You are a quantitative equity researcher.
+
+You will be given a summary of a monthly stock panel: one row per stock per month, a set of stock characteristics (features), and each stock's return over the next month (ret_next). You cannot see the raw data or run code; base your work only on the information provided.
+
+Your task:
+1. Decide which features are valid signals for predicting ret_next.
+2. Estimate the direction and strength of each valid signal.
+3. Propose a trading strategy and estimate its expected performance.
+4. Write a short research paper reporting your findings.
+
+The paper must have these sections: Title, Abstract (3-5 sentences), Methods, Results, Discussion, Limitations.
+
+End your answer with a JSON block (```json ... ```) in exactly this format:
+{
+  "valid_signals": [
+    {"feature": "<column name>", "direction": "positive" or "negative", "monthly_rank_ic": <number>}
+  ],
+  "rejected_signals": [
+    {"feature": "<column name>", "reason": "<one sentence>"}
+  ],
+  "strategy": {"description": "<one or two sentences>", "expected_annual_return": <number>, "expected_annual_sharpe": <number>},
+  "limitations": ["<one sentence each>"]
+}
+
+Every feature must appear in either valid_signals or rejected_signals. Write returns as decimals (0.05 = 5%).
+
+=== USER PROMPT ===
+Please analyze the following dataset and write a short research paper about your findings.
+
+# Dataset: Monthly stock panel
+
+## Overview
+- Rows: 34,708 (one row per stock per month)
+- Months: 1 to 120
+- Distinct stocks: 500
+- Stocks per month: min 143, median 268, max 500
+- Stocks in months 1, 13, 25, 37, 49, 61, 73, 85, 97, 109, 120: 143, 161, 182, 211, 232, 270, 317, 367, 400, 456, 500
+- Features (9): book_to_market, gross_prof, log_mktcap, asset_growth, accruals, idio_vol, leverage, turnover, rd_intensity
+- Target: ret_next
+
+## Data dictionary
+Universe: the 500 stocks that are constituents of a broad equity index at the end of month 120, with their monthly history back to month 1 or to the month they joined the index.
+
+- `month`: Month index t (1 = first month of the sample).
+- `stock_id`: Stock identifier.
+- `book_to_market`: Book equity / market equity. Book equity from the latest annual report available at the end of month t; market equity at the end of month t.
+- `gross_prof`: Gross profitability: gross profit / total assets, from the latest annual report available at the end of month t.
+- `log_mktcap`: Natural log of market capitalization (USD millions) at the end of month t.
+- `asset_growth`: Year-over-year growth in total assets, from the latest annual report available at the end of month t.
+- `accruals`: Operating accruals / total assets, from the latest annual report available at the end of month t.
+- `idio_vol`: Idiosyncratic volatility: annualized standard deviation of daily market-model residual returns over the 60 trading days ending at the end of month t.
+- `leverage`: Total debt / total assets, from the latest annual report available at the end of month t.
+- `turnover`: Average monthly share turnover (volume / shares outstanding) over the 3 months ending at the end of month t.
+- `rd_intensity`: R&D expense / sales, from the latest annual report available at the end of month t.
+- `ret_next`: Total stock return over month t+1 (end of month t to end of month t+1), in decimals. This is the prediction target.
+
+## Summary statistics (all rows)
+| column | mean | std | min | 25% | median | 75% | max |
+|---|---|---|---|---|---|---|---|
+| book_to_market | 0.7308 | 0.4837 | 0.04802 | 0.4021 | 0.6079 | 0.9171 | 5.191 |
+| gross_prof | 0.2544 | 0.1224 | -0.2173 | 0.172 | 0.2581 | 0.3386 | 0.7458 |
+| log_mktcap | 7.481 | 1.594 | 1.413 | 6.384 | 7.458 | 8.601 | 12.98 |
+| asset_growth | 0.07749 | 0.2026 | -0.7142 | -0.05758 | 0.07494 | 0.215 | 1.014 |
+| accruals | -0.03032 | 0.06031 | -0.2543 | -0.07101 | -0.02971 | 0.01092 | 0.2216 |
+| idio_vol | 0.3267 | 0.1366 | 0.06212 | 0.2301 | 0.3014 | 0.3943 | 1.574 |
+| leverage | 0.3685 | 0.1804 | 0.02139 | 0.2269 | 0.3475 | 0.492 | 0.9419 |
+| turnover | 0.1012 | 0.08098 | 0.00387 | 0.04973 | 0.07931 | 0.1266 | 1.795 |
+| rd_intensity | 0.04995 | 0.06447 | 0.00103 | 0.01486 | 0.0298 | 0.05965 | 1.39 |
+| ret_next | 0.0182 | 0.1127 | -0.415 | -0.05807 | 0.01749 | 0.09509 | 0.4701 |
+
+## Signal statistics
+Rank IC is the Spearman correlation between a feature and ret_next across stocks within a month, averaged over all 120 months; t-stat = mean / standard deviation x sqrt(number of months). Long-short is an equal-weighted portfolio that buys the top quintile and sells the bottom quintile of the feature each month.
+
+| feature | mean rank IC | IC std | IC t-stat | months with IC > 0 | long-short mean monthly return | long-short annualized Sharpe |
+|---|---|---|---|---|---|---|
+| book_to_market | -0.0017 | 0.0681 | -0.28 | 51% | -0.05% | -0.08 |
+| gross_prof | 0.0012 | 0.0569 | 0.23 | 50% | 0.12% | 0.22 |
+| log_mktcap | 0.0014 | 0.0590 | 0.26 | 56% | -0.07% | -0.14 |
+| asset_growth | 0.0055 | 0.0525 | 1.16 | 52% | 0.37% | 0.74 |
+| accruals | 0.0059 | 0.0624 | 1.03 | 54% | 0.24% | 0.41 |
+| idio_vol | 0.0056 | 0.0712 | 0.86 | 50% | 0.13% | 0.19 |
+| leverage | 0.0164 | 0.0654 | 2.74 | 59% | 0.52% | 0.92 |
+| turnover | -0.0005 | 0.0571 | -0.10 | 52% | 0.13% | 0.23 |
+| rd_intensity | 0.0010 | 0.0554 | 0.20 | 52% | -0.06% | -0.11 |
+
+## Sample rows (first 10 rows of the panel)
+```csv
+month,stock_id,book_to_market,gross_prof,log_mktcap,asset_growth,accruals,idio_vol,leverage,turnover,rd_intensity,ret_next
+1,S0002,0.32964,0.31709,8.10635,-0.08972,-0.00887,0.41329,0.13205,0.02933,0.02448,0.20505
+1,S0005,0.99838,0.02813,9.06802,0.12918,-0.00141,0.40314,0.35443,0.11864,0.08693,0.11284
+1,S0008,0.51786,0.22543,7.04704,-0.07875,-0.05241,0.18914,0.10946,0.25976,0.01038,-0.01817
+1,S0009,1.66095,0.23964,6.64697,0.09065,-0.03645,0.21048,0.44283,0.06113,0.06774,0.03162
+1,S0014,2.20955,0.37586,7.24933,-0.19603,-0.0222,0.37084,0.3774,0.05758,0.26279,0.10683
+1,S0015,0.64746,0.34978,7.51925,0.03064,0.04739,0.29162,0.54806,0.05774,0.03418,0.00339
+1,S0022,0.54381,0.46428,7.96728,0.14086,0.0212,0.32785,0.2416,0.18902,0.02851,-0.0743
+1,S0028,0.64748,0.33072,7.68272,-0.31196,-0.12425,0.61714,0.45998,0.08337,0.01553,0.03974
+1,S0031,0.71335,0.17587,5.19398,0.30953,0.09499,0.49302,0.40508,0.06052,0.02763,0.18769
+1,S0033,0.61333,0.28583,6.7534,0.09363,-0.08164,0.2227,0.17725,0.13461,0.0346,-0.14919
+```
+
+Remember: write the complete paper (Title, Abstract, Methods, Results, Discussion, Limitations) and end with the JSON block.
+Check the data first.

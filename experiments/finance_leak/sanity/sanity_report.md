@@ -70,7 +70,7 @@ Expected IC is blank for survivor groups (no closed form).
 | asset_growth | true_factor |  | -0.0164 | -1.87 | 0.44 | -0.64 | -0.78 |
 | accruals | noise |  | +0.0130 | +2.06 | 0.58 | +0.31 | +0.50 |
 | idio_vol | true_factor |  | -0.0266 | -3.76 | 0.37 | -0.78 | -1.15 |
-| leverage | survivorship_spurious |  | +0.0137 | +2.56 | 0.57 | +0.50 | +0.99 |
+| leverage | spurious |  | +0.0137 | +2.56 | 0.57 | +0.50 | +0.99 |
 | turnover | noise |  | +0.0042 | +0.64 | 0.53 | +0.15 | +0.23 |
 | rd_intensity | noise |  | +0.0018 | +0.30 | 0.45 | +0.12 | +0.20 |
 
@@ -114,7 +114,7 @@ Expected IC is blank for survivor groups (no closed form).
 | asset_growth | noise |  | +0.0055 | +1.16 | 0.52 | +0.37 | +0.74 |
 | accruals | noise |  | +0.0059 | +1.03 | 0.54 | +0.24 | +0.41 |
 | idio_vol | noise |  | +0.0056 | +0.86 | 0.50 | +0.13 | +0.19 |
-| leverage | survivorship_spurious |  | +0.0164 | +2.74 | 0.59 | +0.52 | +0.92 |
+| leverage | spurious |  | +0.0164 | +2.74 | 0.59 | +0.52 | +0.92 |
 | turnover | noise |  | -0.0005 | -0.10 | 0.53 | +0.13 | +0.23 |
 | rd_intensity | noise |  | +0.0010 | +0.20 | 0.52 | -0.06 | -0.11 |
 

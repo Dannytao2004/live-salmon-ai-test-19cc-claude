@@ -38,6 +38,11 @@ import os
 import numpy as np
 import pandas as pd
 
+from labels import (
+    DATA_DIR, GROUPS, ROLE_NOISE, ROLE_TRUE_FACTOR, TRAPS,
+    dictionary_path, ground_truth_path, panel_path, sample_path,
+)
+
 # ---------------------------------------------------------------------------
 # Configuration
 # ---------------------------------------------------------------------------
@@ -60,7 +65,6 @@ LEAK_CORR = 0.31      # analyst_rev: within-month corr with standardized ret_nex
 LEAK_UNIT = ("linear", 0.0, 0.004)
 SUE_CORR = 0.30       # sue: corr with standardized ret_next in fiscal-quarter-end rows
 DECIMALS = 5
-OUTPUT_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "data")
 
 # premium: expected next-month return per 1 cross-sectional SD of the feature
 #          (0 = pure noise). rho: monthly AR(1) persistence of the feature.
@@ -92,22 +96,6 @@ COLUMN_ORDER = [
     "ret_next",
 ]
 FEATURE_ORDER = [c for c in COLUMN_ORDER if c in FEATURES]
-
-TRAPS = {
-    "contemporaneous": {"column": "analyst_rev", "affected_feature": "analyst_rev"},
-    "reporting_lag": {"column": "sue", "affected_feature": "sue"},
-    "survivorship": {"column": None, "affected_feature": "leverage"},
-}
-
-GROUPS = {
-    "A":  {"returns": "live", "universe": "point_in_time", "trap": None},
-    "B1": {"returns": "live", "universe": "point_in_time", "trap": "contemporaneous"},
-    "B2": {"returns": "live", "universe": "point_in_time", "trap": "reporting_lag"},
-    "B3": {"returns": "live", "universe": "survivors", "trap": "survivorship"},
-    "C1": {"returns": "dead", "universe": "point_in_time", "trap": "contemporaneous"},
-    "C2": {"returns": "dead", "universe": "point_in_time", "trap": "reporting_lag"},
-    "C3": {"returns": "dead", "universe": "survivors", "trap": "survivorship"},
-}
 
 UNIVERSE_NOTES = {
     "point_in_time": (
@@ -361,7 +349,7 @@ def build_ground_truth(panels: dict, seed: int = SEED) -> dict:
     )
     features = {
         name: {
-            "role_in_live_returns": "true_factor" if name in TRUE_FACTORS else "noise",
+            "role_in_live_returns": ROLE_TRUE_FACTOR if name in TRUE_FACTORS else ROLE_NOISE,
             "premium_per_sd_monthly": spec["premium"],
             "expected_rank_ic_live": round(gaussian_rank_ic(spec["premium"] / live_cs_sd), 4),
             "ar1_rho_monthly": spec["rho"],
@@ -504,18 +492,18 @@ def build_ground_truth(panels: dict, seed: int = SEED) -> dict:
 
 
 def main() -> None:
-    os.makedirs(OUTPUT_DIR, exist_ok=True)
+    os.makedirs(DATA_DIR, exist_ok=True)
     panels = build_panels()
 
-    def write_json(filename, obj):
-        with open(os.path.join(OUTPUT_DIR, filename), "w", encoding="utf-8", newline="\n") as f:
+    def write_json(path, obj):
+        with open(path, "w", encoding="utf-8", newline="\n") as f:
             json.dump(obj, f, indent=2)
             f.write("\n")
 
     for group, df in panels.items():
-        df.to_csv(os.path.join(OUTPUT_DIR, f"panel_{group}.csv"), index=False, lineterminator="\n")
-        df.head(10).to_csv(os.path.join(OUTPUT_DIR, f"sample_{group}.csv"), index=False, lineterminator="\n")
-        write_json(f"dictionary_{group}.json", {
+        df.to_csv(panel_path(group), index=False, lineterminator="\n")
+        df.head(10).to_csv(sample_path(group), index=False, lineterminator="\n")
+        write_json(dictionary_path(group), {
             "universe": UNIVERSE_NOTES[GROUPS[group]["universe"]],
             "columns": {c: DATA_DICTIONARY[c] for c in df.columns},
         })
@@ -523,7 +511,7 @@ def main() -> None:
         print(f"Group {group}: {len(df)} rows x {df.shape[1]} cols, "
               f"{df['stock_id'].nunique()} stocks, {per_month.min()}-{per_month.max()} per month")
 
-    write_json("ground_truth.json", build_ground_truth(panels))
+    write_json(ground_truth_path(), build_ground_truth(panels))
     print("Saved data/panel_*.csv, sample_*.csv, dictionary_*.json, ground_truth.json")
 
 

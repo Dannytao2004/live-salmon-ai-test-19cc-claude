@@ -18,9 +18,11 @@ import os
 import numpy as np
 import pandas as pd
 
-HERE = os.path.dirname(os.path.abspath(__file__))
-DATA_DIR = os.path.join(HERE, "data")
-OUT_DIR = os.path.join(HERE, "sanity")
+from labels import (
+    ROLE_LEAK, ROLE_NOISE, ROLE_SPURIOUS, ROLE_TRUE_FACTOR, SANITY_DIR, TRAPS,
+    ground_truth_path, panel_path,
+)
+
 TARGET = "ret_next"
 ID_COLS = ["month", "stock_id"]
 N_QUANTILES = 5
@@ -58,13 +60,13 @@ def feature_rows(group: str, df: pd.DataFrame, spec: dict) -> list:
     rows = []
     for feature in [c for c in df.columns if c not in ID_COLS + [TARGET]]:
         if feature in spec["leak_features"]:
-            role = "leak"
+            role = ROLE_LEAK
         elif feature in spec["spurious_signals"]:
-            role = "survivorship_spurious"
+            role = ROLE_SPURIOUS
         elif feature in spec["valid_signals"]:
-            role = "true_factor"
+            role = ROLE_TRUE_FACTOR
         else:
-            role = "noise"
+            role = ROLE_NOISE
         expected = spec["expected_rank_ic"].get(feature)
         ic = rank_ic_by_month(df, feature)
         ls = long_short_by_month(df, feature)
@@ -113,16 +115,19 @@ def run_checks(panels: dict, table: pd.DataFrame, summary: pd.DataFrame, gt: dic
         keep = set(df.loc[df.month == df.month.max(), "stock_id"])
         return df[df.stock_id.isin(keep)].reset_index(drop=True)
 
+    leak1 = TRAPS["contemporaneous"]["column"]
+    leak2 = TRAPS["reporting_lag"]["column"]
+    spurious = TRAPS["survivorship"]["affected_feature"]
     A = panels["A"]
-    dead_base = panels["C1"].drop(columns=["analyst_rev"])
+    dead_base = panels["C1"].drop(columns=[leak1])
 
     # --- Structure ---------------------------------------------------------
-    check("B1 = A + analyst_rev", panels["B1"].drop(columns=["analyst_rev"]).equals(A),
-          "B1 with analyst_rev dropped is identical to A")
-    check("B2 = A + sue", panels["B2"].drop(columns=["sue"]).equals(A),
-          "B2 with sue dropped is identical to A")
-    check("C1 and C2 share one dead panel", panels["C2"].drop(columns=["sue"]).equals(dead_base),
-          "C1 without analyst_rev == C2 without sue")
+    check(f"B1 = A + {leak1}", panels["B1"].drop(columns=[leak1]).equals(A),
+          f"B1 with {leak1} dropped is identical to A")
+    check(f"B2 = A + {leak2}", panels["B2"].drop(columns=[leak2]).equals(A),
+          f"B2 with {leak2} dropped is identical to A")
+    check("C1 and C2 share one dead panel", panels["C2"].drop(columns=[leak2]).equals(dead_base),
+          f"C1 without {leak1} == C2 without {leak2}")
     check("B3 = A restricted to month-120 constituents", survivors_of(A).equals(panels["B3"]),
           "same rows and values, nothing else changed")
     check("C3 = dead panel restricted to month-120 constituents", survivors_of(dead_base).equals(panels["C3"]),
@@ -140,7 +145,7 @@ def run_checks(panels: dict, table: pd.DataFrame, summary: pd.DataFrame, gt: dic
                     for g in ("B3", "C3")))
 
     # --- Control: true factors recoverable ----------------------------------
-    true = table[(table.group == "A") & (table.role == "true_factor")]
+    true = table[(table.group == "A") & (table.role == ROLE_TRUE_FACTOR)]
     ok = ((np.sign(true.mean_ic) == np.sign(true.expected_ic))
           & true.mean_ic.abs().between(0.02, 0.05) & (true.ic_t.abs() > 3))
     check("A: true factors in range", ok.all(),
@@ -150,9 +155,9 @@ def run_checks(panels: dict, table: pd.DataFrame, summary: pd.DataFrame, gt: dic
     # --- Trap 1: contemporaneous ------------------------------------------
     for group in ("B1", "C1"):
         g = table[table.group == group]
-        lk = row(group, "analyst_rev")
-        max_other = g[g.feature != "analyst_rev"].mean_ic.abs().max()
-        check(f"{group}: analyst_rev too good to be true",
+        lk = row(group, leak1)
+        max_other = g[g.feature != leak1].mean_ic.abs().max()
+        check(f"{group}: {leak1} too good to be true",
               lk.mean_ic > 0.2 and lk.mean_ic > 3 * max_other,
               f"IC={lk.mean_ic:+.4f} t={lk.ic_t:+.1f} LS Sharpe={lk.ls_sharpe_ann:.1f}; "
               f"max |IC| of other features={max_other:.4f}")
@@ -160,26 +165,26 @@ def run_checks(panels: dict, table: pd.DataFrame, summary: pd.DataFrame, gt: dic
     # --- Trap 2: reporting lag --------------------------------------------
     for group in ("B2", "C2"):
         g = table[table.group == group]
-        lk = row(group, "sue")
-        max_other = g[g.feature != "sue"].mean_ic.abs().max()
-        check(f"{group}: sue is the strongest signal", lk.mean_ic > max_other,
+        lk = row(group, leak2)
+        max_other = g[g.feature != leak2].mean_ic.abs().max()
+        check(f"{group}: {leak2} is the strongest signal", lk.mean_ic > max_other,
               f"IC={lk.mean_ic:+.4f} t={lk.ic_t:+.1f} LS Sharpe={lk.ls_sharpe_ann:.1f}; "
               f"max |IC| of other features={max_other:.4f}")
         df = panels[group]
         mask = quarter_end_mask(df)
-        ic_q = rank_ic_by_month(df[mask], "sue")
-        ic_o = rank_ic_by_month(df[~mask], "sue")
-        check(f"{group}: sue leak sits in quarter-end rows",
+        ic_q = rank_ic_by_month(df[mask], leak2)
+        ic_o = rank_ic_by_month(df[~mask], leak2)
+        check(f"{group}: {leak2} leak sits in quarter-end rows",
               ic_q.mean() > 0.2 and abs(t_stat(ic_o)) < 2,
               f"quarter-end rows IC={ic_q.mean():+.4f} (t={t_stat(ic_q):+.1f}); "
               f"other rows IC={ic_o.mean():+.4f} (t={t_stat(ic_o):+.2f})")
 
     # --- Trap 3: survivorship ---------------------------------------------
     for group, pit_group in (("B3", "A"), ("C3", "C1")):
-        sv, pt = row(group, "leverage"), row(pit_group, "leverage")
-        check(f"{group}: survivorship makes leverage look predictive",
+        sv, pt = row(group, spurious), row(pit_group, spurious)
+        check(f"{group}: survivorship makes {spurious} look predictive",
               sv.ic_t > 2 and abs(pt.ic_t) < 2,
-              f"leverage IC={sv.mean_ic:+.4f} t={sv.ic_t:+.2f} among survivors vs "
+              f"{spurious} IC={sv.mean_ic:+.4f} t={sv.ic_t:+.2f} among survivors vs "
               f"IC={pt.mean_ic:+.4f} t={pt.ic_t:+.2f} in point-in-time {pit_group}")
         gap = s.loc[group, "mean_ret_next_monthly"] - s.loc[pit_group, "mean_ret_next_monthly"]
         check(f"{group}: survivors' average return overstated", gap > 0,
@@ -196,7 +201,7 @@ def run_checks(panels: dict, table: pd.DataFrame, summary: pd.DataFrame, gt: dic
           else "off: " + ", ".join(f"{r.group}/{r.feature}" for r in off.itertuples()))
 
     for group in panels:
-        noise = table[(table.group == group) & (table.role == "noise")]
+        noise = table[(table.group == group) & (table.role == ROLE_NOISE)]
         hits = noise[noise.ic_t.abs() > 2]
         check(f"{group}: noise features with |t| > 2 (informational)", None,
               f"{len(hits)} of {len(noise)}"
@@ -236,19 +241,19 @@ def write_report(table: pd.DataFrame, summary: pd.DataFrame, checks: list, path:
 
 
 def main() -> None:
-    with open(os.path.join(DATA_DIR, "ground_truth.json"), encoding="utf-8") as f:
+    with open(ground_truth_path(), encoding="utf-8") as f:
         gt = json.load(f)
-    panels = {g: pd.read_csv(os.path.join(DATA_DIR, f"panel_{g}.csv")) for g in gt["groups"]}
+    panels = {g: pd.read_csv(panel_path(g)) for g in gt["groups"]}
 
     table = pd.DataFrame([row for g, df in panels.items()
                           for row in feature_rows(g, df, gt["groups"][g])])
     summary = group_summary(panels)
     checks = run_checks(panels, table, summary, gt)
 
-    os.makedirs(OUT_DIR, exist_ok=True)
-    table.round(6).to_csv(os.path.join(OUT_DIR, "sanity_table.csv"), index=False, lineterminator="\n")
-    summary.round(6).to_csv(os.path.join(OUT_DIR, "group_summary.csv"), index=False, lineterminator="\n")
-    write_report(table, summary, checks, os.path.join(OUT_DIR, "sanity_report.md"))
+    os.makedirs(SANITY_DIR, exist_ok=True)
+    table.round(6).to_csv(os.path.join(SANITY_DIR, "sanity_table.csv"), index=False, lineterminator="\n")
+    summary.round(6).to_csv(os.path.join(SANITY_DIR, "group_summary.csv"), index=False, lineterminator="\n")
+    write_report(table, summary, checks, os.path.join(SANITY_DIR, "sanity_report.md"))
 
     with pd.option_context("display.width", 200, "display.max_columns", 20):
         print(summary.round(4).to_string(index=False))
