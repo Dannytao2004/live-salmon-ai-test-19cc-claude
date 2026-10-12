@@ -231,13 +231,15 @@ def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--lang", choices=list(TEXT), default="en")
     parser.add_argument("--out", default=FIG_DIR)
-    parser.add_argument("--fmt", choices=["png", "svg"], default="png", help="svg draws text as paths (no font needed)")
+    parser.add_argument("--fmt", choices=["png", "svg"], default="png")
+    parser.add_argument("--svg-text", choices=["path", "text"], default="path",
+                        help="svg only: draw text as paths (no font needed) or keep it as text (much smaller file)")
     args = parser.parse_args()
     t = TEXT[args.lang]
     os.makedirs(args.out, exist_ok=True)
     plt.rcParams["font.family"] = t["fonts"]
     plt.rcParams["axes.unicode_minus"] = False
-    plt.rcParams["svg.fonttype"] = "path"
+    plt.rcParams["svg.fonttype"] = "path" if args.svg_text == "path" else "none"
     plt.rcParams["svg.hashsalt"] = "salmonheart"  # stable ids, so SVG output is reproducible
     df = pd.read_csv(os.path.join(labels.SCORES_DIR, "responses_agent_v4.csv"))
     with open(os.path.join(labels.SCORES_DIR, "judge_reliability.json"), encoding="utf-8") as f:
