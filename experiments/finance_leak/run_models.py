@@ -24,6 +24,7 @@ import datetime as dt
 import hashlib
 import json
 import os
+import random
 import time
 from collections import Counter, defaultdict
 
@@ -54,6 +55,9 @@ PROVIDERS = {
 
 TEMPERATURE = 0.7                        # upstream value; DeepSeek ignores it in thinking mode
 MAX_TOKENS = {True: 65536, False: 8192}  # thinking / non-thinking: DeepSeek's defaults, made explicit
+REASONING_EFFORT = "high"                # DeepSeek's default for thinking mode, made explicit
+RUN_ORDER_SEED = 2026                    # calls are sent in a fixed shuffled order, so that any drift
+                                         # in the provider over time is spread across groups and models
 TIMEOUT = httpx.Timeout(900.0, connect=30.0)
 MAX_ATTEMPTS = 3
 RETRY_STATUS = {429, 500, 502, 503, 504}
@@ -84,6 +88,8 @@ def openai_chat_payload(model: str, system: str, user: str) -> dict:
     }
     if spec["provider"] == "deepseek":
         payload["thinking"] = {"type": "enabled" if spec["thinking"] else "disabled"}
+        if spec["thinking"]:
+            payload["reasoning_effort"] = REASONING_EFFORT
     return payload
 
 
@@ -97,6 +103,7 @@ def parse_openai_chat(data: dict) -> dict:
         "usage": data.get("usage") or {},
         "response_model": data.get("model"),
         "response_id": data.get("id"),
+        "system_fingerprint": data.get("system_fingerprint"),
     }
 
 
@@ -226,6 +233,7 @@ def run_one(group: str, condition: str, model: str, run: int) -> dict:
         "request": out.get("request"),
         "response_model": out.get("response_model"),
         "response_id": out.get("response_id"),
+        "system_fingerprint": out.get("system_fingerprint"),
         "finish_reason": out.get("finish_reason"),
         "usage": out.get("usage"),
         "price_period": period,
@@ -258,6 +266,7 @@ def build_plan(args) -> list:
         if unknown:
             raise SystemExit(f"unknown {name}(s): {sorted(unknown)}; allowed: {list(allowed)}")
     tasks = [(g, c, m, r) for m in args.models for g in args.groups for c in args.conditions for r in args.runs]
+    random.Random(RUN_ORDER_SEED).shuffle(tasks)
     return tasks[: args.limit] if args.limit else tasks
 
 
